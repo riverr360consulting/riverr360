@@ -4,14 +4,13 @@ excerpt: "A short 1-2 sentence description of your post. This shows on the blog 
 category: "General"
 author: "Riverr360 Team"
 publishedDate: "2026-02-11"
-coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f"
+coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80"
 featured: false
 tags: ["tag1", "tag2", "tag3"]
 ---
 
-# Your Blog Post Title Here
-
-Your opening paragraph goes here. Hook the reader and tell them what they'll learn.
+**IMPORTANT:** Don't use # (H1) at the start of your content!  
+The title above becomes the H1. Start your content with ## (H2) instead.
 
 ## Main Section Heading
 
@@ -87,10 +86,16 @@ End with a clear next step for readers.
 
 ## FORMATTING TIPS:
 
-**Headings:**
-# H1 - Only use once (main title)
-## H2 - Main sections
+**Headings (SEO-FRIENDLY STRUCTURE):**
+# H1 - NEVER use in content! The title field above becomes your H1
+## H2 - Main sections (use these for your content)
 ### H3 - Subsections
+
+**IMPORTANT FOR SEO:**
+- Only ONE H1 per page (automatically from title field)
+- Start content with ## (H2) for main headings
+- Use ### (H3) for subheadings
+- Never use # in your markdown content
 
 **Text styles:**
 **Bold text**

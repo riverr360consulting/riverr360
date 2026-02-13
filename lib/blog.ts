@@ -111,3 +111,18 @@ export function getPostsByCategory(category: string): BlogPost[] {
   const allPosts = getAllPosts();
   return allPosts.filter(post => post.category === category);
 }
+
+// Get previous and next posts
+export function getAdjacentPosts(currentSlug: string): { prev: BlogPost | null; next: BlogPost | null } {
+  const allPosts = getAllPosts();
+  const currentIndex = allPosts.findIndex(post => post.slug === currentSlug);
+  
+  if (currentIndex === -1) {
+    return { prev: null, next: null };
+  }
+
+  return {
+    prev: currentIndex > 0 ? allPosts[currentIndex - 1] : null,
+    next: currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null,
+  };
+}

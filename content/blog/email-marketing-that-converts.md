@@ -4,12 +4,10 @@ excerpt: "Your email list is your most valuable marketing asset. Learn how to wr
 category: "Email Marketing"
 author: "Riverr360 Team"
 publishedDate: "2026-02-08"
-coverImage: "https://images.unsplash.com/photo-1557200134-90327ee9fafa"
+coverImage: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=1200&q=80"
 featured: false
 tags: ["email-marketing", "conversion", "automation"]
 ---
-
-# Email Marketing That Actually Converts
 
 Email marketing has an average ROI of $42 for every $1 spent. But only if you do it right.
 

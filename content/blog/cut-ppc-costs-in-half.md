@@ -4,12 +4,10 @@ excerpt: "Discover proven strategies to reduce your Google Ads spending by 50% w
 category: "PPC"
 author: "Riverr360 Team"
 publishedDate: "2026-02-10"
-coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f"
+coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80"
 featured: true
 tags: ["ppc", "google-ads", "cost-reduction"]
 ---
-
-# 5 Ways to Cut Your PPC Costs in Half
 
 Are you spending thousands on Google Ads with disappointing results? You're not alone. Most businesses waste 40-60% of their PPC budget on poorly optimized campaigns.
 

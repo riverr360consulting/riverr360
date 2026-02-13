@@ -3,7 +3,7 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getPostBySlug, getAllPostSlugs, getPostsByCategory } from '@/lib/blog';
+import { getPostBySlug, getAllPostSlugs, getPostsByCategory, getAdjacentPosts } from '@/lib/blog';
 import ReactMarkdown from 'react-markdown';
 
 const categoryColors: { [key: string]: string } = {
@@ -50,6 +50,9 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const relatedPosts = getPostsByCategory(post.category)
     .filter(p => p.slug !== params.slug)
     .slice(0, 3);
+
+  // Get previous and next posts
+  const { prev, next } = getAdjacentPosts(params.slug);
 
   // Calculate reading time (rough estimate)
   const wordsPerMinute = 200;
@@ -131,7 +134,8 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               <div className="prose prose-lg max-w-none">
                 <ReactMarkdown
                   components={{
-                    h1: ({node, ...props}) => <h1 className="text-4xl font-bold mt-8 mb-4" {...props} />,
+                    // Skip h1 since we already have one in the page title
+                    h1: ({node, ...props}) => <h2 className="text-3xl font-bold mt-8 mb-4" {...props} />,
                     h2: ({node, ...props}) => <h2 className="text-3xl font-bold mt-8 mb-4" {...props} />,
                     h3: ({node, ...props}) => <h3 className="text-2xl font-semibold mt-6 mb-3" {...props} />,
                     p: ({node, ...props}) => <p className="text-gray-700 leading-relaxed mb-6" {...props} />,
@@ -158,6 +162,51 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                         #{tag}
                       </span>
                     ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Previous/Next Navigation */}
+              {(prev || next) && (
+                <div className="mt-12 pt-8 border-t">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {/* Previous Post */}
+                    {prev ? (
+                      <Link
+                        href={`/blog/${prev.slug}`}
+                        className="group bg-gray-50 p-6 rounded-lg hover:bg-primary-50 transition-colors"
+                      >
+                        <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                          Previous Post
+                        </div>
+                        <h3 className="font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
+                          {prev.title}
+                        </h3>
+                      </Link>
+                    ) : (
+                      <div></div>
+                    )}
+
+                    {/* Next Post */}
+                    {next && (
+                      <Link
+                        href={`/blog/${next.slug}`}
+                        className="group bg-gray-50 p-6 rounded-lg hover:bg-primary-50 transition-colors text-right"
+                      >
+                        <div className="flex items-center justify-end gap-2 text-sm text-gray-500 mb-2">
+                          Next Post
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
+                        <h3 className="font-bold text-gray-900 group-hover:text-primary-600 transition-colors">
+                          {next.title}
+                        </h3>
+                      </Link>
+                    )}
                   </div>
                 </div>
               )}
