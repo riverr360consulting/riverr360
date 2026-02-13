@@ -59,13 +59,13 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <ul className="space-y-2">
               <li>Email: info@riverr360.com</li>
-              <li>Phone: +1 (555) 123-4567</li>
+              <li>Phone: (+91)-7411-129-188</li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; {currentYear} Riverr360 Digital Marketing. All rights reserved.</p>
+          <p>&copy; {currentYear} Riverr360 Consulting. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -40,11 +40,11 @@ export default function ProfilePage() {
 
               <div className="prose prose-lg max-w-none">
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                  Your Name, Founder & Principal Consultant
+                  Bijeesh Kuttikrishnan, Founder & Principal Consultant
                 </h2>
                 
                 <p className="text-xl text-gray-600 mb-6">
-                  With over 15 years of experience in revenue operations and financial optimization, 
+                  With over 15 years of experience in digital marketing and optimization, 
                   I've helped dozens of companies recover millions in lost revenue.
                 </p>
 
@@ -53,13 +53,13 @@ export default function ProfilePage() {
                 </h3>
                 <div className="grid md:grid-cols-2 gap-6 mb-8">
                   <div className="bg-gray-50 p-6 rounded-lg">
-                    <h4 className="font-semibold text-gray-900 mb-2">Revenue Operations</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Digital Marketing Operations</h4>
                     <p className="text-gray-600">
                       Streamlining billing, pricing, and contract management processes
                     </p>
                   </div>
                   <div className="bg-gray-50 p-6 rounded-lg">
-                    <h4 className="font-semibold text-gray-900 mb-2">Financial Analysis</h4>
+                    <h4 className="font-semibold text-gray-900 mb-2">Marketing Analysis</h4>
                     <p className="text-gray-600">
                       Deep-dive audits to identify and quantify revenue leakage
                     </p>
@@ -87,19 +87,19 @@ export default function ProfilePage() {
                   that I now bring to my clients.
                 </p>
                 <p className="text-gray-600 mb-4">
-                  I hold an MBA in Finance and am a certified Revenue Operations professional. 
-                  I've spoken at industry conferences on topics including pricing strategy, 
-                  revenue recognition, and billing automation.
+                  I hold an Bachelors Degree in Economics and am a certified Digital Marketing Professional. 
+                  I've attended many industry conferences on topics including marketing strategy, 
+                  revenue management, and budget optimization.
                 </p>
 
                 <h3 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">
                   Certifications
                 </h3>
                 <ul className="space-y-2 text-gray-600">
-                  <li>• Certified Revenue Operations Professional (CROP)</li>
-                  <li>• MBA, Finance - [University Name]</li>
-                  <li>• Certified Management Accountant (CMA)</li>
-                  <li>• Six Sigma Black Belt</li>
+                  <li>• Certified Google Analytics & Ads Professional</li>
+                  <li>• BA, Economics - [University of Calicut]</li>
+                  <li>• Hubspot Certified Professional</li>
+                  <li>• Six Sigma White Belt</li>
                 </ul>
 
                 <div className="mt-12 p-8 bg-primary-50 rounded-lg text-center">
