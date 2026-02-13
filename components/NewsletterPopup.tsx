@@ -6,24 +6,37 @@ export default function NewsletterPopup() {
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [hasSubscribed, setHasSubscribed] = useState(false);
 
   useEffect(() => {
     // Check if user already dismissed or subscribed
     const dismissed = localStorage.getItem('newsletter-dismissed');
     const subscribed = localStorage.getItem('newsletter-subscribed');
     
-    if (dismissed || subscribed) {
-      return; // Don't show popup
+    // If either is 'true', never show the popup
+    if (dismissed === 'true' || subscribed === 'true') {
+      return; // Exit early - don't set up timers or listeners
     }
 
     // Timer: Show popup after 3 minutes (180000ms)
     const timer = setTimeout(() => {
-      setIsVisible(true);
+      // Double-check before showing (in case user dismissed in another tab)
+      const stillDismissed = localStorage.getItem('newsletter-dismissed');
+      const stillSubscribed = localStorage.getItem('newsletter-subscribed');
+      if (stillDismissed !== 'true' && stillSubscribed !== 'true') {
+        setIsVisible(true);
+      }
     }, 180000); // 3 minutes
 
     // Exit intent: Show when mouse leaves viewport
     const handleMouseLeave = (e: MouseEvent) => {
+      // Check again if already dismissed/subscribed
+      const currentDismissed = localStorage.getItem('newsletter-dismissed');
+      const currentSubscribed = localStorage.getItem('newsletter-subscribed');
+      
+      if (currentDismissed === 'true' || currentSubscribed === 'true') {
+        return; // Don't show if dismissed or subscribed
+      }
+      
       // Check if mouse is leaving at the top (not bottom/sides)
       if (e.clientY <= 0) {
         setIsVisible(true);
@@ -32,6 +45,7 @@ export default function NewsletterPopup() {
 
     document.addEventListener('mouseleave', handleMouseLeave);
 
+    // Cleanup
     return () => {
       clearTimeout(timer);
       document.removeEventListener('mouseleave', handleMouseLeave);
@@ -59,13 +73,13 @@ export default function NewsletterPopup() {
 
       if (response.ok) {
         setStatus('success');
-        setHasSubscribed(true);
+        // Mark as subscribed IMMEDIATELY (before showing success message)
         localStorage.setItem('newsletter-subscribed', 'true');
         
-        // Close popup after 3 seconds
+        // Close popup after 2 seconds
         setTimeout(() => {
           setIsVisible(false);
-        }, 3000);
+        }, 2000);
       } else {
         setStatus('error');
       }
@@ -75,31 +89,29 @@ export default function NewsletterPopup() {
   };
 
   const handleClose = () => {
+    // Hide popup immediately
     setIsVisible(false);
+    // Mark as dismissed permanently
     localStorage.setItem('newsletter-dismissed', 'true');
   };
 
-  const handleDontShowAgain = () => {
-    setIsVisible(false);
-    localStorage.setItem('newsletter-dismissed', 'permanent');
-  };
-
+  // Don't render anything if not visible
   if (!isVisible) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
       <div className="bg-white rounded-lg shadow-2xl max-w-md w-full relative animate-fade-in">
-        {/* Close button */}
+        {/* Close button - always visible */}
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl"
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold z-10 w-8 h-8 flex items-center justify-center"
           aria-label="Close"
         >
           ×
         </button>
 
         <div className="p-8">
-          {!hasSubscribed ? (
+          {status !== 'success' ? (
             <>
               {/* Header */}
               <div className="text-center mb-6">
@@ -155,16 +167,6 @@ export default function NewsletterPopup() {
                   <span className="text-green-600">✓</span>
                   <span>Unsubscribe anytime</span>
                 </div>
-              </div>
-
-              {/* Don't show again */}
-              <div className="mt-6 text-center">
-                <button
-                  onClick={handleDontShowAgain}
-                  className="text-sm text-gray-500 hover:text-gray-700 underline"
-                >
-                  Don't show this again
-                </button>
               </div>
             </>
           ) : (
