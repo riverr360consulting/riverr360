@@ -63,7 +63,7 @@ export default function GetStartedPage() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a href="#lead-form" className="bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors inline-block">
-                Get Free $500 Audit
+                Get Free ₹5000 Audit
               </a>
               <a href="#process" className="bg-white hover:bg-gray-50 text-gray-900 px-8 py-4 rounded-lg font-semibold text-lg border-2 border-gray-200 transition-colors inline-block">
                 See How It Works
@@ -621,7 +621,7 @@ export default function GetStartedPage() {
                 </h2>
                 <p className="text-lg text-gray-600">
                   Discover exactly where your marketing is leaking money. 
-                  <span className="font-semibold text-primary-600"> $500 value, completely free.</span>
+                  <span className="font-semibold text-primary-600"> ₹5,000 value, completely free.</span>
                 </p>
               </div>
 
@@ -707,11 +707,11 @@ export default function GetStartedPage() {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   >
                     <option value="">Select your budget range</option>
-                    <option value="<$2,500">Less than $2,500/month</option>
-                    <option value="$2,500-$5,000">$2,500 - $5,000/month</option>
-                    <option value="$5,000-$10,000">$5,000 - $10,000/month</option>
-                    <option value="$10,000-$25,000">$10,000 - $25,000/month</option>
-                    <option value="$25,000+">$25,000+/month</option>
+                    <option value="<₹25,000">Less than ₹25,000/month</option>
+                    <option value="₹25,000-₹50,000">₹25,000 - ₹50,000/month</option>
+                    <option value="₹50,000-₹1,00,000">₹50,000 - ₹1,00,000/month</option>
+                    <option value="₹1,00,000-₹2,50,000">₹1,00,000 - ₹2,50,000/month</option>
+                    <option value="₹2,50,000+">₹2,50,000+/month</option>
                   </select>
                 </div>
 
@@ -732,7 +732,7 @@ export default function GetStartedPage() {
                   type="submit"
                   className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold text-lg py-4 px-8 rounded-lg transition-colors shadow-lg hover:shadow-xl"
                 >
-                  Get My Free $500 Audit
+                  Get My Free ₹5000 Audit
                 </button>
 
                 <p className="text-sm text-gray-500 text-center">
@@ -772,7 +772,7 @@ export default function GetStartedPage() {
               <p className="text-sm">End-to-End Digital Growth</p>
             </div>
             <div className="text-sm">
-              <p>© {new Date().getFullYear()} Riverr360 Digital Marketing. All rights reserved.</p>
+              <p>© {new Date().getFullYear()} Riverr360 Consulting. All rights reserved.</p>
             </div>
             <div>
               <a href="mailto:info@riverr360.com" className="text-sm hover:text-white transition-colors">
