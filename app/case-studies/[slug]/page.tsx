@@ -17,8 +17,8 @@ const caseStudiesData: { [key: string]: any } = {
     metrics: [
       { label: 'Conversion Rate', before: '0.8%', after: '2.7%', change: '+240%' },
       { label: 'Cart Abandonment', before: '78%', after: '42%', change: '-46%' },
-      { label: 'Revenue', before: '$45K/mo', after: '$153K/mo', change: '+240%' },
-      { label: 'AOV', before: '$67', after: '$89', change: '+33%' },
+      { label: 'Revenue', before: '₹45K/mo', after: '₹153K/mo', change: '+240%' },
+      { label: 'AOV', before: '₹67', after: '₹89', change: '+33%' },
     ],
     situation: "An online fashion retailer was driving 50,000 monthly visitors through paid ads but converting less than 1%. With a 78% cart abandonment rate, they were hemorrhaging money on traffic that wasn't buying.",
     approach: [
@@ -39,7 +39,7 @@ const caseStudiesData: { [key: string]: any } = {
         description: 'Implemented automated email sequence with 15% discount for abandoned carts.',
       },
     ],
-    results: "Within 90 days, conversion rate tripled from 0.8% to 2.7%. Cart abandonment dropped to 42%. Monthly revenue jumped from $45K to $153K with the same traffic volume.",
+    results: "Within 90 days, conversion rate tripled from 0.8% to 2.7%. Cart abandonment dropped to 42%. Monthly revenue jumped from ₹45K to ₹153K with the same traffic volume.",
     testimonial: "Riverr360 didn't just improve our conversion rate - they completely transformed our business. We're now profitable on paid traffic and scaling rapidly.",
     testimonialAuthor: "Marketing Director",
   },
@@ -52,9 +52,9 @@ const caseStudiesData: { [key: string]: any } = {
     client: 'B2B SaaS Platform',
     timeline: '4 months',
     metrics: [
-      { label: 'Cost per Lead', before: '$450', after: '$180', change: '-60%' },
+      { label: 'Cost per Lead', before: '₹450', after: '₹180', change: '-60%' },
       { label: 'Monthly Leads', before: '33', after: '83', change: '+152%' },
-      { label: 'Ad Spend', before: '$15K', after: '$6K', change: '-60%' },
+      { label: 'Ad Spend', before: '₹15K', after: '₹6K', change: '-60%' },
       { label: 'Lead Quality Score', before: '4.2/10', after: '8.7/10', change: '+107%' },
     ],
     situation: "A B2B SaaS company was burning $15K/month on Google Ads with a $450 cost per lead. Most leads were unqualified, and sales team was frustrated with poor lead quality.",
@@ -76,7 +76,7 @@ const caseStudiesData: { [key: string]: any } = {
         description: 'Implemented retargeting and lookalike audiences based on best customers.',
       },
     ],
-    results: "Ad spend dropped from $15K to $6K while leads increased from 33 to 83 per month. Cost per lead fell to $180, and lead quality score jumped to 8.7/10.",
+    results: "Ad spend dropped from ₹15K to ₹6K while leads increased from 33 to 83 per month. Cost per lead fell to ₹180, and lead quality score jumped to 8.7/10.",
     testimonial: "We went from wasting money on Google Ads to it being our #1 lead source. The ROI is incredible now.",
     testimonialAuthor: "CEO",
   },
@@ -92,9 +92,9 @@ const caseStudiesData: { [key: string]: any } = {
       { label: 'Organic Traffic', before: '120/mo', after: '2,400/mo', change: '+1,900%' },
       { label: 'Top 3 Rankings', before: '0', after: '12', change: '+1,200%' },
       { label: 'Organic Leads', before: '2/mo', after: '38/mo', change: '+1,800%' },
-      { label: 'Cost per Lead', before: '$850', after: '$75', change: '-91%' },
+      { label: 'Cost per Lead', before: '₹850', after: '₹75', change: '-91%' },
     ],
-    situation: "A local law firm was spending $8,000/month on PPC just to get clients. They had zero SEO presence and were invisible in organic search despite being in business for 15 years.",
+    situation: "A local law firm was spending ₹8,000/month on PPC just to get clients. They had zero SEO presence and were invisible in organic search despite being in business for 15 years.",
     approach: [
       {
         title: '1. Technical SEO Foundation',

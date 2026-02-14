@@ -21,7 +21,7 @@ const caseStudies = [
     metrics: [
       { label: 'Conversion Rate', before: '0.8%', after: '2.7%' },
       { label: 'Cart Abandonment', before: '78%', after: '42%' },
-      { label: 'Revenue', before: '$45K/mo', after: '$153K/mo' },
+      { label: 'Revenue', before: '₹45K/mo', after: '₹153K/mo' },
     ]
   },
   {
@@ -30,12 +30,12 @@ const caseStudies = [
     industry: 'SaaS',
     challenge: 'Wasted ad spend with poor targeting',
     result: '60% cost reduction, 2X leads',
-    excerpt: 'A B2B SaaS company was spending $15K/month on Google Ads with minimal qualified leads and sky-high CPAs.',
+    excerpt: 'A B2B SaaS company was spending ₹15K/month on Google Ads with minimal qualified leads and sky-high CPAs.',
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
     metrics: [
-      { label: 'Cost per Lead', before: '$450', after: '$180' },
+      { label: 'Cost per Lead', before: '₹450', after: '₹180' },
       { label: 'Monthly Leads', before: '33', after: '83' },
-      { label: 'Ad Spend', before: '$15K', after: '$6K' },
+      { label: 'Ad Spend', before: '₹15K', after: '₹6K' },
     ]
   },
   {
@@ -44,7 +44,7 @@ const caseStudies = [
     industry: 'Professional Services',
     challenge: 'Zero organic visibility and traffic',
     result: '#1 rankings for 12 keywords',
-    excerpt: 'A local law firm had no SEO presence and was paying $8K/month for every client through ads.',
+    excerpt: 'A local law firm had no SEO presence and was paying ₹8K/month for every client through ads.',
     image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80',
     metrics: [
       { label: 'Organic Traffic', before: '120/mo', after: '2,400/mo' },
