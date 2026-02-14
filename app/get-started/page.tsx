@@ -626,7 +626,7 @@ export default function GetStartedPage() {
               </div>
 
               <form className="space-y-6" action="https://api.web3forms.com/submit" method="POST">
-                <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY" />
+                <input type="hidden" name="access_key" value="bd8222f1-81ef-4ed7-9182-09c0c52ae333" />
                 <input type="hidden" name="subject" value="New Lead - Marketing Audit Request" />
 
                 <div className="grid md:grid-cols-2 gap-6">
