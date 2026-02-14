@@ -6,10 +6,13 @@ import { useEffect } from 'react';
 export default function GetStartedPage() {
   // Smooth scroll for anchor links
   useEffect(() => {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
+    document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const href = anchor.getAttribute('href');
+        if (!href) return;
+
+        const target = document.querySelector(href);
         if (target) {
           target.scrollIntoView({
             behavior: 'smooth',
@@ -302,11 +305,12 @@ export default function GetStartedPage() {
                 {num: 6, icon: '🔄', title: 'Retention & LTV Growth', desc: 'Maximize customer value', color: 'border-green-500'},
                 {num: 7, icon: '📊', title: 'Continuous Optimization', desc: 'Data-driven improvements', color: 'border-blue-500'},
               ].map((step) => (
-                <div key={step.num} className="flex items-start gap-4 bg-white p-6 rounded-xl shadow-md border-l-4 ${step.color}">
-                  <div className="flex-shrink-0">
-                    <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-3xl border-2 ${step.color}">
-                      {step.icon}
-                    </div>
+                <div key={step.num} className={`flex items-start gap-4 bg-white p-6 rounded-xl shadow-md border-l-4 ${step.color}`}>
+  			<div className="flex-shrink-0">
+    				<div className={`w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-3xl border-2 ${step.color}`}>
+     				 {step.icon}
+   				 </div>
+
                     <div className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold text-sm mx-auto mt-2">
                       {step.num}
                     </div>
