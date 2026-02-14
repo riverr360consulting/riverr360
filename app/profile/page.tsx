@@ -109,7 +109,7 @@ export default function ProfilePage() {
                   <p className="text-gray-600 mb-6">
                     Ready to stop your revenue leaks and maximize profitability?
                   </p>
-                  <CTAButton text="Schedule a Consultation" variant="primary" />
+                  <CTAButton text="Schedule a Consultation" variant="primary" href="https://calendar.app.google/JMgapqTEJMGsDCzu7"/>
                 </div>
               </div>
             </div>
