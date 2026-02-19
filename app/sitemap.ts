@@ -1,39 +1,98 @@
+// FILE: app/sitemap.ts
+// Copy this file to: C:\riverr360\app\sitemap.ts
+
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://www.riverr360.com'; // Update with your actual domain
+  const baseUrl = 'https://riverr360.vercel.app';
+  const currentDate = new Date();
 
   return [
+    // Homepage
     {
       url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 1,
+      lastModified: currentDate,
+      changeFrequency: 'daily',
+      priority: 1.0,
     },
+    
+    // Main Pages
     {
-      url: `${baseUrl}/profile`,
-      lastModified: new Date(),
+      url: `${baseUrl}/about`,
+      lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/case-studies`,
-      lastModified: new Date(),
+      url: `${baseUrl}/services`,
+      lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/blog`,
+      lastModified: currentDate,
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/case-studies`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/contact`,
-      lastModified: new Date(),
+      lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
-    // Add individual case study URLs here
     {
-      url: `${baseUrl}/case-studies/saas-company-revenue-recovery`,
-      lastModified: new Date(),
+      url: `${baseUrl}/get-started`,
+      lastModified: currentDate,
       changeFrequency: 'monthly',
-      priority: 0.6,
+      priority: 0.8,
     },
+    {
+      url: `${baseUrl}/survey`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+
+    // Service Pages (add your actual service pages)
+    {
+      url: `${baseUrl}/services/seo`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/services/ppc`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/services/social-media`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/services/content-marketing`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+
+    // Add blog posts as you create them
+    // Example:
+    // {
+    //   url: `${baseUrl}/blog/seo-guide-small-business`,
+    //   lastModified: currentDate,
+    //   changeFrequency: 'monthly',
+    //   priority: 0.7,
+    // },
   ];
 }
