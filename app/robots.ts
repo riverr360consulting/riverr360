@@ -5,8 +5,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/keystatic/', '/api/'],
+      disallow: ['/api/', '/_next/', '/admin/'],
     },
-    sitemap: 'https://www.riverr360.com/sitemap.xml', // Update with your actual domain
+    sitemap: 'https://riverr360.vercel.app/sitemap.xml',
   };
 }
