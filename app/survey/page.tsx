@@ -61,7 +61,7 @@ export default function SurveyPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          access_key: 'bd8222f1-81ef-4ed7-9182-09c0c52ae333', // Replace with your key
+          access_key: 'YOUR_WEB3FORMS_ACCESS_KEY', // Replace with your key
           subject: 'New Survey Response - Free ₹5,000 Consultation',
           from_name: formData.name,
           
@@ -173,9 +173,10 @@ export default function SurveyPage() {
         </div>
       </header>
 
-      {/* Progress Bar */}
-      <div className="bg-white border-b">
-        <div className="container mx-auto px-4 max-w-4xl">
+      {/* Main Content */}
+      <main className="container mx-auto px-4 max-w-4xl py-8">
+        {/* Progress Bar */}
+        <div className="bg-white rounded-lg shadow-sm p-4 mb-8">
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div 
               className="h-full bg-gradient-to-r from-primary-500 to-primary-600 transition-all duration-500"
@@ -186,10 +187,6 @@ export default function SurveyPage() {
             {Math.round(progress)}% Complete
           </p>
         </div>
-      </div>
-
-      {/* Main Content */}
-      <main className="container mx-auto px-4 max-w-4xl py-12">
         <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
           
           {/* Step 0: Introduction */}
@@ -742,7 +739,7 @@ export default function SurveyPage() {
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-6 mt-12">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-sm">© 2024 Riverr360 Digital Marketing. All rights reserved.</p>
+          <p className="text-sm">© 2026 Riverr360 Digital Marketing. All rights reserved.</p>
           <p className="text-xs mt-2">Your information is secure and will never be shared.</p>
         </div>
       </footer>
