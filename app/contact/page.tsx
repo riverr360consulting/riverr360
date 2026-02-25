@@ -1,6 +1,7 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ContactForm from '@/components/ContactForm';
+import AppointmentScheduler from '@/components/AppointmentScheduler';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -56,8 +57,8 @@ export default function ContactPage() {
                   
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-2">Phone</h3>
-                    <a href="tel:+7411129188" className="text-primary-600 hover:text-primary-700">
-                      (+91)-7411-129-188
+                    <a href="tel:+15551234567" className="text-primary-600 hover:text-primary-700">
+                      +1 (555) 123-4567
                     </a>
                   </div>
                   
@@ -95,6 +96,13 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Appointment Scheduler Section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <AppointmentScheduler />
           </div>
         </section>
 
