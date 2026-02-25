@@ -30,12 +30,15 @@ export default function Header() {
             <Link href="/case-studies" className="text-gray-700 hover:text-primary-600 transition-colors">
               Case Studies
             </Link>
+            <Link href="/webinars" className="text-gray-700 hover:text-primary-600 transition-colors">
+	      Webinars
+            </Link>
             <Link href="/profile" className="text-gray-700 hover:text-primary-600 transition-colors">
               About
             </Link>
             <Link href="/contact" className="text-gray-700 hover:text-primary-600 transition-colors">
               Contact
-            </Link>
+            </Link>	   
           </div>
 
           {/* CTA Button */}
