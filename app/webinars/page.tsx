@@ -1,7 +1,8 @@
 // FILE: app/webinars/page.tsx
-// Webinar landing page with registration and archives
+// Webinar landing page with registration form
 
 import { currentWebinar, archivedWebinars } from '@/data/webinars';
+import WebinarRegistrationForm from '@/components/WebinarRegistrationForm';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -12,73 +13,49 @@ export const metadata: Metadata = {
 export default function WebinarsPage() {
   return (
     <div className="min-h-screen">
-      {/* Hero Section - Current Webinar */}
+      {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary-600 via-primary-700 to-purple-700 text-white py-20">
         <div className="container mx-auto px-4 max-w-6xl">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Left: Content */}
-            <div>
-              <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-6">
-                🔴 LIVE WEBINAR
-              </div>
-              
-              <h1 className="text-5xl font-bold mb-6">
-                {currentWebinar.title}
-              </h1>
-              
-              <p className="text-xl text-white/90 mb-8">
-                {currentWebinar.description}
-              </p>
+          <div className="text-center mb-12">
+            <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-6">
+              🔴 LIVE WEBINAR
+            </div>
+            
+            <h1 className="text-5xl font-bold mb-6">
+              {currentWebinar.title}
+            </h1>
+            
+            <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
+              {currentWebinar.description}
+            </p>
 
-              {/* Webinar Details */}
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center gap-3">
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  <span className="text-lg">{currentWebinar.date} at {currentWebinar.time}</span>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span className="text-lg">{currentWebinar.duration}</span>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                  <span className="text-lg">Hosted by {currentWebinar.speaker.name}</span>
-                </div>
+            {/* Webinar Details */}
+            <div className="flex flex-wrap justify-center gap-6 mb-8">
+              <div className="flex items-center gap-3">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span className="text-lg">{currentWebinar.date}</span>
               </div>
 
-              {/* CTA Button */}
-              <a
-                href={currentWebinar.registrationLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block bg-white text-primary-700 font-bold text-lg px-10 py-5 rounded-xl hover:bg-gray-50 transition-all shadow-xl hover:shadow-2xl"
-              >
-                Register for Free →
-              </a>
+              <div className="flex items-center gap-3">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-lg">{currentWebinar.time}</span>
+              </div>
 
-              <p className="text-sm text-white/70 mt-4">
-                ✓ 100% Free • ✓ Live Q&A Session • ✓ Recording Available
-              </p>
+              <div className="flex items-center gap-3">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-lg">{currentWebinar.duration}</span>
+              </div>
             </div>
 
-            {/* Right: Image/Thumbnail */}
-            <div className="relative">
-              <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20">
-                <div className="aspect-video bg-gradient-to-br from-primary-400 to-purple-500 rounded-xl flex items-center justify-center">
-                  <svg className="w-24 h-24 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
+            <p className="text-sm text-white/70">
+              ✓ 100% Free • ✓ Live Q&A Session • ✓ Recording Available • ✓ Certificate
+            </p>
           </div>
         </div>
       </section>
@@ -100,30 +77,29 @@ export default function WebinarsPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          {/* CTA */}
-          <div className="text-center mt-12">
-            <a
-              href={currentWebinar.registrationLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-primary-600 hover:bg-primary-700 text-white font-bold text-lg px-10 py-4 rounded-xl transition-colors"
-            >
-              Save My Spot - Register Free
-            </a>
-          </div>
+      {/* Registration Form Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4 max-w-2xl">
+          <WebinarRegistrationForm 
+            webinarTitle={currentWebinar.title}
+            webinarDate={currentWebinar.date}
+            webinarTime={currentWebinar.time}
+          />
         </div>
       </section>
 
       {/* Who Should Attend */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4 max-w-4xl">
           <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
             Who Should Attend?
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-xl text-center">
+            <div className="bg-gray-50 p-6 rounded-xl text-center hover:shadow-lg transition-shadow">
               <div className="text-4xl mb-4">👔</div>
               <h3 className="font-bold text-gray-900 mb-2">Business Owners</h3>
               <p className="text-gray-600 text-sm">
@@ -131,7 +107,7 @@ export default function WebinarsPage() {
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-xl text-center">
+            <div className="bg-gray-50 p-6 rounded-xl text-center hover:shadow-lg transition-shadow">
               <div className="text-4xl mb-4">📊</div>
               <h3 className="font-bold text-gray-900 mb-2">Marketing Managers</h3>
               <p className="text-gray-600 text-sm">
@@ -139,12 +115,71 @@ export default function WebinarsPage() {
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-xl text-center">
+            <div className="bg-gray-50 p-6 rounded-xl text-center hover:shadow-lg transition-shadow">
               <div className="text-4xl mb-4">🚀</div>
               <h3 className="font-bold text-gray-900 mb-2">Entrepreneurs</h3>
               <p className="text-gray-600 text-sm">
                 Scale your startup with proven marketing tactics
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Attend */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
+            Why You Should Attend
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-green-100 text-green-700 rounded-full flex items-center justify-center">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-bold text-gray-900 mb-2">Actionable Strategies</h3>
+                <p className="text-gray-600">No fluff - only proven tactics you can implement immediately</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-green-100 text-green-700 rounded-full flex items-center justify-center">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-bold text-gray-900 mb-2">Live Q&A</h3>
+                <p className="text-gray-600">Get your specific questions answered by experts</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-green-100 text-green-700 rounded-full flex items-center justify-center">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-bold text-gray-900 mb-2">Real Case Studies</h3>
+                <p className="text-gray-600">See how we've helped businesses achieve 240% ROI</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-green-100 text-green-700 rounded-full flex items-center justify-center">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-bold text-gray-900 mb-2">Recording Included</h3>
+                <p className="text-gray-600">Can't attend live? Watch the recording anytime</p>
+              </div>
             </div>
           </div>
         </div>
@@ -190,7 +225,7 @@ export default function WebinarsPage() {
                       </a>
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
-                        <span className="text-white text-sm">Video Coming Soon</span>
+                        <span className="text-white text-sm">Recording Coming Soon</span>
                       </div>
                     )}
                   </div>
@@ -236,12 +271,10 @@ export default function WebinarsPage() {
             Join hundreds of businesses who've already learned these strategies
           </p>
           <a
-            href={currentWebinar.registrationLink}
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#registration"
             className="inline-block bg-white text-primary-700 font-bold text-lg px-12 py-5 rounded-xl hover:bg-gray-50 transition-all shadow-xl"
           >
-            Register for Free Webinar
+            Register via Form Now
           </a>
           <p className="text-sm text-white/70 mt-4">
             Limited spots available • 100% Free • No credit card required
