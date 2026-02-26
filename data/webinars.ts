@@ -24,21 +24,21 @@ export interface Webinar {
 // CURRENT WEBINAR - Edit this section!
 // ============================================
 export const currentWebinar: Webinar = {
-  id: 'seo-2024-trends',
-  title: 'SEO in 2024: What Actually Works',
+  id: 'seo-2026-trends',
+  title: 'SEO in 2026: What Actually Works',
   description: 'Discover the latest SEO strategies that are driving real results. Learn how to rank higher on Google, avoid common mistakes, and implement proven tactics that increase organic traffic by 300%+.',
-  date: 'March 25, 2024',
+  date: 'April 25, 2026',
   time: '3:00 PM IST',
   duration: '60 minutes',
   registrationLink: 'https://zoom.us/webinar/register/YOUR_WEBINAR_ID',
   status: 'upcoming',
   topics: [
-    'Google Algorithm Updates 2024',
+    'Google Algorithm Updates 2026',
     'AI-Powered SEO Strategies',
     'Technical SEO Essentials',
     'Local SEO Domination',
     'Link Building That Works',
-    'Content Strategy for 2024',
+    'Content Strategy for 2026',
   ],
   speaker: {
     name: 'Your Name',
@@ -53,10 +53,10 @@ export const currentWebinar: Webinar = {
 // ============================================
 export const archivedWebinars: Webinar[] = [
   {
-    id: 'google-ads-mastery-feb-2024',
+    id: 'google-ads-mastery-feb-2026',
     title: 'Google Ads Mastery: Reduce CPC by 50%',
     description: 'Learn proven strategies to cut your Google Ads costs in half while increasing conversions.',
-    date: 'February 15, 2024',
+    date: 'February 15, 2026',
     time: '2:00 PM IST',
     duration: '75 minutes',
     registrationLink: '',
@@ -73,10 +73,10 @@ export const archivedWebinars: Webinar[] = [
     },
   },
   {
-    id: 'social-media-roi-jan-2024',
+    id: 'social-media-roi-jan-2026',
     title: 'Social Media ROI: From Likes to Sales',
     description: 'Turn your social media followers into paying customers.',
-    date: 'January 20, 2024',
+    date: 'January 20, 2026',
     time: '4:00 PM IST',
     duration: '60 minutes',
     registrationLink: '',

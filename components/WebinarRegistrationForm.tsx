@@ -35,7 +35,7 @@ export default function WebinarRegistrationForm({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          access_key: 'YOUR_WEB3FORMS_ACCESS_KEY', // Replace with your key
+          access_key: 'bd8222f1-81ef-4ed7-9182-09c0c52ae333', // Replace with your key
           subject: `Webinar Registration: ${webinarTitle}`,
           from_name: formData.name,
           
