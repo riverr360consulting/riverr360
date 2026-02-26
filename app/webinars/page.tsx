@@ -3,6 +3,8 @@
 
 import { currentWebinar, archivedWebinars } from '@/data/webinars';
 import WebinarRegistrationForm from '@/components/WebinarRegistrationForm';
+import SmoothScrollLink from '@/components/SmoothScrollLink';
+
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -270,12 +272,9 @@ export default function WebinarsPage() {
           <p className="text-xl text-white/90 mb-8">
             Join hundreds of businesses who've already learned these strategies
           </p>
-          <a
-            href="#registration"
-            className="inline-block bg-white text-primary-700 font-bold text-lg px-12 py-5 rounded-xl hover:bg-gray-50 transition-all shadow-xl"
-          >
-            Register via Form Now
-          </a>
+          <SmoothScrollLink href="#registration" className="inline-block bg-white text-primary-700 font-bold text-lg px-12 py-5 rounded-xl hover:bg-gray-50 transition-       	  all shadow-xl">
+  		Register via Form Now
+	  </SmoothScrollLink>
           <p className="text-sm text-white/70 mt-4">
             Limited spots available • 100% Free • No credit card required
           </p>
