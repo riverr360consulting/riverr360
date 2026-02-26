@@ -81,7 +81,7 @@ export default function WebinarsPage() {
       </section>
 
       {/* Registration Form Section */}
-      <section className="py-16 bg-gray-50">
+      <section id="registration" className="py-16 bg-gray-50 scroll-mt-20">
         <div className="container mx-auto px-4 max-w-2xl">
           <WebinarRegistrationForm 
             webinarTitle={currentWebinar.title}
