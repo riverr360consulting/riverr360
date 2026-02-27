@@ -102,6 +102,12 @@ export default function Header() {
             >
               Case Studies
             </Link>
+	    <Link href="/webinars" 
+             className="block text-gray-700 hover:text-primary-600"
+             onClick={() => setMobileMenuOpen(false)}
+             >
+               Webinars
+            </Link>
             <Link
               href="/profile"
               className="block text-gray-700 hover:text-primary-600"
