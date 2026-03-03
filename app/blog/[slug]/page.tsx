@@ -226,8 +226,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                   <div>
                     <h4 className="font-bold text-gray-900 mb-2">{post.author}</h4>
                     <p className="text-gray-600">
-                      Digital marketing expert specializing in helping businesses stop wasting their 
-                      marketing budget and maximize ROI through data-driven strategies.
+                    Bijeesh Kuttikrishnan has over 15 years of experience in Digital Marketing and AI-driven growth strategies. He leverages his expertise across  		    industries such as hospitality, IT, and travel to help business owners achieve stronger ROI and sustainable growth.
                     </p>
                   </div>
                 </div>

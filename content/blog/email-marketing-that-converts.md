@@ -2,7 +2,7 @@
 title: "Email Marketing That Actually Converts"
 excerpt: "Your email list is your most valuable marketing asset. Learn how to write emails that get opened, read, and clicked—turning subscribers into customers."
 category: "Email Marketing"
-author: "Riverr360 Team"
+author: "Bijeesh Kuttikrishnan"
 publishedDate: "2026-02-08"
 coverImage: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=1200&q=80"
 featured: false

@@ -2,7 +2,7 @@
 title: "5 Ways to Cut Your PPC Costs in Half"
 excerpt: "Discover proven strategies to reduce your Google Ads spending by 50% while maintaining or even improving your lead quality. These data-driven tactics work for businesses of all sizes."
 category: "Google Ads"
-author: "Riverr360 Team"
+author: "Bijeesh Kuttikrishnan"
 publishedDate: "2026-02-10"
 coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80"
 featured: true

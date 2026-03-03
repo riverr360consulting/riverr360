@@ -2,7 +2,7 @@
 title: "SEO Basics Every Business Owner Should Know"
 excerpt: "Don't pay thousands for SEO services you don't understand. Learn the fundamentals that actually move the needle for your business visibility and organic traffic."
 category: "SEO"
-author: "Riverr360 Team"
+author: "Bijeesh Kuttikrishnan"
 publishedDate: "2026-02-09"
 coverImage: "https://images.unsplash.com/photo-1593437955835-fc8c51725430"
 featured: false
