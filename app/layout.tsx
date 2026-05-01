@@ -1,24 +1,38 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import NewsletterPopup from "@/components/NewsletterPopup";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import MetaPixel from '@/components/MetaPixel';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Riverr360 Digital Marketing | Stop Wasting Your Marketing Budget",
-  description: "Data-driven digital marketing solutions to plug revenue leaks. SEO, PPC, conversion optimization, and analytics that deliver ROI.",
-  keywords: ["digital marketing", "marketing roi", "conversion optimization", "ppc management", "seo services", "marketing analytics"],
-  authors: [{ name: "Riverr360 Digital Marketing" }],
-  icons: {
-    icon: '/favicon.ico',
+  title: {
+    default: 'Riverr360 | Revenue Leakage Consulting',
+    template: '%s | Riverr360',
   },
+  description:
+    'Riverr360 helps businesses identify and fix revenue leakage through strategic consulting and data-driven solutions.',
+  keywords: ['revenue leakage', 'consulting', 'marketing solutions', 'business growth'],
   openGraph: {
-    title: "Riverr360 Digital Marketing | Stop Wasting Your Marketing Budget",
-    description: "Data-driven digital marketing solutions to plug revenue leaks and maximize ROI.",
-    type: "website",
-    locale: "en_US",
-    images: ['/images/logo.png'],
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://riverr360.vercel.app',
+    siteName: 'Riverr360',
+    title: 'Riverr360 | Revenue Leakage Consulting',
+    description:
+      'Riverr360 helps businesses identify and fix revenue leakage through strategic consulting.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Riverr360 | Revenue Leakage Consulting',
+    description:
+      'Riverr360 helps businesses identify and fix revenue leakage through strategic consulting.',
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -30,8 +44,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
-        <NewsletterPopup />
+        {/* ── Meta Pixel (loads after page is interactive, tracks all routes) ── */}
+        <MetaPixel />
+
+        <Header />
+        <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );
