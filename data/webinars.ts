@@ -21,37 +21,37 @@ export interface Webinar {
 }
 
 // ============================================
-// CURRENT WEBINAR - Edit this section!
+// NEXT WEBINAR - Set to null when no webinar
 // ============================================
-export const currentWebinar: Webinar = {
-  id: 'seo-2026-trends',
-  title: 'SEO in 2026: What Actually Works',
-  description: 'Discover the latest SEO strategies that are driving real results. Learn how to rank higher on Google, avoid common mistakes, and implement proven tactics that increase organic traffic by 300%+.',
-  date: 'April 25, 2026',
-  time: '3:00 PM IST',
-  duration: '60 minutes',
-  registrationLink: 'https://zoom.us/webinar/register/YOUR_WEBINAR_ID',
-  status: 'upcoming',
-  topics: [
-    'Google Algorithm Updates 2026',
-    'AI-Powered SEO Strategies',
-    'Technical SEO Essentials',
-    'Local SEO Domination',
-    'Link Building That Works',
-    'Content Strategy for 2026',
-  ],
-  speaker: {
-    name: 'Your Name',
-    title: 'SEO Expert & Founder, Riverr360',
-    image: '/images/speaker.jpg',
-  },
-  thumbnail: '/images/webinar-seo-2024.jpg',
-};
+export const currentWebinar: Webinar | null = null;
 
 // ============================================
-// ARCHIVED WEBINARS - Add completed ones here
+// ARCHIVED WEBINARS - Past webinars go here
 // ============================================
 export const archivedWebinars: Webinar[] = [
+  {
+    id: 'seo-2026-trends-apr-2026',
+    title: 'SEO in 2026: What Actually Works',
+    description: 'Discover the latest SEO strategies that are driving real results. Learn how to rank higher on Google, avoid common mistakes, and implement proven tactics that increase organic traffic by 300%+.',
+    date: 'April 26, 2026',
+    time: '3:00 PM IST',
+    duration: '60 minutes',
+    registrationLink: '',
+    status: 'archived',
+    youtubeVideoId: '',
+    topics: [
+      'Google Algorithm Updates 2026',
+      'AI-Powered SEO Strategies',
+      'Technical SEO Essentials',
+      'Local SEO Domination',
+      'Link Building That Works',
+      'Content Strategy for 2026',
+    ],
+    speaker: {
+      name: 'Bijeesh Kuttikrishnan',
+      title: 'SEO Expert & Founder, Riverr360',
+    },
+  },
   {
     id: 'google-ads-mastery-feb-2026',
     title: 'Google Ads Mastery: Reduce CPC by 50%',
@@ -61,14 +61,14 @@ export const archivedWebinars: Webinar[] = [
     duration: '75 minutes',
     registrationLink: '',
     status: 'archived',
-    youtubeVideoId: 'dQw4w9WgXcQ', // UPDATE with real YouTube ID
+    youtubeVideoId: '',
     topics: [
       'Quality Score Optimization',
       'Negative Keywords Strategy',
       'Ad Copy That Converts',
     ],
     speaker: {
-      name: 'Your Name',
+      name: 'Bijeesh Kuttikrishnan',
       title: 'PPC Expert, Riverr360',
     },
   },
@@ -81,18 +81,19 @@ export const archivedWebinars: Webinar[] = [
     duration: '60 minutes',
     registrationLink: '',
     status: 'archived',
-    youtubeVideoId: 'dQw4w9WgXcQ', // UPDATE
+    youtubeVideoId: '',
     topics: [
       'Instagram Shopping Setup',
       'Facebook Ads Funnel',
       'Content Strategy',
     ],
     speaker: {
-      name: 'Your Name',
+      name: 'Bijeesh Kuttikrishnan',
       title: 'Social Media Strategist, Riverr360',
     },
   },
 ];
 
 export const getArchivedWebinars = () => archivedWebinars;
-export const getUpcomingWebinars = () => [currentWebinar].filter(w => w.status === 'upcoming');
+export const getUpcomingWebinars = () =>
+  currentWebinar ? [currentWebinar].filter(w => w.status === 'upcoming') : [];
