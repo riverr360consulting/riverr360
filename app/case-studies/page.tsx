@@ -1,14 +1,11 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Case Studies | Riverr360 Digital Marketing',
-  description: 'See how we\'ve helped businesses stop wasting marketing budget and achieve real ROI.',
+  description: "See how we've helped businesses stop wasting marketing budget and achieve real ROI.",
 };
 
-// Sample case studies
 const caseStudies = [
   {
     slug: 'ecommerce-conversion-optimization',
@@ -56,89 +53,53 @@ const caseStudies = [
 
 export default function CaseStudiesPage() {
   return (
-    <>
-      <Header />
-      <main>
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-primary-50 to-white py-16">
-          <div className="container-custom">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-5xl font-bold text-gray-900 mb-6">
-                Case Studies
-              </h1>
-              <p className="text-xl text-gray-600">
-                Real results from real businesses. See how we've helped companies 
-                plug marketing leaks and maximize ROI.
-              </p>
-            </div>
+    <main>
+      <section className="bg-gradient-to-br from-primary-50 to-white py-16">
+        <div className="container-custom">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-5xl font-bold text-gray-900 mb-6">Case Studies</h1>
+            <p className="text-xl text-gray-600">
+              Real results from real businesses. See how we've helped companies plug marketing leaks and maximize ROI.
+            </p>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Case Studies Grid */}
-        <section className="section-padding bg-white">
-          <div className="container-custom">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {caseStudies.map((study) => (
-                <Link
-                  key={study.slug}
-                  href={`/case-studies/${study.slug}`}
-                  className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-xl transition-shadow"
-                >
-                  <div className="aspect-video bg-gray-200 overflow-hidden">
-                    <img 
-                      src={study.image} 
-                      alt={study.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <div className="text-sm text-primary-600 font-semibold mb-2">
-                      {study.industry}
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
-                      {study.title}
-                    </h3>
-                    <p className="text-gray-600 mb-4">{study.excerpt}</p>
-                    
-                    {/* Key Metrics Preview */}
-                    <div className="border-t pt-4">
-                      <div className="text-sm font-semibold text-gray-900 mb-2">Key Results:</div>
-                      <div className="space-y-1">
-                        {study.metrics.slice(0, 2).map((metric, idx) => (
-                          <div key={idx} className="flex justify-between text-sm">
-                            <span className="text-gray-600">{metric.label}:</span>
-                            <span className="font-semibold text-green-600">
-                              {metric.before} → {metric.after}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="mt-4 text-primary-600 font-semibold text-sm group-hover:translate-x-2 transition-transform inline-block">
-                      View Full Case Study →
+      <section className="section-padding bg-white">
+        <div className="container-custom">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {caseStudies.map((study) => (
+              <Link key={study.slug} href={`/case-studies/${study.slug}`} className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div className="aspect-video bg-gray-200 overflow-hidden">
+                  <img src={study.image} alt={study.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                </div>
+                <div className="p-6">
+                  <div className="text-sm text-primary-600 font-semibold mb-2">{study.industry}</div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">{study.title}</h3>
+                  <p className="text-gray-600 mb-4">{study.excerpt}</p>
+                  <div className="border-t pt-4">
+                    <div className="text-sm font-semibold text-gray-900 mb-2">Key Results:</div>
+                    <div className="space-y-1">
+                      {study.metrics.slice(0, 2).map((metric, idx) => (
+                        <div key={idx} className="flex justify-between text-sm">
+                          <span className="text-gray-600">{metric.label}:</span>
+                          <span className="font-semibold text-green-600">{metric.before} → {metric.after}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                </Link>
-              ))}
-            </div>
-
-            {/* CTA Section */}
-            <div className="mt-16 bg-primary-600 text-white p-8 rounded-lg text-center">
-              <h3 className="text-3xl font-bold mb-4">
-                Ready to Write Your Success Story?
-              </h3>
-              <p className="text-xl mb-6 text-primary-100">
-                Let's identify your marketing leaks and create an ROI improvement plan.
-              </p>
-              <Link href="/contact" className="btn-secondary">
-                Plug Now
+                  <div className="mt-4 text-primary-600 font-semibold text-sm group-hover:translate-x-2 transition-transform inline-block">View Full Case Study →</div>
+                </div>
               </Link>
-            </div>
+            ))}
           </div>
-        </section>
-      </main>
-      <Footer />
-    </>
+          <div className="mt-16 bg-primary-600 text-white p-8 rounded-lg text-center">
+            <h3 className="text-3xl font-bold mb-4">Ready to Write Your Success Story?</h3>
+            <p className="text-xl mb-6 text-primary-100">Let's identify your marketing leaks and create an ROI improvement plan.</p>
+            <Link href="/contact" className="btn-secondary">Plug Now</Link>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
