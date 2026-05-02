@@ -27,7 +27,7 @@ export default function BlogPage() {
 
   return (
     <>
-      <Header />
+      
       <main>
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-primary-50 to-white py-16">
@@ -183,7 +183,6 @@ export default function BlogPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </>
   );
 }
