@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
   // Your Google Calendar appointment link
-  const calendarURL = 'https://calendar.app.google/9mfVZcWdj9DssBZ37';
+  const calendarURL = 'https://calendar.app.google/JMgapqTEJMGsDCzu7';
   
   // Optional: Track appointments (log to analytics, database, etc.)
   const referrer = request.headers.get('referer') || 'direct';
