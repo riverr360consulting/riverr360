@@ -1,5 +1,4 @@
 // FILE: data/webinars.ts
-// EDIT THIS FILE to update webinars - no coding needed!
 
 export interface Webinar {
   id: string;
@@ -20,14 +19,8 @@ export interface Webinar {
   thumbnail?: string;
 }
 
-// ============================================
-// NEXT WEBINAR - Set to null when no webinar
-// ============================================
 export const currentWebinar: Webinar | null = null;
 
-// ============================================
-// ARCHIVED WEBINARS - Past webinars go here
-// ============================================
 export const archivedWebinars: Webinar[] = [
   {
     id: 'seo-2026-trends-apr-2026',
@@ -95,5 +88,5 @@ export const archivedWebinars: Webinar[] = [
 ];
 
 export const getArchivedWebinars = () => archivedWebinars;
-export const getUpcomingWebinars = () =>
-  currentWebinar ? [currentWebinar].filter(w => w.status === 'upcoming') : [];
+export const getUpcomingWebinars = (): Webinar[] =>
+  currentWebinar ? [currentWebinar] : [];
