@@ -8,7 +8,7 @@ export default function AdminSettingsPage() {
   const [siteTitle, setSiteTitle] = useState('Riverr360 | Revenue Leakage Consulting');
   const [siteDesc, setSiteDesc] = useState('Riverr360 helps businesses identify and fix revenue leakage through strategic consulting and data-driven solutions.');
   const [metaPixelId, setMetaPixelId] = useState('1529840028657513');
-  const [googleAnalyticsId, setGoogleAnalyticsId] = useState('');
+  const [gtmId, setGtmId] = useState('');
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
   const router = useRouter();
@@ -24,7 +24,7 @@ export default function AdminSettingsPage() {
     const res = await fetch('/api/admin/save-settings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ siteTitle, siteDesc, metaPixelId, googleAnalyticsId }),
+      body: JSON.stringify({ siteTitle, siteDesc, metaPixelId, gtmId }),
     });
     setMessage(res.ok ? 'success' : 'error');
     setSaving(false);
@@ -46,6 +46,7 @@ export default function AdminSettingsPage() {
           <button onClick={handleLogout} style={{ fontSize: '0.875rem', color: '#6b7280', background: 'none', border: '1px solid #d1d5db', padding: '0.4rem 0.875rem', borderRadius: '8px', cursor: 'pointer' }}>Logout</button>
         </div>
 
+        {/* SEO */}
         <div style={{ background: 'white', borderRadius: '12px', border: '1px solid #e5e7eb', padding: '1.5rem', marginBottom: '1rem' }}>
           <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: '0 0 1rem' }}>SEO & Meta</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -57,24 +58,38 @@ export default function AdminSettingsPage() {
             <div>
               <label style={lbl}>Meta description</label>
               <textarea style={{ ...inp, resize: 'vertical' }} rows={3} value={siteDesc} onChange={e => setSiteDesc(e.target.value)} />
-              <p style={hint}>Shown in Google search results — keep under 160 characters</p>
+              <p style={hint}>Shown in Google search results — keep under 160 characters ({siteDesc.length}/160)</p>
             </div>
           </div>
         </div>
 
+        {/* Analytics */}
         <div style={{ background: 'white', borderRadius: '12px', border: '1px solid #e5e7eb', padding: '1.5rem', marginBottom: '1rem' }}>
           <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: '0 0 1rem' }}>Analytics & Tracking</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div>
               <label style={lbl}>Meta Pixel ID</label>
               <input style={inp} type="text" value={metaPixelId} onChange={e => setMetaPixelId(e.target.value)} />
-              <p style={hint}>Your current Pixel ID: 1529840028657513</p>
+              <p style={hint}>Current: 1529840028657513</p>
             </div>
             <div>
-              <label style={lbl}>Google Analytics ID (optional)</label>
-              <input style={inp} type="text" placeholder="G-XXXXXXXXXX" value={googleAnalyticsId} onChange={e => setGoogleAnalyticsId(e.target.value)} />
+              <label style={lbl}>Google Tag Manager ID (optional)</label>
+              <input style={inp} type="text" placeholder="GTM-XXXXXXX" value={gtmId} onChange={e => setGtmId(e.target.value)} />
+              <p style={hint}>Format: GTM-XXXXXXX — Add when you have your GTM account ready</p>
             </div>
           </div>
+        </div>
+
+        {/* Zoho CRM notice */}
+        <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '12px', padding: '1.25rem', marginBottom: '1rem' }}>
+          <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#92400e', margin: '0 0 0.5rem' }}>Zoho CRM Integration</p>
+          <p style={{ fontSize: '0.875rem', color: '#92400e', margin: 0 }}>
+            When you have your official Zoho account ready, add these to Vercel Environment Variables:
+          </p>
+          <ul style={{ fontSize: '0.8125rem', color: '#92400e', margin: '0.5rem 0 0', paddingLeft: '1.25rem' }}>
+            <li><code>ZOHO_API_TOKEN</code> — your Zoho API token</li>
+            <li><code>ZOHO_ACCOUNT_OWNER</code> — your work email</li>
+          </ul>
         </div>
 
         <button onClick={handleSave} disabled={saving}
@@ -83,9 +98,8 @@ export default function AdminSettingsPage() {
         </button>
 
         {message === 'success' && (
-          <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '1rem', color: '#15803d', fontSize: '0.9375rem' }}>
-            ✅ Saved! Now run in Command Prompt:
-            <pre style={{ background: '#dcfce7', borderRadius: '6px', padding: '8px', marginTop: '8px', fontSize: '0.8125rem', color: '#166534' }}>{'git add .\ngit commit -m "update: site settings"\ngit push origin main'}</pre>
+          <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '1rem', color: '#15803d' }}>
+            ✅ Saved! Vercel will deploy in ~60 seconds.
           </div>
         )}
         {message === 'error' && (
