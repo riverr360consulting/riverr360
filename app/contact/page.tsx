@@ -33,15 +33,15 @@ export default function ContactPage() {
               <div className="space-y-6 mb-8">
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">Email</h3>
-                  <a href="mailto:info@riverr360.com" className="text-primary-600 hover:text-primary-700">info@riverr360.com</a>
+                  <a href="mailto:riverr360consulting@gmail.com" className="text-primary-600 hover:text-primary-700">riverr360consulting@gmail.com</a>
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">Phone</h3>
-                  <a href="tel:+7411129188" className="text-primary-600 hover:text-primary-700">(+91)-7411-129-188</a>
+                  <a href="tel:(+91)-7411-129-188" className="text-primary-600 hover:text-primary-700">(+91)-7411-129-188</a>
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">Office Hours</h3>
-                  <p className="text-gray-600">Monday - Friday: 9:00 AM - 6:00 PM EST<br />Saturday - Sunday: Closed</p>
+                  <p className="text-gray-600">Monday - Friday: 9:00 AM - 6:00 PM IST<br />Saturday - Sunday: Closed</p>
                 </div>
               </div>
               <div className="bg-primary-50 p-6 rounded-lg">
