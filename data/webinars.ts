@@ -19,7 +19,7 @@ export interface Webinar {
   thumbnail?: string;
 }
 
-export const currentWebinar: Webinar | null = null;
+export const currentWebinar: Webinar | null = null;;
 
 export const archivedWebinars: Webinar[] = [
   {
