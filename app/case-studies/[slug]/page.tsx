@@ -1,5 +1,3 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
@@ -147,8 +145,7 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
 
   return (
     <>
-      <Header />
-      <main>
+        <main>
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-primary-50 to-white py-16">
           <div className="container-custom max-w-5xl mx-auto">
@@ -283,7 +280,6 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
           </div>
         </section>
       </main>
-      <Footer />
-    </>
+     </>
   );
 }
