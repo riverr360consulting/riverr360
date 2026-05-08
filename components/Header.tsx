@@ -6,6 +6,12 @@ import { useState } from 'react';
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+import { usePathname } from 'next/navigation'
+
+export default function Header() {
+  const pathname = usePathname()
+  if (pathname === '/get-started') return null  //
+
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <nav className="container-custom">
