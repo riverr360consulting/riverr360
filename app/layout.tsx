@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: {
-    default: 'Riverr360 | Digital Marketing Revenue Leakage Consultation',
+    default: 'Riverr360 | Revenue Leakage Consulting',
     template: '%s | Riverr360',
   },
   description:
@@ -47,6 +47,18 @@ export default function RootLayout({
       <body className={inter.className}>
         {/* ── Meta Pixel (loads after page is interactive, tracks all routes) ── */}
         <MetaPixel />
+      {/* Google Tag Manager */}
+      <Script
+        id="gtm-script"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-PB2BCL8J');`,
+        }}
+      />
 
         <Header />
         <main>{children}</main>
