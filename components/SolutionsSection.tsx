@@ -12,7 +12,7 @@ const solutions = [
     ],
   },
   {
-    title: 'Conversion Optimization',
+    title: 'Conversion Flow Optimization',
     description: 'Transform your website and landing pages into high-converting sales machines.',
     details: [
       'Landing page design and optimization',
@@ -22,7 +22,7 @@ const solutions = [
     ],
   },
   {
-    title: 'Paid Advertising Management',
+    title: 'Performance Acquisition Systems',
     description: 'Strategic ad campaigns that deliver ROI, not just clicks.',
     details: [
       'Google Ads and Meta Ads management',
@@ -32,7 +32,7 @@ const solutions = [
     ],
   },
   {
-    title: 'SEO & Content Strategy',
+    title: 'Organic Visibility & Search Authority',
     description: 'Dominate search results and attract high-quality organic traffic.',
     details: [
       'Keyword research and content planning',
@@ -42,7 +42,7 @@ const solutions = [
     ],
   },
   {
-    title: 'Email Marketing Automation',
+    title: 'Lifecycle & Retention Systems',
     description: 'Turn subscribers into customers with strategic email campaigns.',
     details: [
       'Automated email funnel setup',
@@ -52,7 +52,7 @@ const solutions = [
     ],
   },
   {
-    title: 'Analytics & Reporting',
+    title: 'Attribution & Performance Intelligence',
     description: 'Track what matters and make data-driven decisions.',
     details: [
       'Google Analytics 4 setup and tracking',
@@ -69,7 +69,7 @@ export default function SolutionsSection() {
       <div className="container-custom">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Our Digital Marketing Solutions
+            How Riverr360 Identifies & Reduces Marketing Leakage
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Data-driven strategies to plug your marketing leaks and maximize ROI.
