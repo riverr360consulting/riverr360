@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: {
-    default: 'Riverr360 | Digital Marketing Revenue Leakage Consultation',
+    default: 'Riverr360 | Revenue Leakage Consulting',
     template: '%s | Riverr360',
   },
   description:
