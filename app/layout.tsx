@@ -10,11 +10,11 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: {
-    default: 'Riverr360 | Revenue Leakage Consulting',
+    default: 'Riverr360 | Revenue Leakage Framework for Your Business Growth',
     template: '%s | Riverr360',
   },
   description:
-    'Riverr360 helps businesses identify and fix revenue leakage through strategic consulting and data-driven solutions.',
+    'Riverr360 helps businesses identify and fix revenue leakage through strategic 360 Revenue Leakage Framework and data-driven solutions.',
   keywords: ['revenue leakage', 'consulting', 'marketing solutions', 'business growth'],
   openGraph: {
     type: 'website',
