@@ -19,17 +19,17 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://riverr360.vercel.app',
+    url: 'https://riverr360.com',
     siteName: 'Riverr360',
-    title: 'Riverr360 | Revenue Leakage Consulting',
+    title: 'Riverr360 | R360 Revenue Leakage Framework for Your Business Growth',
     description:
-      'Riverr360 helps businesses identify and fix revenue leakage through strategic consulting.',
+      'Riverr360 helps businesses identify and fix revenue leakage through strategic framework and process.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Riverr360 | Revenue Leakage Consulting',
+    title: 'Riverr360 | R360 Revenue Leakage Framework for Your Business Growth',
     description:
-      'Riverr360 helps businesses identify and fix revenue leakage through strategic consulting.',
+      'Riverr360 helps businesses identify and fix revenue leakage through strategic process and framework.',
   },
   robots: {
     index: true,

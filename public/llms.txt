@@ -1,0 +1,45 @@
+# llms.txt for riverr360.com
+# This file helps AI crawlers understand your website
+
+# Site Information
+name: Riverr360 Solutions
+url: https://riverr360.com
+description: Riverr360 helps businesses identify and fix revenue leakage through data-driven digital marketing consulting. End-to-End Digital Growth.
+owner: Bijeesh Kuttikrishnan
+contact: consult@riverr360.com
+
+# What we do
+focus: Digital Marketing Consulting, Revenue Leakage, Google Ads, SEO, PPC, Conversion Rate Optimization
+
+# Key Pages
+pages:
+  - url: https://riverr360.com/
+    title: Home - End-to-End Digital Growth
+  - url: https://riverr360.com/blog
+    title: Digital Marketing Blog
+  - url: https://riverr360.com/case-studies
+    title: Case Studies - Real Results
+  - url: https://riverr360.com/webinars
+    title: Webinars
+  - url: https://riverr360.com/profile
+    title: About Bijeesh Kuttikrishnan
+  - url: https://riverr360.com/contact
+    title: Contact Us
+  - url: https://riverr360.com/framework
+    title: Our Framework
+
+# AI Crawlers Policy
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# Do not index ad landing pages
+Disallow: /get-started
