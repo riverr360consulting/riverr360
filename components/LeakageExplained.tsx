@@ -1,64 +1,131 @@
-import CTAButton from './CTAButton';
+import Link from 'next/link';
+
+const layers = [
+  {
+    number: '01',
+    name: 'Acquisition Leakage',
+    color: 'bg-red-50 border-red-400',
+    badge: 'bg-red-100 text-red-700',
+    problem: 'Spending on traffic that never converts — wrong channels, wrong audience, wrong message.',
+    signals: ['High CPL with low quality leads', 'Low CTR on ads', 'Bounced traffic above 70%', 'Wrong audience demographics'],
+    diagnosis: ['Channel mix audit', 'Audience targeting review', 'Ad creative analysis', 'Landing page relevance check'],
+    outcome: 'Right traffic, right cost — qualified leads flowing into your funnel consistently.',
+  },
+  {
+    number: '02',
+    name: 'Attribution Leakage',
+    color: 'bg-orange-50 border-orange-400',
+    badge: 'bg-orange-100 text-orange-700',
+    problem: 'Not knowing which marketing efforts actually drive revenue — leading to wrong budget decisions.',
+    signals: ['No clear ROI visibility', 'Multiple tools, no unified view', 'Over-crediting last-click', 'Dark funnel blind spots'],
+    diagnosis: ['Tracking stack audit', 'Attribution model review', 'CRM-to-ad platform mapping', 'Conversion path analysis'],
+    outcome: 'Full funnel visibility — every rupee tracked to revenue so you invest in what works.',
+  },
+  {
+    number: '03',
+    name: 'Conversion Leakage',
+    color: 'bg-yellow-50 border-yellow-400',
+    badge: 'bg-yellow-100 text-yellow-700',
+    problem: 'Traffic arrives but doesn\'t convert — broken funnels, weak offers, and poor user experience.',
+    signals: ['Sub-2% website conversion rate', 'High cart abandonment', 'Low form completion', 'Weak landing page performance'],
+    diagnosis: ['Conversion funnel mapping', 'UX and CRO audit', 'Offer and CTA review', 'A/B test opportunities'],
+    outcome: 'More revenue from existing traffic — higher conversion rates without spending more on ads.',
+  },
+  {
+    number: '04',
+    name: 'Retention Leakage',
+    color: 'bg-green-50 border-green-400',
+    badge: 'bg-green-100 text-green-700',
+    problem: 'Winning customers but losing them fast — no nurture, no loyalty, no repeat business.',
+    signals: ['High churn rate', 'No post-sale communication', 'Low LTV vs CAC ratio', 'No referral or upsell system'],
+    diagnosis: ['Customer journey mapping', 'Email nurture audit', 'LTV and churn analysis', 'Loyalty and referral gaps'],
+    outcome: 'Customers who stay longer, spend more, and refer others — compounding growth over time.',
+  },
+  {
+    number: '05',
+    name: 'Scaling Leakage',
+    color: 'bg-blue-50 border-blue-400',
+    badge: 'bg-blue-100 text-blue-700',
+    problem: 'Trying to scale but costs rise faster than revenue — no systems, no efficiency, no leverage.',
+    signals: ['CAC increases as you scale', 'Team overwhelmed with manual tasks', 'No automation in place', 'Inconsistent campaign performance'],
+    diagnosis: ['Automation and tech stack review', 'Process efficiency audit', 'Scaling bottleneck identification', 'Growth system blueprint'],
+    outcome: 'A scalable, systemised growth engine — where spending more predictably generates more revenue.',
+  },
+];
 
 export default function LeakageExplained() {
   return (
     <section id="leakage-explained" className="section-padding bg-white">
       <div className="container-custom">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center">
-            What is Marketing Revenue Leakage?
+
+        {/* Section header */}
+        <div className="max-w-3xl mx-auto text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+            Our Proprietary System
+          </div>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            The R360 Revenue Leakage Framework
           </h2>
-          <div className="prose prose-lg max-w-none text-gray-600">
-            <p className="text-xl mb-6">
-              Marketing revenue leakage occurs when your digital marketing efforts fail to 
-              convert potential customers, wasting your ad spend and losing sales opportunities. 
-              It's the silent profit killer that most businesses don't even track.
-            </p>
-            
-            <div className="bg-gray-50 p-8 rounded-lg mb-8">
-              <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-                The Hidden Cost
-              </h3>
-              <p className="mb-4">
-                Studies show that businesses waste 40-60% of their marketing budget on 
-                ineffective campaigns, poor targeting, and broken conversion funnels. 
-                For a company spending $10K/month on marketing, that's up to $6K wasted monthly.
-              </p>
-              <p>
-                The worst part? Most of this is completely preventable with proper tracking, 
-                optimization, and strategic digital marketing.
-              </p>
-            </div>
+          <p className="text-xl text-gray-600">
+            A 5-layer diagnostic system that identifies exactly where your business is losing revenue — and builds a roadmap to recover it.
+          </p>
+        </div>
 
-            <div className="grid md:grid-cols-2 gap-6 mb-8">
-              <div className="border-l-4 border-primary-600 pl-6">
-                <h4 className="text-xl font-semibold text-gray-900 mb-2">
-                  Where Marketing Dollars Leak
-                </h4>
-                <ul className="space-y-2 text-gray-600">
-                  <li>• Poorly optimized ad campaigns</li>
-                  <li>• Low website conversion rates</li>
-                  <li>• Weak email marketing funnels</li>
-                  <li>• Invisible SEO presence</li>
-                </ul>
-              </div>
-              <div className="border-l-4 border-primary-600 pl-6">
-                <h4 className="text-xl font-semibold text-gray-900 mb-2">
-                  The Impact
-                </h4>
-                <ul className="space-y-2 text-gray-600">
-                  <li>• Wasted advertising budget</li>
-                  <li>• Lost leads and customers</li>
-                  <li>• Poor ROI on marketing spend</li>
-                  <li>• Competitors capturing your market</li>
-                </ul>
+        {/* 5 Layers */}
+        <div className="space-y-6 max-w-5xl mx-auto mb-12">
+          {layers.map((layer, index) => (
+            <div key={index} className={`border-l-4 rounded-xl p-6 ${layer.color}`}>
+              <div className="flex flex-col md:flex-row md:items-start gap-6">
+
+                {/* Layer number and name */}
+                <div className="md:w-56 flex-shrink-0">
+                  <div className={`inline-block text-xs font-bold px-3 py-1 rounded-full mb-2 ${layer.badge}`}>
+                    Layer {layer.number}
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900">{layer.name}</h3>
+                  <p className="text-sm text-gray-600 mt-2">{layer.problem}</p>
+                </div>
+
+                {/* Details grid */}
+                <div className="flex-1 grid md:grid-cols-3 gap-4">
+                  <div>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Leakage Signals</p>
+                    <ul className="space-y-1">
+                      {layer.signals.map((s, i) => (
+                        <li key={i} className="text-sm text-gray-600 flex items-start gap-1">
+                          <span className="text-red-400 mt-0.5">▸</span> {s}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Diagnosis Areas</p>
+                    <ul className="space-y-1">
+                      {layer.diagnosis.map((d, i) => (
+                        <li key={i} className="text-sm text-gray-600 flex items-start gap-1">
+                          <span className="text-primary-500 mt-0.5">▸</span> {d}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Outcome</p>
+                    <p className="text-sm text-gray-700 font-medium leading-relaxed">{layer.outcome}</p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          ))}
+        </div>
 
-          <div className="text-center mt-8">
-            <CTAButton text="See How We Help" href="/case-studies" variant="primary" />
-          </div>
+        {/* CTA */}
+        <div className="text-center">
+          <Link href="/framework" className="inline-block bg-primary-600 text-white font-bold px-8 py-4 rounded-xl hover:bg-primary-700 transition-all shadow-lg mr-4">
+            Explore Full Framework →
+          </Link>
+          <Link href="/get-started" className="inline-block bg-white text-primary-600 font-bold px-8 py-4 rounded-xl border-2 border-primary-600 hover:bg-primary-50 transition-all">
+            Diagnose My Business
+          </Link>
         </div>
       </div>
     </section>
