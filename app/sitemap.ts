@@ -1,10 +1,9 @@
 // FILE: app/sitemap.ts
-// Copy this file to: C:\riverr360\app\sitemap.ts
 
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://riverr360.vercel.app';
+  const baseUrl = 'https://riverr360.com';
   const currentDate = new Date();
 
   return [
@@ -12,34 +11,40 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: baseUrl,
       lastModified: currentDate,
-      changeFrequency: 'daily',
+      changeFrequency: 'weekly',
       priority: 1.0,
     },
-    
+
     // Main Pages
-    {
-      url: `${baseUrl}/about`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
     {
       url: `${baseUrl}/blog`,
       lastModified: currentDate,
-      changeFrequency: 'daily',
+      changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
       url: `${baseUrl}/case-studies`,
       lastModified: currentDate,
-      changeFrequency: 'weekly',
+      changeFrequency: 'monthly',
       priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/webinars`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/framework`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/profile`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
     },
     {
       url: `${baseUrl}/contact`,
@@ -47,52 +52,51 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.7,
     },
+
+    // Blog Posts
     {
-      url: `${baseUrl}/get-started`,
+      url: `${baseUrl}/blog/google-ads-landing-page-problem`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.7,
     },
     {
-      url: `${baseUrl}/survey`,
+      url: `${baseUrl}/blog/cut-ppc-costs-in-half`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
-      priority: 0.9,
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/blog/seo-basics-every-business-owner-should-know`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/blog/email-marketing-that-converts`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
     },
 
-    // Service Pages (add your actual service pages)
+    // Case Studies
     {
-      url: `${baseUrl}/services/seo`,
+      url: `${baseUrl}/case-studies/ecommerce-conversion-optimization`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
-      priority: 0.9,
+      priority: 0.7,
     },
     {
-      url: `${baseUrl}/services/ppc`,
+      url: `${baseUrl}/case-studies/saas-ppc-roi-improvement`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
-      priority: 0.9,
+      priority: 0.7,
     },
     {
-      url: `${baseUrl}/services/social-media`,
+      url: `${baseUrl}/case-studies/local-business-seo-domination`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
-      priority: 0.9,
+      priority: 0.7,
     },
-    {
-      url: `${baseUrl}/services/content-marketing`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-
-    // Add blog posts as you create them
-    // Example:
-    // {
-    //   url: `${baseUrl}/blog/seo-guide-small-business`,
-    //   lastModified: currentDate,
-    //   changeFrequency: 'monthly',
-    //   priority: 0.7,
-    // },
   ];
 }
