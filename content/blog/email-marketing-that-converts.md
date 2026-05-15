@@ -1,12 +1,13 @@
----
+\---
+
 title: "Email Marketing That Actually Converts"
 excerpt: "Your email list is your most valuable marketing asset. Learn how to write emails that get opened, read, and clicked—turning subscribers into customers."
 category: "Email Marketing"
-author: "Bijeesh Kuttikrishnan"
+author: "Team Riverr360"
 publishedDate: "2026-02-08"
-coverImage: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=1200&q=80"
+coverImage: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=1200\&q=80"
 featured: false
-tags: ["email-marketing", "conversion", "automation"]
+tags: \["email-marketing", "conversion", "automation"]
 ---
 
 Email marketing has an average ROI of $42 for every $1 spent. But only if you do it right.
@@ -14,6 +15,7 @@ Email marketing has an average ROI of $42 for every $1 spent. But only if you do
 ## Why Most Email Marketing Fails
 
 Three common mistakes:
+
 1. **Boring subject lines** - Nobody opens
 2. **No clear offer** - People don't know what to do
 3. **Selling too hard** - Subscribers hit unsubscribe
@@ -29,21 +31,23 @@ Three common mistakes:
 **Good:** "This mistake is costing you $10K/month"
 
 **Tips:**
-- Ask questions
-- Create curiosity
-- Promise a benefit
-- Keep it under 50 characters
+
+* Ask questions
+* Create curiosity
+* Promise a benefit
+* Keep it under 50 characters
 
 ### Step 2: Start With Value, Not Sales
 
 Your first few emails should GIVE, not ASK.
 
 **Example sequence:**
-- Email 1: Helpful tip
-- Email 2: Case study
-- Email 3: Free resource
-- Email 4: Soft offer
-- Email 5: Direct ask
+
+* Email 1: Helpful tip
+* Email 2: Case study
+* Email 3: Free resource
+* Email 4: Soft offer
+* Email 5: Direct ask
 
 Build trust first, sell second.
 
@@ -52,17 +56,19 @@ Build trust first, sell second.
 Don't confuse people with multiple links and CTAs.
 
 **Each email should have:**
-- One main idea
-- One call-to-action
-- One link (or multiple to same place)
+
+* One main idea
+* One call-to-action
+* One link (or multiple to same place)
 
 ### Step 4: Make It Personal
 
 Write like you're talking to a friend:
-- Use "you" and "I"
-- Tell stories
-- Share failures
-- Be human
+
+* Use "you" and "I"
+* Tell stories
+* Share failures
+* Be human
 
 **Not this:** "Our company announces..."  
 **But this:** "I learned something interesting yesterday..."
@@ -70,15 +76,19 @@ Write like you're talking to a friend:
 ## Email Types That Perform Best
 
 ### Welcome Series
+
 New subscriber? Send 3-5 emails over the first week introducing yourself and delivering value.
 
 ### Newsletter
+
 Weekly or bi-weekly updates with tips, insights, and occasional offers.
 
 ### Promotional
+
 Special offers, launches, limited-time deals. Use sparingly (80% value, 20% promotion).
 
 ### Re-engagement
+
 Haven't opened in 60 days? Send a "miss you" email with your best content.
 
 ## Automation That Works
@@ -94,10 +104,10 @@ Set up these automated sequences:
 
 Ignore vanity metrics. Focus on:
 
-- **Open rate:** 20-30% is good
-- **Click rate:** 2-5% is solid
-- **Conversion rate:** Depends on offer
-- **Unsubscribe rate:** Under 0.5% is healthy
+* **Open rate:** 20-30% is good
+* **Click rate:** 2-5% is solid
+* **Conversion rate:** Depends on offer
+* **Unsubscribe rate:** Under 0.5% is healthy
 
 ## The #1 Email Marketing Rule
 
@@ -109,4 +119,5 @@ A simple email sent every week beats a "perfect" email sent once a month.
 
 Want help building email campaigns that convert?
 
-**[Let's talk about your email strategy](/contact)**
+[**Let's talk about your email strategy**](/contact)
+
