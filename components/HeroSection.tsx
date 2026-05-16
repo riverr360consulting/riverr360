@@ -39,7 +39,7 @@ export default function HeroSection() {
               Riverr360 helps growing businesses identify hidden revenue leaks in acquisition, conversion, retention, and scaling — then builds systems that recover profitability.
             </p>
             <p className="text-base text-gray-500 max-w-2xl mx-auto">
-              Using the proprietary <strong className="text-gray-700">R360 Revenue Leakage Framework</strong> — a 5-layer diagnostic system that identifies exactly where your business is losing money and builds a roadmap to recover it.
+              Using the proprietary 5 layer <strong className="text-gray-700">R360 Revenue Leakage Framework</strong> — engineered to solve revenue leakage across acquisition, conversion, retention, and scaling systems.
             </p>
           </div>
 
