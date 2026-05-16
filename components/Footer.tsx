@@ -8,14 +8,11 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="md:col-span-2">
-            <div className="mb-4">
-              <img src="/images/logo-white.png" alt="Riverr360" className="h-10 w-auto" onError={(e) => { (e.target as HTMLImageElement).style.display='none'; }} />
-              <span className="text-2xl font-bold text-white">Riverr360</span>
-            </div>
+            <p className="text-2xl font-bold text-white mb-4">Riverr360</p>
             <p className="text-gray-400 text-sm leading-relaxed max-w-sm mb-4">
               Riverr360 helps growing businesses uncover hidden revenue leakage and build scalable growth systems — driven by intelligence, efficiency, and measurable profitability.
             </p>
-            <div className="inline-flex items-center gap-2 bg-primary-900 border border-primary-700 px-3 py-1.5 rounded-full text-xs text-primary-300 font-medium">
+            <div className="inline-flex items-center gap-2 bg-gray-800 border border-gray-700 px-3 py-1.5 rounded-full text-xs text-gray-300 font-medium">
               <span className="w-1.5 h-1.5 bg-primary-400 rounded-full"></span>
               R360 Revenue Leakage Framework
             </div>
@@ -67,13 +64,13 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Riverr360. All rights reserved.
+            &copy; 2026 Riverr360. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <Link href="/contact" className="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</Link>
             <Link href="/contact" className="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</Link>
             <Link href="/get-started" className="bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all">
-              Free Audit →
+              Free Audit
             </Link>
           </div>
         </div>
