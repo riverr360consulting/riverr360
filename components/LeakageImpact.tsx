@@ -1,111 +1,98 @@
-════════════════════════════════════════
-PSEO CONTENT BRIEF
-URL: /where-to-stay-in-mumbai-with-family
-════════════════════════════════════════
+export default function LeakageImpact() {
+  const problems = [
+    {
+      title: 'Rising Acquisition Costs',
+      description:
+        'You spend more on marketing, but growth becomes harder to sustain.',
+    },
+    {
+      title: 'Poor Funnel Conversion',
+      description:
+        'Traffic increases, but too few visitors become paying customers.',
+    },
+    {
+      title: 'Weak Customer Retention',
+      description:
+        'New customers come in, but repeat revenue stays low.',
+    },
+    {
+      title: 'Unclear Performance Data',
+      description:
+        'Decisions are made without knowing what is actually driving revenue.',
+    },
+    {
+      title: 'Inefficient Scaling',
+      description:
+        'Businesses grow faster than their systems can support profitably.',
+    },
+  ];
 
-TONE: warm and friendly | CITY: Mumbai | CATEGORY: family
+  return (
+    <section className="section-padding bg-gray-50">
+      <div className="container-custom">
+        <div className="max-w-3xl mx-auto text-center mb-14">
+          <div className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+            Revenue Leakage Impact
+          </div>
 
-[H1]
-Where to stay in  with 
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-5 leading-tight">
+            Where Revenue Leakage Becomes Expensive
+          </h2>
 
-[H2-intro]
-Where to stay in  with ?
+          <p className="text-xl text-gray-600 leading-relaxed">
+            As businesses scale, hidden inefficiencies across marketing, conversion, and retention systems quietly reduce profitability.
+          </p>
+        </div>
 
-[Intro]
-If you are trying to find where to stay in  with , consider choosing the right location, one that fits your budget while keeping you close to major tourist attractions and essential conveniences.  offers a wide range of localities to suit different types of travellers, from commercial hubs ideal for business travellers to areas rich in leisure activities, parks, malls, and temples for tourists. Your budget and location preferences play a key role in choosing the right place to stay.
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {problems.map((problem, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-all"
+            >
+              <div className="text-sm font-semibold text-primary-600 mb-3">
+                0{index + 1}
+              </div>
 
-[Intro2]
-Explore both -friendly and  areas to stay in , along with a curated list of top hotels in each category.
+              <h3 className="text-xl font-bold text-gray-900 mb-3">
+                {problem.title}
+              </h3>
 
-[H2-budget]
--friendly places to stay in  for 
+              <p className="text-gray-600 leading-relaxed text-sm md:text-base">
+                {problem.description}
+              </p>
+            </div>
+          ))}
+        </div>
 
-[H3-loc1]
-1. Borivali
+        <div className="max-w-5xl mx-auto mt-14 bg-white border border-gray-100 rounded-2xl p-8 shadow-sm">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              What Efficient Growth Systems Restore
+            </h3>
+            <p className="text-gray-600">
+              Revenue leakage affects more than marketing performance — it impacts scalability, visibility, and profitability across the business.
+            </p>
+          </div>
 
-[Loc1-body]
-Borivali, being closer to 's top  attractions, is ideal for a  stay. You can find several -friendly hotels and accommodations there.
-
-[H3-loc1-attr]
-Top  attractions near Borivali:
-
-[Attr1]
-Sanjay Gandhi National Park
-
-[Attr1-desc]
-{attraction1_desc}
-
-[Attr2]
-Kanheri Caves
-
-[Attr2-desc]
-{attraction2_desc}
-
-[Attr3]
-Global Vipassana Pagoda
-
-[Attr3-desc]
-{attraction3_desc}
-
-[H3-loc2]
-2. Kandivali
-
-[Loc2-body]
-In Kandivali, you can find various affordable, cosy, and -friendly stays close to various attractions.
-
-[H3-loc3]
-3. Malad
-
-[H2-luxury]
- places to stay in  with 
-
-[H3-loc4]
-1. Malabar Hill
-
-[H3-loc5]
-2. Cuffe Parade
-
-[H3-loc6]
-3. Bandra West
-
-[H2-hotels]
-How to find hotels for  in ?
-
-[Hotel-intro]
-Bag2Bag offers you a wide range of -friendly and  hotels in .
-
-[H3-budget-hotels]
--friendly hotels in  include:
-
-[Hotel1]
-Antlers Hotel, located in Borivali, offers you well-rated accommodations at affordable rates. Location: Mahada Layout, Gorai, Borivali West
-
-[Hotel2]
-Hotel Borivali Executive, located near Borivali, offers reasonably priced, cosy accommodations. Location: Shivam Building, near National Park, Borivali East
-
-[Hotel3]
-A1 Hotel is a  hotel in  offering a hassle-free stay. Location: Brijwasi Apartment, Daftary Road, Malad East
-
-[H3-luxury-hotels]
- hotels in  include:
-
-[Hotel4]
-Bloom Boutique is a top-rated  stay in . Location: Dr Ambedkar Road, Pali Pathar, Bandra West
-
-[Hotel5]
-Hotel Metro Palace offers neatly furnished accommodations. Location: Hill Road, opp Marks N Spencer, Bandra West
-
-[Hotel6]
-Hotel Bandra Residency offers reasonably priced accommodations. Location: Gurunanak Road, opp Sahakari Bhandar, Bandra West
-
-[Hotel7]
-Adiva Residency Beacon offers top-rated,  stays. Location: Maulana Shaukat Ali Road, Grant Road East
-
-RULES:
-1. Only use hotels listed above.
-2. No "bustling" or "vibrant".
-3. 3-4 sentences/paragraph.
-4. Indian/UK English.
-5. 800-900 words.
-
-════════════════════════════════════════
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+            {[
+              'Better Conversion Performance',
+              'More Profitable Acquisition',
+              'Stronger Customer Retention',
+              'Clearer Revenue Visibility',
+              'Scalable Growth Efficiency',
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="bg-gray-50 rounded-xl px-4 py-5 text-sm font-medium text-gray-700"
+              >
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
