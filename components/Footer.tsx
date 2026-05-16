@@ -1,77 +1,81 @@
-'use client';
-
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 
 export default function Footer() {
-  const pathname = usePathname();
-  if (pathname === '/get-started') return null;
-
-  const currentYear = new Date().getFullYear();
-
   return (
-    <footer className="bg-gray-900 text-gray-300">
+    <footer className="bg-gray-900 text-white">
       <div className="container-custom py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Company Info with Logo */}
-          <div>
-            <img 
-              src="/images/logo.png" 
-              alt="Riverr360 Consulting" 
-              className="h-16 w-auto mb-4 brightness-0 invert"
-            />
-            <p className="text-gray-400">
-              Data-driven digital marketing solutions to stop wasting your budget and maximize ROI.
+        <div className="grid md:grid-cols-4 gap-8 mb-10">
+
+          {/* Brand */}
+          <div className="md:col-span-2">
+            <div className="mb-4">
+              <img src="/images/logo-white.png" alt="Riverr360" className="h-10 w-auto" onError={(e) => { (e.target as HTMLImageElement).style.display='none'; }} />
+              <span className="text-2xl font-bold text-white">Riverr360</span>
+            </div>
+            <p className="text-gray-400 text-sm leading-relaxed max-w-sm mb-4">
+              Riverr360 helps growing businesses uncover hidden revenue leakage and build scalable growth systems — driven by intelligence, efficiency, and measurable profitability.
             </p>
-            <p className="text-sm text-gray-500 mt-4 italic">
-              End-to-End Digital Growth
-            </p>
+            <div className="inline-flex items-center gap-2 bg-primary-900 border border-primary-700 px-3 py-1.5 rounded-full text-xs text-primary-300 font-medium">
+              <span className="w-1.5 h-1.5 bg-primary-400 rounded-full"></span>
+              R360 Revenue Leakage Framework
+            </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Navigation */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Quick Links</h4>
+            <h3 className="font-semibold text-white mb-4 text-sm uppercase tracking-wide">Company</h3>
             <ul className="space-y-2">
-              <li>
-                <Link href="/" className="hover:text-primary-400 transition-colors">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="hover:text-primary-400 transition-colors">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link href="/case-studies" className="hover:text-primary-400 transition-colors">
-                  Case Studies
-                </Link>
-              </li>
-              <li>
-                <Link href="/profile" className="hover:text-primary-400 transition-colors">
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-primary-400 transition-colors">
-                  Contact
-                </Link>
-              </li>
+              {[
+                { label: 'About', href: '/profile' },
+                { label: 'Framework', href: '/framework' },
+                { label: 'Case Studies', href: '/case-studies' },
+                { label: 'Blog', href: '/blog' },
+                { label: 'Webinars', href: '/webinars' },
+                { label: 'Contact', href: '/contact' },
+              ].map((item, i) => (
+                <li key={i}>
+                  <Link href={item.href} className="text-gray-400 hover:text-white text-sm transition-colors">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Contact Info */}
+          {/* Services */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Contact</h4>
+            <h3 className="font-semibold text-white mb-4 text-sm uppercase tracking-wide">Services</h3>
             <ul className="space-y-2">
-              <li>Email: info@riverr360.com</li>
-              <li>Phone: (+91)-7411-129-188</li>
+              {[
+                'Revenue Leakage Audit',
+                'Acquisition Strategy',
+                'Conversion Optimisation',
+                'Retention Systems',
+                'Scaling Framework',
+                'Attribution & Analytics',
+              ].map((item, i) => (
+                <li key={i}>
+                  <Link href="/get-started" className="text-gray-400 hover:text-white text-sm transition-colors">
+                    {item}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; {currentYear} Riverr360 Consulting. All rights reserved.</p>
+        {/* Bottom bar */}
+        <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-gray-500 text-sm">
+            © {new Date().getFullYear()} Riverr360. All rights reserved.
+          </p>
+          <div className="flex items-center gap-6">
+            <Link href="/contact" className="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</Link>
+            <Link href="/contact" className="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</Link>
+            <Link href="/get-started" className="bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all">
+              Free Audit →
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
