@@ -9,7 +9,7 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <ProblemSection />
+      <ProblemsSection />
       <LeakageExplained />
       <ReasonsSection />
       <SolutionsSection />
