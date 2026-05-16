@@ -9,6 +9,7 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
+      <LeakageImpact />
       <LeakageExplained />
       <ReasonsSection />
       <SolutionsSection />
