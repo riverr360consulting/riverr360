@@ -33,7 +33,7 @@ export default function HeroSection() {
           {/* Headline */}
           <div className="text-center mb-8">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Stop Losing Revenue Across <span className="text-primary-600">Your Marketing Funnel</span>
+              Stop Revenue Leakage Across <span className="text-primary-600">Your Marketing Funnel</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-4 max-w-3xl mx-auto leading-relaxed">
               Riverr360 helps growing businesses identify hidden revenue leaks in acquisition, conversion, retention, and scaling — then builds systems that recover profitability.
