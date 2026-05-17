@@ -3,7 +3,7 @@ import ProblemsSection from '@/components/ProblemsSection';
 import FrameworkDiagram from '@/components/FrameworkDiagram';
 import SolutionsSection from '@/components/SolutionsSection';
 import CaseStudyStrip from '@/components/CaseStudyStrip';
-import WebinarHomeSection from '@/components/WebinarHomeSection';
+import BlogPreview from '@/components/BlogPreview';
 
 export default function HomePage() {
   return (
@@ -13,7 +13,7 @@ export default function HomePage() {
       <FrameworkDiagram />
       <SolutionsSection />
       <CaseStudyStrip />
-      <WebinarHomeSection />
+      <BlogPreview />
     </>
   );
 }
