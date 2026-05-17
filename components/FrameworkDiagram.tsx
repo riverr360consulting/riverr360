@@ -106,11 +106,11 @@ export default function FrameworkDiagram() {
         </div>
 
         {/* CTA */}
-        <div className="text-center">
-          <Link href="/framework" className="inline-block bg-primary-600 text-white font-bold px-8 py-4 rounded-xl hover:bg-primary-700 transition-all shadow-lg mr-4">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link href="/framework" className="inline-block text-center bg-primary-600 text-white font-bold px-8 py-4 rounded-xl hover:bg-primary-700 transition-all shadow-lg">
             Explore Full Framework →
           </Link>
-          <Link href="/get-started" className="inline-block bg-white text-primary-600 font-bold px-8 py-4 rounded-xl border-2 border-primary-600 hover:bg-primary-50 transition-all">
+          <Link href="/get-started" className="inline-block text-center bg-white text-primary-600 font-bold px-8 py-4 rounded-xl border-2 border-primary-600 hover:bg-primary-50 transition-all">
             Get Free Diagnosis
           </Link>
         </div>
