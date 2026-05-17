@@ -39,17 +39,12 @@ export default function BlogPreview() {
       <div className="container-custom">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-          <div>
-            <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-              Insights & Resources
-            </div>
-            <h2 className="text-3xl font-bold text-gray-900">Latest from the Blog</h2>
-            <p className="text-gray-600 mt-2">Practical strategies to stop revenue leakage and grow profitably.</p>
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+            Insights & Resources
           </div>
-          <Link href="/blog" className="text-primary-600 font-semibold text-sm hover:text-primary-700 transition-colors flex-shrink-0">
-            View all articles →
-          </Link>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Latest from the Blog</h2>
+          <p className="text-gray-600">Practical strategies to stop revenue leakage and grow profitably.</p>
         </div>
 
         {/* Cards */}
@@ -85,6 +80,13 @@ export default function BlogPreview() {
               </div>
             </Link>
           ))}
+        </div>
+
+        {/* View all */}
+        <div className="text-center mt-8">
+          <Link href="/blog" className="text-primary-600 font-semibold text-sm hover:text-primary-700 transition-colors">
+            View all articles →
+          </Link>
         </div>
 
       </div>
