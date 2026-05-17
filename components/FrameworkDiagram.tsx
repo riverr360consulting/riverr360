@@ -22,71 +22,87 @@ export default function FrameworkDiagram() {
         <div className="max-w-2xl mx-auto mb-12">
           <div className="relative w-full" style={{ paddingBottom: '100%' }}>
             <svg
-              viewBox="0 0 640 640"
+              viewBox="0 0 700 700"
               className="absolute inset-0 w-full h-full"
               xmlns="http://www.w3.org/2000/svg"
             >
-              {/* Orbit ring */}
-              <circle cx="320" cy="320" r="210" fill="none" stroke="#e5e7eb" strokeWidth="1" strokeDasharray="4 6"/>
+              {/* Center point: 350, 350 | Orbit radius: 240 */}
 
-              {/* Connector lines */}
-              <line x1="320" y1="200" x2="320" y2="152" stroke="#e5e7eb" strokeWidth="1"/>
-              <line x1="388" y1="253" x2="467" y2="227" stroke="#e5e7eb" strokeWidth="1"/>
-              <line x1="368" y1="387" x2="398" y2="428" stroke="#e5e7eb" strokeWidth="1"/>
-              <line x1="272" y1="387" x2="242" y2="428" stroke="#e5e7eb" strokeWidth="1"/>
-              <line x1="252" y1="253" x2="173" y2="227" stroke="#e5e7eb" strokeWidth="1"/>
+              {/* Orbit ring */}
+              <circle cx="350" cy="350" r="240" fill="none" stroke="#e5e7eb" strokeWidth="1" strokeDasharray="4 6"/>
+
+              {/* 
+                Pentagon positions (radius=240, center=350,350):
+                01 Acquisition  — top:         350, 110
+                02 Attribution  — top-right:   578, 240
+                03 Conversion   — bottom-right: 493, 537
+                04 Retention    — bottom-left:  207, 537
+                05 Scaling      — top-left:     122, 240
+              */}
+
+              {/* Connector lines — from edge of center circle (r=120) to edge of layer circle (r=75) */}
+              {/* 01 Acquisition top: angle=270deg */}
+              <line x1="350" y1="230" x2="350" y2="185" stroke="#d1d5db" strokeWidth="1"/>
+              {/* 02 Attribution top-right: angle=342deg */}
+              <line x1="460" y1="295" x2="510" y2="268" stroke="#d1d5db" strokeWidth="1"/>
+              {/* 03 Conversion bottom-right: angle=54deg */}
+              <line x1="440" y1="447" x2="463" y2="472" stroke="#d1d5db" strokeWidth="1"/>
+              {/* 04 Retention bottom-left: angle=126deg */}
+              <line x1="260" y1="447" x2="237" y2="472" stroke="#d1d5db" strokeWidth="1"/>
+              {/* 05 Scaling top-left: angle=198deg */}
+              <line x1="240" y1="295" x2="190" y2="268" stroke="#d1d5db" strokeWidth="1"/>
 
               {/* Layer 01 — Acquisition — top */}
-              <circle cx="320" cy="110" r="70" fill="#fef2f2" stroke="#fca5a5" strokeWidth="1"/>
-              <text x="320" y="100" textAnchor="middle" fontSize="13" fontWeight="600" fill="#991b1b">Acquisition</text>
-              <text x="320" y="116" textAnchor="middle" fontSize="11" fill="#b91c1c">Improve traffic</text>
-              <text x="320" y="130" textAnchor="middle" fontSize="11" fill="#b91c1c">efficiency</text>
-              <circle cx="373" cy="62" r="12" fill="#fee2e2" stroke="#fca5a5" strokeWidth="0.5"/>
-              <text x="373" y="62" textAnchor="middle" dominantBaseline="central" fontSize="10" fontWeight="600" fill="#991b1b">01</text>
+              <circle cx="350" cy="110" r="75" fill="#fef2f2" stroke="#fca5a5" strokeWidth="1.5"/>
+              <text x="350" y="93" textAnchor="middle" fontSize="14" fontWeight="700" fill="#991b1b">Acquisition</text>
+              <text x="350" y="111" textAnchor="middle" fontSize="12" fill="#b91c1c">Improve traffic</text>
+              <text x="350" y="127" textAnchor="middle" fontSize="12" fill="#b91c1c">efficiency</text>
+              <circle cx="409" cy="58" r="13" fill="#fee2e2" stroke="#fca5a5" strokeWidth="1"/>
+              <text x="409" y="58" textAnchor="middle" dominantBaseline="central" fontSize="11" fontWeight="700" fill="#991b1b">01</text>
 
               {/* Layer 02 — Attribution — top right */}
-              <circle cx="509" cy="215" r="70" fill="#fffbeb" stroke="#fcd34d" strokeWidth="1"/>
-              <text x="509" y="205" textAnchor="middle" fontSize="13" fontWeight="600" fill="#78350f">Attribution</text>
-              <text x="509" y="221" textAnchor="middle" fontSize="11" fill="#92400e">Restore revenue</text>
-              <text x="509" y="235" textAnchor="middle" fontSize="11" fill="#92400e">visibility</text>
-              <circle cx="562" cy="168" r="12" fill="#fef3c7" stroke="#fcd34d" strokeWidth="0.5"/>
-              <text x="562" y="168" textAnchor="middle" dominantBaseline="central" fontSize="10" fontWeight="600" fill="#78350f">02</text>
+              <circle cx="578" cy="240" r="75" fill="#fffbeb" stroke="#fcd34d" strokeWidth="1.5"/>
+              <text x="578" y="223" textAnchor="middle" fontSize="14" fontWeight="700" fill="#78350f">Attribution</text>
+              <text x="578" y="241" textAnchor="middle" fontSize="12" fill="#92400e">Restore revenue</text>
+              <text x="578" y="257" textAnchor="middle" fontSize="12" fill="#92400e">visibility</text>
+              <circle cx="636" cy="187" r="13" fill="#fef3c7" stroke="#fcd34d" strokeWidth="1"/>
+              <text x="636" y="187" textAnchor="middle" dominantBaseline="central" fontSize="11" fontWeight="700" fill="#78350f">02</text>
 
               {/* Layer 03 — Conversion — bottom right */}
-              <circle cx="430" cy="470" r="70" fill="#f0fdf4" stroke="#6ee7b7" strokeWidth="1"/>
-              <text x="430" y="460" textAnchor="middle" fontSize="13" fontWeight="600" fill="#064e3b">Conversion</text>
-              <text x="430" y="476" textAnchor="middle" fontSize="11" fill="#065f46">Increase customer</text>
-              <text x="430" y="490" textAnchor="middle" fontSize="11" fill="#065f46">action</text>
-              <circle cx="483" cy="522" r="12" fill="#d1fae5" stroke="#6ee7b7" strokeWidth="0.5"/>
-              <text x="483" y="522" textAnchor="middle" dominantBaseline="central" fontSize="10" fontWeight="600" fill="#064e3b">03</text>
+              <circle cx="493" cy="537" r="75" fill="#f0fdf4" stroke="#6ee7b7" strokeWidth="1.5"/>
+              <text x="493" y="520" textAnchor="middle" fontSize="14" fontWeight="700" fill="#064e3b">Conversion</text>
+              <text x="493" y="538" textAnchor="middle" fontSize="12" fill="#065f46">Increase customer</text>
+              <text x="493" y="554" textAnchor="middle" fontSize="12" fill="#065f46">action</text>
+              <circle cx="551" cy="590" r="13" fill="#d1fae5" stroke="#6ee7b7" strokeWidth="1"/>
+              <text x="551" y="590" textAnchor="middle" dominantBaseline="central" fontSize="11" fontWeight="700" fill="#064e3b">03</text>
 
               {/* Layer 04 — Retention — bottom left */}
-              <circle cx="210" cy="470" r="70" fill="#eff6ff" stroke="#93c5fd" strokeWidth="1"/>
-              <text x="210" y="460" textAnchor="middle" fontSize="13" fontWeight="600" fill="#1e3a8a">Retention</text>
-              <text x="210" y="476" textAnchor="middle" fontSize="11" fill="#1d4ed8">Strengthen</text>
-              <text x="210" y="490" textAnchor="middle" fontSize="11" fill="#1d4ed8">lifetime value</text>
-              <circle cx="157" cy="522" r="12" fill="#dbeafe" stroke="#93c5fd" strokeWidth="0.5"/>
-              <text x="157" y="522" textAnchor="middle" dominantBaseline="central" fontSize="10" fontWeight="600" fill="#1e3a8a">04</text>
+              <circle cx="207" cy="537" r="75" fill="#eff6ff" stroke="#93c5fd" strokeWidth="1.5"/>
+              <text x="207" y="520" textAnchor="middle" fontSize="14" fontWeight="700" fill="#1e3a8a">Retention</text>
+              <text x="207" y="538" textAnchor="middle" fontSize="12" fill="#1d4ed8">Strengthen</text>
+              <text x="207" y="554" textAnchor="middle" fontSize="12" fill="#1d4ed8">lifetime value</text>
+              <circle cx="149" cy="590" r="13" fill="#dbeafe" stroke="#93c5fd" strokeWidth="1"/>
+              <text x="149" y="590" textAnchor="middle" dominantBaseline="central" fontSize="11" fontWeight="700" fill="#1e3a8a">04</text>
 
               {/* Layer 05 — Scaling — top left */}
-              <circle cx="131" cy="215" r="70" fill="#f5f3ff" stroke="#c4b5fd" strokeWidth="1"/>
-              <text x="131" y="205" textAnchor="middle" fontSize="13" fontWeight="600" fill="#3730a3">Scaling</text>
-              <text x="131" y="221" textAnchor="middle" fontSize="11" fill="#4338ca">Build profitable</text>
-              <text x="131" y="235" textAnchor="middle" fontSize="11" fill="#4338ca">growth systems</text>
-              <circle cx="78" cy="168" r="12" fill="#ede9fe" stroke="#c4b5fd" strokeWidth="0.5"/>
-              <text x="78" y="168" textAnchor="middle" dominantBaseline="central" fontSize="10" fontWeight="600" fill="#3730a3">05</text>
+              <circle cx="122" cy="240" r="75" fill="#f5f3ff" stroke="#c4b5fd" strokeWidth="1.5"/>
+              <text x="122" y="223" textAnchor="middle" fontSize="14" fontWeight="700" fill="#3730a3">Scaling</text>
+              <text x="122" y="241" textAnchor="middle" fontSize="12" fill="#4338ca">Build profitable</text>
+              <text x="122" y="257" textAnchor="middle" fontSize="12" fill="#4338ca">growth systems</text>
+              <circle cx="64" cy="187" r="13" fill="#ede9fe" stroke="#c4b5fd" strokeWidth="1"/>
+              <text x="64" y="187" textAnchor="middle" dominantBaseline="central" fontSize="11" fontWeight="700" fill="#3730a3">05</text>
 
-              {/* Center logo */}
-              <circle cx="320" cy="320" r="112" fill="white" stroke="#e5e7eb" strokeWidth="1"/>
+              {/* Center logo circle */}
+              <circle cx="350" cy="350" r="122" fill="white" stroke="#e5e7eb" strokeWidth="1.5"/>
               <image
                 href="/images/r360-framework-logo.png"
-                x="208" y="208"
-                width="224" height="224"
+                x="228" y="228"
+                width="244" height="244"
                 preserveAspectRatio="xMidYMid meet"
               />
             </svg>
           </div>
-          <p className="text-center text-sm text-gray-400 mt-4">Each layer connects to a precise diagnostic and recovery roadmap</p>
+          <p className="text-center text-sm text-gray-400 mt-2">Each layer connects to a precise diagnostic and recovery roadmap</p>
         </div>
 
         {/* CTA */}
