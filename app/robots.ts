@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/_next/", "/admin/"],
       },
     ],
-    sitemap: "https://riverr360.vercel.app/sitemap.xml",
+    sitemap: "https://riverr360.com/sitemap.xml",
   };
 }
