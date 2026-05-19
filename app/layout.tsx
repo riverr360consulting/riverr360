@@ -9,13 +9,22 @@ import MetaPixel from '@/components/MetaPixel';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://riverr360.com'),
+
+  alternates: {
+    canonical: '/',
+  },
+
   title: {
     default: 'Riverr360 | Revenue Leakage Framework for Your Business Growth',
     template: '%s | Riverr360',
   },
+
   description:
     'Riverr360 helps businesses identify and fix revenue leakage through strategic 360 Revenue Leakage Framework and data-driven solutions.',
+
   keywords: ['revenue leakage', 'consulting', 'marketing solutions', 'business growth'],
+
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -25,12 +34,14 @@ export const metadata: Metadata = {
     description:
       'Riverr360 helps businesses identify and fix revenue leakage through strategic framework and process.',
   },
+
   twitter: {
     card: 'summary_large_image',
     title: 'Riverr360 | R360 Revenue Leakage Framework for Your Business Growth',
     description:
       'Riverr360 helps businesses identify and fix revenue leakage through strategic process and framework.',
   },
+
   robots: {
     index: true,
     follow: true,
