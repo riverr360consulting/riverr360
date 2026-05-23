@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * ── Font display ─────────────────────────────────────────────────────────────
+ * Ensures any custom/Google fonts don't block rendering.
+ * Add this if you load fonts via @font-face anywhere in the project.
+ */
+@layer base {
+  @font-face {
+    font-display: swap; /* Show fallback font immediately; swap when ready */
+  }
+}
+
+/*
+ * ── Content visibility ───────────────────────────────────────────────────────
+ * Tells the browser it can skip rendering off-screen sections until needed.
+ * Apply .cv-auto to below-the-fold sections in your page components.
+ */
+@layer utilities {
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 500px; /* Approximate height hint to prevent layout shift */
+  }
+}
+
 @layer base {
   body {
     @apply bg-white text-gray-900;

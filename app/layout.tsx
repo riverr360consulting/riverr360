@@ -9,9 +9,10 @@ import CookieConsent from '@/components/CookieConsent';
 
 const inter = Inter({
   subsets: ['latin'],
-  // Only load the weights you actually use — cuts font payload
   weight: ['400', '500', '600', '700'],
-  display: 'swap', // prevents font from being render-blocking too
+  display: 'swap',
+  // Preload the font so it's fetched early — reduces layout shift
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -54,37 +55,6 @@ export const metadata: Metadata = {
   },
 };
 
-// Critical above-the-fold CSS inlined so the browser can paint immediately
-// without waiting for the external stylesheet to download.
-// ─────────────────────────────────────────────────────────────────────────────
-// HOW TO UPDATE: Open Chrome DevTools → Coverage tab → reload the page →
-// copy the CSS rules that are marked as "used" for the first viewport, and
-// paste them here. Everything else stays in globals.css (loaded async below).
-// ─────────────────────────────────────────────────────────────────────────────
-const CRITICAL_CSS = `
-  *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: Inter, system-ui, -apple-system, sans-serif;
-    background: #fff;
-    color: #0f172a;
-    -webkit-font-smoothing: antialiased;
-  }
-  /* Header / nav placeholder — prevents layout shift before CSS loads */
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    width: 100%;
-    background: #fff;
-  }
-  main { min-height: 100vh; }
-  img, video { max-width: 100%; height: auto; display: block; }
-  a { color: inherit; text-decoration: none; }
-`;
-
 export default function RootLayout({
   children,
 }: {
@@ -94,35 +64,53 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/*
-          1. Inline critical CSS — zero extra network round-trip,
-             browser can start painting immediately.
-        */}
-        <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
+         * ── Preconnect to critical origins ────────────────────────────────────
+         * Establishes TCP+TLS handshakes early so font/resource fetches don't
+         * pay a full round-trip penalty when the browser discovers them later.
+         */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
         {/*
-          2. Load the full stylesheet NON-blocking via media trick.
-             - media="print" makes the browser fetch it at low priority
-               (non-render-blocking).
-             - onLoad switches it to media="all" so it applies once downloaded.
-             - <noscript> fallback ensures it still loads without JS.
-        */}
-        <link
-          rel="stylesheet"
-          href="/_next/static/css/bbf1d802b98f061b.css"
-          media="print"
-          // @ts-ignore — onLoad on link is valid HTML, TS just doesn't know it
-          onLoad="this.media='all'"
-        />
-        <noscript>
-          <link rel="stylesheet" href="/_next/static/css/bbf1d802b98f061b.css" />
-        </noscript>
+         * ── DNS prefetch for third-party scripts ──────────────────────────────
+         * Cheaper than preconnect — just resolves DNS early for FB/GTM origins.
+         */}
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
+        {/*
+         * ── Preload hero image / logo ─────────────────────────────────────────
+         * Tells the browser to fetch the LCP image as soon as possible,
+         * before it parses the full HTML. Update path if your logo differs.
+         */}
+        <link rel="preload" href="/images/logo.png" as="image" type="image/png" />
+
+        {/*
+         * ── NO manual CSS link here ───────────────────────────────────────────
+         * Previously a hardcoded /_next/static/css/<hash>.css was loaded here,
+         * but that hash changes on every build and would silently break.
+         *
+         * Instead, `experimental.optimizeCss: true` in next.config.js handles
+         * this automatically — it inlines critical CSS and defers the rest
+         * without any hardcoded filenames.
+         *
+         * DO NOT add a manual <link rel="stylesheet"> for Next.js CSS chunks.
+         */}
       </head>
 
       <body className={inter.className}>
-        {/* Meta Pixel */}
+        {/*
+         * ── Meta Pixel ────────────────────────────────────────────────────────
+         * MetaPixel component should use next/script with strategy="lazyOnload"
+         * or "afterInteractive" to keep it off the critical path.
+         * See: app/components/MetaPixel.tsx
+         */}
         <MetaPixel />
 
-        {/* Google Tag Manager — afterInteractive keeps it off the critical path */}
+        {/*
+         * ── Google Tag Manager ────────────────────────────────────────────────
+         * afterInteractive fires after hydration — never blocks first paint.
+         */}
         <Script
           id="gtm-script"
           strategy="afterInteractive"
