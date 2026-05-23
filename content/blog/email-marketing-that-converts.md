@@ -1,15 +1,13 @@
-\---
-
+---
 title: "Email Marketing That Actually Converts"
 excerpt: "Your email list is your most valuable marketing asset. Learn how to write emails that get opened, read, and clicked—turning subscribers into customers."
 category: "Email Marketing"
 author: "Team Riverr360"
 publishedDate: "2026-02-08"
-coverImage: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=1200\&q=80"
+coverImage: "https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=1200&q=80"
 featured: false
-tags: \["email-marketing", "conversion", "automation"]
+tags: ["email-marketing", "conversion", "automation"]
 ---
-
 Email marketing has an average ROI of $42 for every $1 spent. But only if you do it right.
 
 ## Why Most Email Marketing Fails

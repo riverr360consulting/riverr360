@@ -1,20 +1,18 @@
-\---
-
+---
 title: "Why Your Google Ads Are Failing (It's Not What You Think)"
 slug: "google-ads-failing-landing-page-problem"
 date: "2026-03-01"
 author: "Team Riverr360"
 category: "Google Ads"
-tags: \["google-ads", "ppc", "landing-pages", "conversion-optimization", "CPC", "quality-score"]
+tags: ["google-ads", "ppc", "landing-pages", "conversion-optimization", "CPC", "quality-score"]
 excerpt: "High CPC? Bad leads? Your Google Ads might not be the problem—your landing page is. Learn why most businesses waste their ad budget and how to fix it."
 coverImage: "https://images.unsplash.com/photo-1453928582365-b6ad33cbcf64"
 featured: true
-reading\_time: "5 min read"
+reading_time: "5 min read"
 status: "published"
-seo\_title: "Why Google Ads Fail: The Landing Page Problem Nobody Talks About"
-seo\_description: "Discover why your Google Ads campaigns aren't converting. It's not your keywords or budget—it's your landing page. Learn how to fix it and reduce CPC by 50%."
+seo_title: "Why Google Ads Fail: The Landing Page Problem Nobody Talks About"
+seo_description: "Discover why your Google Ads campaigns aren't converting. It's not your keywords or budget—it's your landing page. Learn how to fix it and reduce CPC by 50%."
 ---
-
 I hear it all the time from clients:
 
 "CPC is too high."  
@@ -124,7 +122,7 @@ It's:
 
 A focused landing page is a singular argument for one action. Nothing more.
 
-!\[Example of a high-converting landing page](/images/blog/high-converting-landing-page.jpg)
+![Example of a high-converting landing page](/images/blog/high-converting-landing-page.jpg)
 *A focused landing page with clear messaging, single CTA, and no distractions*
 
 ## The Real Damage of a Bad Landing Page
@@ -185,7 +183,7 @@ Start looking at what happens **after** the click.
 
 Because that's where your money is really being wasted.
 
-\---
+---
 
 ## Want Help Fixing Your Landing Pages?
 
