@@ -1,5 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // ─── Target modern browsers only ─────────────────────────────────────────────
+  // Stops Next.js/SWC from transpiling ES6+ features (arrow functions, async/await,
+  // optional chaining, etc.) that all modern browsers have supported natively for
+  // years. Saves ~24 KiB of unnecessary polyfill/transform overhead per Lighthouse.
+  //
+  // "last 2 chrome versions, last 2 firefox versions, last 2 safari versions" covers
+  // ~95%+ of real traffic. Adjust if you have analytics showing significant legacy
+  // browser usage (IE11, very old iOS Safari, etc.).
+  experimental: {
+    browsersListForSwc: true,
+  },
   // ─── Compression ─────────────────────────────────────────────────────────────
   compress: true,
 
