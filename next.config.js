@@ -1,12 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // ─── Critical CSS inlining (eliminates render-blocking CSS chain) ───────────
-  // Uses 'critters' under the hood to inline above-the-fold CSS and defer the rest.
-  // This directly fixes the 1,027ms critical path latency flagged by Lighthouse.
-  experimental: {
-    optimizeCss: true,
-  },
-
   // ─── Compression ─────────────────────────────────────────────────────────────
   compress: true,
 
