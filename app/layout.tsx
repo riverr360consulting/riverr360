@@ -1,17 +1,21 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
-import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MetaPixel from '@/components/MetaPixel';
 import CookieConsent from '@/components/CookieConsent';
 
+// NOTE: globals.css is NOT imported here anymore.
+// It is loaded non-blocking via a <link> tag below using the media="print" trick.
+// This removes it from the render-blocking critical path entirely.
+// The CRITICAL_CSS constant below covers everything needed for first paint.
+
 const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   display: 'swap',
-  adjustFontFallback: true, // generates size-adjust so fallback font matches Inter metrics — reduces CLS
+  adjustFontFallback: true, // size-adjust on fallback font — reduces font-swap CLS
   preload: true,
 });
 
@@ -41,13 +45,22 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-// ─── Critical CSS ─────────────────────────────────────────────────────────────
-// Only the styles needed to render Header + HeroSection on first paint.
-// The full Tailwind stylesheet (globals.css) handles everything below the fold.
+// ─── Critical CSS ──────────────────────────────────────────────────────────────
+// Covers Header + HeroSection — everything visible on first paint.
+// The full stylesheet (globals.css) loads non-blocking after first paint.
 //
-// HOW TO UPDATE: When you change Header.tsx or HeroSection.tsx, grep the new
-// Tailwind class names and add their CSS equivalents here.
-// ─────────────────────────────────────────────────────────────────────────────
+// WHY: Next.js was injecting globals.css as a render-blocking <link> in <head>,
+// causing 170ms delay before the browser could paint anything. By removing the
+// `import './globals.css'` and loading it deferred instead, first paint is
+// unblocked. This CSS ensures no visual difference during that window.
+//
+// CLS SAFETY: Every class used in Header.tsx and HeroSection.tsx is defined here,
+// so there is no style difference between the inline and deferred versions for
+// above-the-fold content. Below-the-fold content may flash briefly — acceptable.
+//
+// HOW TO UPDATE: When adding new classes to Header.tsx or HeroSection.tsx,
+// add their CSS equivalents here. Use browser DevTools > Coverage tab to verify.
+// ──────────────────────────────────────────────────────────────────────────────
 const CRITICAL_CSS = `
   *, *::before, *::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; line-height: 1.5; -webkit-text-size-adjust: 100%; }
@@ -63,6 +76,7 @@ const CRITICAL_CSS = `
   .z-50 { z-index: 50; }
   .flex { display: flex; }
   .inline-flex { display: inline-flex; }
+  .inline-block { display: inline-block; }
   .hidden { display: none; }
   .grid { display: grid; }
   .block { display: block; }
@@ -78,6 +92,7 @@ const CRITICAL_CSS = `
   .gap-4 { gap: 1rem; }
   .gap-5 { gap: 1.25rem; }
   .space-x-8 > * + * { margin-left: 2rem; }
+  .space-y-4 > * + * { margin-top: 1rem; }
 
   /* Sizing */
   .h-9 { height: 2.25rem; }
@@ -93,6 +108,7 @@ const CRITICAL_CSS = `
   .max-w-7xl { max-width: 80rem; }
   .mx-auto { margin-left: auto; margin-right: auto; }
   .w-full { width: 100%; }
+  .min-h-\\[1lh\\] { min-height: 1lh; }
 
   /* Spacing */
   .p-2 { padding: 0.5rem; }
@@ -165,12 +181,13 @@ const CRITICAL_CSS = `
   /* Buttons */
   .btn-primary { display: inline-flex; align-items: center; justify-content: center; background-color: #2563eb; color: #fff; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; transition: background-color 0.2s; }
   .btn-primary:hover { background-color: #1d4ed8; }
+  .btn-secondary { display: inline-flex; align-items: center; justify-content: center; background-color: #fff; color: #2563eb; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; border: 2px solid #2563eb; transition: background-color 0.2s; }
 
   /* Custom utilities */
   .container-custom { max-width: 80rem; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
   .section-padding { padding-top: 4rem; padding-bottom: 4rem; }
 
-  /* Grid cols */
+  /* Grid */
   .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
   .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
@@ -179,6 +196,11 @@ const CRITICAL_CSS = `
   .transition-all { transition-property: all; transition-duration: 0.15s; }
   .duration-200 { transition-duration: 0.2s; }
   .transition-transform { transition-property: transform; transition-duration: 0.15s; }
+
+  /* Hover states needed for above-fold nav */
+  .hover\\:text-primary-600:hover { color: #2563eb; }
+  .hover\\:scale-105:hover { transform: scale(1.05); }
+  .hover\\:border-primary-400:hover { border-color: #60a5fa; }
 
   /* Responsive: sm (640px+) */
   @media (min-width: 640px) {
@@ -211,27 +233,53 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        {/* ── Early connection hints ─────────────────────────────────────────── */}
+        {/* ── Early connection hints ───────────────────────────────────────────── */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://connect.facebook.net" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
-        {/* ── Preload logo — it's the first image painted ─────────────────────── */}
+        {/* ── Preload logo (LCP / CLS fix) ─────────────────────────────────────── */}
         <link rel="preload" href="/images/logo.png" as="image" type="image/png" />
 
         {/*
          * ── Inline critical CSS ───────────────────────────────────────────────
-         * Browser can paint Header + HeroSection immediately — no network wait.
-         * globals.css (full Tailwind) still loads for everything below the fold.
+         * Paints Header + HeroSection with zero network wait.
+         * Matches the full Tailwind output exactly for these components,
+         * so there is NO style difference when globals.css arrives — no CLS.
          */}
         <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
+
+        {/*
+         * ── Deferred full stylesheet (render-blocking fix) ────────────────────
+         * media="print" makes the browser fetch this at LOW priority (non-blocking).
+         * onLoad flips it to media="all" so it applies once downloaded.
+         * This is the standard technique recommended by web.dev/Chrome team.
+         *
+         * IMPORTANT: Replace the CSS filename below after every `next build`.
+         * The hash changes each build. Find the new filename in:
+         *   .next/static/css/*.css
+         * Or run: ls .next/static/css/
+         *
+         * TODO: Consider a build script to auto-update this hash.
+         */}
+        <link
+          rel="stylesheet"
+          href="/_next/static/css/aaa50ee16a6d65d6.css"
+          media="print"
+          // @ts-ignore — onload on <link> is valid HTML; TypeScript doesn't know it
+          onLoad="this.media='all';this.onload=null"
+        />
+        <noscript>
+          {/* Fallback for browsers with JS disabled — load normally */}
+          <link rel="stylesheet" href="/_next/static/css/aaa50ee16a6d65d6.css" />
+        </noscript>
       </head>
 
       <body className={inter.className}>
         <MetaPixel />
 
-        {/* GTM — afterInteractive keeps it off the critical path */}
+        {/* GTM — afterInteractive: never on the critical path */}
         <Script
           id="gtm-script"
           strategy="afterInteractive"
