@@ -8,7 +8,9 @@ export default function Footer() {
 
           {/* Brand */}
           <div className="md:col-span-2">
-            <p className="text-2xl font-bold text-white mb-4">Riverr360</p>
+            <div className="mb-4">
+              <img src="/images/logo-white.png" alt="Riverr360" className="h-12 w-auto" />
+            </div>
             <p className="text-gray-400 text-sm leading-relaxed max-w-sm mb-4">
               Riverr360 helps growing businesses uncover hidden revenue leakage and build scalable growth systems — driven by intelligence, efficiency, and measurable profitability.
             </p>

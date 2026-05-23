@@ -33,13 +33,13 @@ export default function HeroSection() {
           {/* Headline */}
           <div className="text-center mb-8">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Stop Revenue Leakage Across <span className="text-primary-600">Your Marketing Funnel</span>
+              Stop Losing Revenue Across <span className="text-primary-600">Your Marketing Funnel</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-4 max-w-3xl mx-auto leading-relaxed">
               Riverr360 helps growing businesses identify hidden revenue leaks in acquisition, conversion, retention, and scaling — then builds systems that recover profitability.
             </p>
             <p className="text-base text-gray-500 max-w-2xl mx-auto">
-              Using the proprietary 5 layer <strong className="text-gray-700">R360 Revenue Leakage Framework</strong> — engineered to solve revenue leakage across acquisition, conversion, retention, and scaling systems.
+              Using the proprietary <strong className="text-gray-700">R360 Revenue Leakage Framework</strong> — a 5-layer diagnostic system that identifies exactly where your business is losing money and builds a roadmap to recover it.
             </p>
           </div>
 
@@ -63,39 +63,22 @@ export default function HeroSection() {
           </div>
 
           {/* Trust bar */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm px-8 py-5">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold">✓</div>
-                <div>
-                  <div className="font-semibold text-gray-900 text-sm">Diagnosis-First Approach</div>
-                  <div className="text-xs text-gray-500">We audit before we recommend anything</div>
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm px-6 py-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+              {[
+                { bg: 'bg-green-100', color: 'text-green-600', title: 'Diagnosis-First Approach', sub: 'We audit before we recommend anything' },
+                { bg: 'bg-blue-100', color: 'text-blue-600', title: 'No Retainer Traps', sub: 'Start with a free audit, no commitment' },
+                { bg: 'bg-purple-100', color: 'text-purple-600', title: 'Outcome-Tied Metrics', sub: 'Every engagement has defined KPIs' },
+                { bg: 'bg-red-100', color: 'text-red-600', title: '5-Layer R360 Framework', sub: 'Proprietary diagnostic methodology' },
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className={`w-9 h-9 flex-shrink-0 ${item.bg} rounded-full flex items-center justify-center ${item.color} font-bold text-sm`}>✓</div>
+                  <div>
+                    <div className="font-semibold text-gray-900 text-sm">{item.title}</div>
+                    <div className="text-xs text-gray-500 mt-0.5">{item.sub}</div>
+                  </div>
                 </div>
-              </div>
-              <div className="hidden md:block w-px h-10 bg-gray-200"></div>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">✓</div>
-                <div>
-                  <div className="font-semibold text-gray-900 text-sm">No Retainer Traps</div>
-                  <div className="text-xs text-gray-500">Start with a free audit, no commitment</div>
-                </div>
-              </div>
-              <div className="hidden md:block w-px h-10 bg-gray-200"></div>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold">✓</div>
-                <div>
-                  <div className="font-semibold text-gray-900 text-sm">Outcome-Tied Metrics</div>
-                  <div className="text-xs text-gray-500">Every engagement has defined KPIs</div>
-                </div>
-              </div>
-              <div className="hidden md:block w-px h-10 bg-gray-200"></div>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center text-red-600 font-bold">✓</div>
-                <div>
-                  <div className="font-semibold text-gray-900 text-sm">5-Layer R360 Framework</div>
-                  <div className="text-xs text-gray-500">Proprietary diagnostic methodology</div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 
