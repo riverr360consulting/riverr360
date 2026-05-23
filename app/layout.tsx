@@ -11,6 +11,7 @@ const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   display: 'swap',
+  adjustFontFallback: true, // generates size-adjust so fallback font matches Inter metrics — reduces CLS
   preload: true,
 });
 

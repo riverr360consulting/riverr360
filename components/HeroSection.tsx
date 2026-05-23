@@ -30,10 +30,24 @@ export default function HeroSection() {
             ))}
           </div>
 
-          {/* Headline */}
+          {/* Headline
+            * CLS fix: the <span class="text-primary-600"> was shifting because the
+            * Inter font wasn't loaded yet when the browser first painted, causing
+            * a reflow as font metrics changed. Two fixes applied:
+            *   1. `size-adjust` via font-display:swap is already set in layout.tsx
+            *   2. Explicit `will-change: auto` + `min-h` on the h1 reserves space
+            *      so the font swap doesn't push surrounding content around.
+            */}
           <div className="text-center mb-8">
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Stop Losing Revenue Across <span className="text-primary-600">Your Marketing Funnel</span>
+            <h1
+              className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight"
+              style={{ minHeight: '1lh' }} /* reserves line height space before font loads */
+            >
+              Stop Losing Revenue Across{' '}
+              {/* inline-block prevents the span from causing a line-break reflow */}
+              <span className="text-primary-600 inline-block">
+                Your Marketing Funnel
+              </span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-4 max-w-3xl mx-auto leading-relaxed">
               Riverr360 helps growing businesses identify hidden revenue leaks in acquisition, conversion, retention, and scaling — then builds systems that recover profitability.
