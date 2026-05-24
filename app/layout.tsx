@@ -1,22 +1,16 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
+import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MetaPixel from '@/components/MetaPixel';
 import CookieConsent from '@/components/CookieConsent';
 
-// NOTE: globals.css is NOT imported here anymore.
-// It is loaded non-blocking via a <link> tag below using the media="print" trick.
-// This removes it from the render-blocking critical path entirely.
-// The CRITICAL_CSS constant below covers everything needed for first paint.
-
 const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   display: 'swap',
-  adjustFontFallback: true, // size-adjust on fallback font — reduces font-swap CLS
-  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -35,251 +29,31 @@ export const metadata: Metadata = {
     url: 'https://riverr360.com',
     siteName: 'Riverr360',
     title: 'Riverr360 | R360 Revenue Leakage Framework for Your Business Growth',
-    description: 'Riverr360 helps businesses identify and fix revenue leakage through strategic framework and process.',
+    description:
+      'Riverr360 helps businesses identify and fix revenue leakage through strategic framework and process.',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Riverr360 | R360 Revenue Leakage Framework for Your Business Growth',
-    description: 'Riverr360 helps businesses identify and fix revenue leakage through strategic process and framework.',
+    description:
+      'Riverr360 helps businesses identify and fix revenue leakage through strategic process and framework.',
   },
   robots: { index: true, follow: true },
 };
-
-// ─── Critical CSS ──────────────────────────────────────────────────────────────
-// Covers Header + HeroSection — everything visible on first paint.
-// The full stylesheet (globals.css) loads non-blocking after first paint.
-//
-// WHY: Next.js was injecting globals.css as a render-blocking <link> in <head>,
-// causing 170ms delay before the browser could paint anything. By removing the
-// `import './globals.css'` and loading it deferred instead, first paint is
-// unblocked. This CSS ensures no visual difference during that window.
-//
-// CLS SAFETY: Every class used in Header.tsx and HeroSection.tsx is defined here,
-// so there is no style difference between the inline and deferred versions for
-// above-the-fold content. Below-the-fold content may flash briefly — acceptable.
-//
-// HOW TO UPDATE: When adding new classes to Header.tsx or HeroSection.tsx,
-// add their CSS equivalents here. Use browser DevTools > Coverage tab to verify.
-// ──────────────────────────────────────────────────────────────────────────────
-const CRITICAL_CSS = `
-  *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; line-height: 1.5; -webkit-text-size-adjust: 100%; }
-  body { margin: 0; font-family: Inter, system-ui, -apple-system, sans-serif; background: #fff; color: #111827; -webkit-font-smoothing: antialiased; }
-  img, svg { display: block; max-width: 100%; }
-  a { color: inherit; text-decoration: none; }
-  strong { font-weight: 700; }
-  button { cursor: pointer; border: none; background: none; }
-
-  /* Layout */
-  .sticky { position: sticky; }
-  .top-0 { top: 0; }
-  .z-50 { z-index: 50; }
-  .flex { display: flex; }
-  .inline-flex { display: inline-flex; }
-  .inline-block { display: inline-block; }
-  .hidden { display: none; }
-  .grid { display: grid; }
-  .block { display: block; }
-  .items-center { align-items: center; }
-  .items-start { align-items: flex-start; }
-  .justify-between { justify-content: space-between; }
-  .justify-center { justify-content: center; }
-  .flex-col { flex-direction: column; }
-  .flex-shrink-0 { flex-shrink: 0; }
-  .flex-wrap { flex-wrap: wrap; }
-  .gap-2 { gap: 0.5rem; }
-  .gap-3 { gap: 0.75rem; }
-  .gap-4 { gap: 1rem; }
-  .gap-5 { gap: 1.25rem; }
-  .space-x-8 > * + * { margin-left: 2rem; }
-  .space-y-4 > * + * { margin-top: 1rem; }
-
-  /* Sizing */
-  .h-9 { height: 2.25rem; }
-  .h-10 { height: 2.5rem; }
-  .h-16 { height: 4rem; }
-  .w-6 { width: 1.5rem; }
-  .w-9 { width: 2.25rem; }
-  .h-6 { height: 1.5rem; }
-  .w-auto { width: auto; }
-  .max-w-2xl { max-width: 42rem; }
-  .max-w-3xl { max-width: 48rem; }
-  .max-w-5xl { max-width: 64rem; }
-  .max-w-7xl { max-width: 80rem; }
-  .mx-auto { margin-left: auto; margin-right: auto; }
-  .w-full { width: 100%; }
-  .min-h-\\[1lh\\] { min-height: 1lh; }
-
-  /* Spacing */
-  .p-2 { padding: 0.5rem; }
-  .p-5 { padding: 1.25rem; }
-  .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
-  .px-4 { padding-left: 1rem; padding-right: 1rem; }
-  .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
-  .px-8 { padding-left: 2rem; padding-right: 2rem; }
-  .py-1\\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
-  .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
-  .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
-  .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
-  .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
-  .mb-1 { margin-bottom: 0.25rem; }
-  .mb-4 { margin-bottom: 1rem; }
-  .mb-6 { margin-bottom: 1.5rem; }
-  .mb-8 { margin-bottom: 2rem; }
-  .mb-10 { margin-bottom: 2.5rem; }
-  .mb-16 { margin-bottom: 4rem; }
-  .mt-0\\.5 { margin-top: 0.125rem; }
-
-  /* Typography */
-  .text-xs { font-size: 0.75rem; line-height: 1rem; }
-  .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
-  .text-base { font-size: 1rem; line-height: 1.5rem; }
-  .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
-  .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
-  .text-5xl { font-size: 3rem; line-height: 1; }
-  .font-semibold { font-weight: 600; }
-  .font-bold { font-weight: 700; }
-  .text-center { text-align: center; }
-  .leading-tight { line-height: 1.25; }
-  .leading-relaxed { line-height: 1.625; }
-
-  /* Colors */
-  .bg-white { background-color: #fff; }
-  .text-gray-500 { color: #6b7280; }
-  .text-gray-600 { color: #4b5563; }
-  .text-gray-700 { color: #374151; }
-  .text-gray-900 { color: #111827; }
-  .text-primary-600 { color: #2563eb; }
-  .text-green-600 { color: #16a34a; }
-  .text-blue-600 { color: #2563eb; }
-  .text-purple-600 { color: #9333ea; }
-  .text-red-600 { color: #dc2626; }
-  .bg-green-100 { background-color: #dcfce7; }
-  .bg-blue-100 { background-color: #dbeafe; }
-  .bg-purple-100 { background-color: #f3e8ff; }
-  .bg-red-100 { background-color: #fee2e2; }
-  .border-gray-100 { border-color: #f3f4f6; }
-  .border-gray-200 { border-color: #e5e7eb; }
-  .border-gray-300 { border-color: #d1d5db; }
-
-  /* Borders & Shadows */
-  .border { border-width: 1px; border-style: solid; }
-  .border-2 { border-width: 2px; border-style: solid; }
-  .rounded-full { border-radius: 9999px; }
-  .rounded-lg { border-radius: 0.5rem; }
-  .rounded-xl { border-radius: 0.75rem; }
-  .rounded-2xl { border-radius: 1rem; }
-  .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); }
-  .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1); }
-
-  /* Hero gradient */
-  .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); }
-  .from-primary-50 { --tw-gradient-from: #eff6ff; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(239,246,255,0)); }
-  .via-white { --tw-gradient-stops: var(--tw-gradient-from), #fff, var(--tw-gradient-to, rgba(255,255,255,0)); }
-  .to-purple-50 { --tw-gradient-to: #faf5ff; }
-
-  /* Buttons */
-  .btn-primary { display: inline-flex; align-items: center; justify-content: center; background-color: #2563eb; color: #fff; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; transition: background-color 0.2s; }
-  .btn-primary:hover { background-color: #1d4ed8; }
-  .btn-secondary { display: inline-flex; align-items: center; justify-content: center; background-color: #fff; color: #2563eb; font-weight: 600; padding: 0.75rem 2rem; border-radius: 0.5rem; border: 2px solid #2563eb; transition: background-color 0.2s; }
-
-  /* Custom utilities */
-  .container-custom { max-width: 80rem; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
-  .section-padding { padding-top: 4rem; padding-bottom: 4rem; }
-
-  /* Grid */
-  .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-  .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-
-  /* Transitions */
-  .transition-colors { transition-property: color, background-color, border-color; transition-duration: 0.15s; }
-  .transition-all { transition-property: all; transition-duration: 0.15s; }
-  .duration-200 { transition-duration: 0.2s; }
-  .transition-transform { transition-property: transform; transition-duration: 0.15s; }
-
-  /* Hover states needed for above-fold nav */
-  .hover\\:text-primary-600:hover { color: #2563eb; }
-  .hover\\:scale-105:hover { transform: scale(1.05); }
-  .hover\\:border-primary-400:hover { border-color: #60a5fa; }
-
-  /* Responsive: sm (640px+) */
-  @media (min-width: 640px) {
-    .sm\\:flex-row { flex-direction: row; }
-    .sm\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .container-custom { padding-left: 1.5rem; padding-right: 1.5rem; }
-  }
-
-  /* Responsive: md (768px+) */
-  @media (min-width: 768px) {
-    .md\\:flex { display: flex; }
-    .md\\:hidden { display: none; }
-    .md\\:block { display: block; }
-    .md\\:h-12 { height: 3rem; }
-    .md\\:py-24 { padding-top: 6rem; padding-bottom: 6rem; }
-    .md\\:text-2xl { font-size: 1.5rem; line-height: 2rem; }
-    .md\\:text-6xl { font-size: 3.75rem; line-height: 1; }
-    .md\\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .section-padding { padding-top: 6rem; padding-bottom: 6rem; }
-    .container-custom { padding-left: 1.5rem; padding-right: 1.5rem; }
-  }
-
-  /* Responsive: lg (1024px+) */
-  @media (min-width: 1024px) {
-    .container-custom { padding-left: 2rem; padding-right: 2rem; }
-  }
-`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
-        {/* ── Early connection hints ───────────────────────────────────────────── */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://connect.facebook.net" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-
-        {/* ── Preload logo (LCP / CLS fix) ─────────────────────────────────────── */}
         <link rel="preload" href="/images/logo.png" as="image" type="image/png" />
-
-        {/*
-         * ── Inline critical CSS ───────────────────────────────────────────────
-         * Paints Header + HeroSection with zero network wait.
-         * Matches the full Tailwind output exactly for these components,
-         * so there is NO style difference when globals.css arrives — no CLS.
-         */}
-        <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
-
-        {/*
-         * ── Deferred full stylesheet (render-blocking fix) ────────────────────
-         * media="print" makes the browser fetch this at LOW priority (non-blocking).
-         * onLoad flips it to media="all" so it applies once downloaded.
-         * This is the standard technique recommended by web.dev/Chrome team.
-         *
-         * IMPORTANT: Replace the CSS filename below after every `next build`.
-         * The hash changes each build. Find the new filename in:
-         *   .next/static/css/*.css
-         * Or run: ls .next/static/css/
-         *
-         * TODO: Consider a build script to auto-update this hash.
-         */}
-        <link
-          rel="stylesheet"
-          href="/_next/static/css/aaa50ee16a6d65d6.css"
-          media="print"
-          // @ts-ignore — onload on <link> is valid HTML; TypeScript doesn't know it
-          onLoad="this.media='all';this.onload=null"
-        />
-        <noscript>
-          {/* Fallback for browsers with JS disabled — load normally */}
-          <link rel="stylesheet" href="/_next/static/css/aaa50ee16a6d65d6.css" />
-        </noscript>
       </head>
-
       <body className={inter.className}>
         <MetaPixel />
 
-        {/* GTM — afterInteractive: never on the critical path */}
         <Script
           id="gtm-script"
           strategy="afterInteractive"
