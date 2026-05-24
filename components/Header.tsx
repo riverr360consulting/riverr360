@@ -8,13 +8,13 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  if (pathname === '/get-started') return null;
+  if (pathname === '/get-started' || pathname === '/lp') return null;
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <nav className="container-custom">
         <div className="flex justify-between items-center h-16">
-          {/* Logo — explicit width/height prevent layout shift (CLS fix) */}
+          {/* Logo */}
           <Link href="/" className="flex items-center">
             <img
               src="/images/logo.png"
@@ -29,6 +29,9 @@ export default function Header() {
           <div className="hidden md:flex space-x-8">
             <Link href="/" className="text-gray-700 hover:text-primary-600 transition-colors">
               Home
+            </Link>
+            <Link href="/framework" className="text-gray-700 hover:text-primary-600 transition-colors">
+              R360
             </Link>
             <Link href="/blog" className="text-gray-700 hover:text-primary-600 transition-colors">
               Blog
@@ -47,9 +50,9 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* CTA Button */}
+          {/* CTA Button → now goes to /book */}
           <div className="hidden md:block">
-            <Link href="/contact" className="btn-primary">
+            <Link href="/book" className="btn-primary">
               Get Started
             </Link>
           </div>
@@ -58,6 +61,7 @@ export default function Header() {
           <button
             className="md:hidden p-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {mobileMenuOpen ? (
@@ -73,12 +77,13 @@ export default function Header() {
         {mobileMenuOpen && (
           <div className="md:hidden py-4 space-y-4">
             <Link href="/" className="block text-gray-700 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>Home</Link>
+            <Link href="/framework" className="block text-gray-700 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>R360</Link>
             <Link href="/blog" className="block text-gray-700 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>Blog</Link>
             <Link href="/case-studies" className="block text-gray-700 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>Case Studies</Link>
             <Link href="/webinars" className="block text-gray-700 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>Webinars</Link>
             <Link href="/profile" className="block text-gray-700 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>About</Link>
             <Link href="/contact" className="block text-gray-700 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
-            <Link href="/contact" className="block btn-primary text-center" onClick={() => setMobileMenuOpen(false)}>Get Started</Link>
+            <Link href="/book" className="block btn-primary text-center" onClick={() => setMobileMenuOpen(false)}>Get Started</Link>
           </div>
         )}
       </nav>
