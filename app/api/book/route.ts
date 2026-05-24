@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
     // 2. Confirmation email to visitor
     await sendEmail(
       email,
-      `Your strategy call is confirmed — ${formattedDate} at ${time}`,
+      `Your strategy call is confirmed - ${formattedDate} at ${time}`,
       `
       <div style="font-family:Inter,sans-serif;max-width:560px;margin:0 auto;color:#1e293b;">
         <h2 style="color:#1d4ed8;">Your call is confirmed, ${name.split(' ')[0]}!</h2>
