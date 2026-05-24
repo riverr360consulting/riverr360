@@ -4,14 +4,15 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Stop Losing Revenue | Free Marketing Audit — Riverr360',
   description: 'Get a free R360 Revenue Leakage Audit. We identify exactly where your marketing budget is leaking and build a roadmap to recover it.',
-  robots: { index: false, follow: false }, // don't index ad landing pages
+  robots: { index: false, follow: false },
 };
 
 export default function LandingPage() {
   return (
+    // No global Header or Footer — this page uses pathname check in Header.tsx
     <div className="min-h-screen bg-white">
 
-      {/* Minimal header — no nav */}
+      {/* Minimal header */}
       <header className="border-b border-gray-100 bg-white">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/">
@@ -40,8 +41,6 @@ export default function LandingPage() {
               <p className="text-lg text-gray-600 mb-8">
                 Most businesses waste 40–60% of their marketing budget without knowing where. The R360 Framework pinpoints exactly where your revenue is leaking — and builds a roadmap to recover it.
               </p>
-
-              {/* Proof points */}
               <div className="grid grid-cols-2 gap-4 mb-8">
                 {[
                   { stat: '↓ 32%', label: 'Lower Acquisition Cost' },
@@ -55,29 +54,21 @@ export default function LandingPage() {
                   </div>
                 ))}
               </div>
-
-              {/* Trust badges */}
               <div className="flex flex-wrap gap-3 text-sm text-gray-500">
                 {['✓ No retainer traps', '✓ Diagnosis-first approach', '✓ Outcome-tied metrics'].map(t => (
-                  <span key={t} className="flex items-center gap-1">{t}</span>
+                  <span key={t}>{t}</span>
                 ))}
               </div>
             </div>
 
             {/* Right: Form */}
             <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-8">
-              <h2 className="text-xl font-bold text-gray-900 mb-2">Get Your Free Audit</h2>
-              <p className="text-sm text-gray-500 mb-6">Takes 5 minutes. No commitment required.</p>
-
-              <form
-                action="https://api.web3forms.com/submit"
-                method="POST"
-                className="space-y-4"
-              >
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Get Your Free Revenue Leakage Audit</h2>
+              <p className="text-sm text-gray-500 mb-6">Takes 2 minutes. No commitment required.</p>
+              <form action="https://api.web3forms.com/submit" method="POST" className="space-y-4">
                 <input type="hidden" name="access_key" value="bd8222f1-81ef-4ed7-9182-09c0c52ae333" />
                 <input type="hidden" name="subject" value="New Landing Page Lead — Riverr360" />
                 <input type="hidden" name="redirect" value="https://riverr360.com/thank-you" />
-
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Full name <span className="text-red-500">*</span></label>
                   <input type="text" name="name" placeholder="Rahul Sharma" required />
@@ -105,25 +96,17 @@ export default function LandingPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Biggest marketing challenge</label>
                   <textarea name="challenge" placeholder="e.g. High ad spend but poor quality leads..." style={{ height: 72 }} />
                 </div>
-
                 <button type="submit" className="btn-primary w-full text-center">
-                  Get My Free Audit →
+                  Get My Free Revenue Leakage Audit →
                 </button>
-
-                <div className="text-center space-y-3 pt-2">
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 h-px bg-gray-200" />
-                    <span className="text-xs text-gray-400">or</span>
-                    <div className="flex-1 h-px bg-gray-200" />
-                  </div>
-                  <Link
-                    href="/book"
-                    className="block w-full btn-secondary text-center text-sm"
-                  >
-                    📅 Book a 30-min Strategy Call Instead
-                  </Link>
+                <div className="flex items-center gap-3 my-2">
+                  <div className="flex-1 h-px bg-gray-200" />
+                  <span className="text-xs text-gray-400">or</span>
+                  <div className="flex-1 h-px bg-gray-200" />
                 </div>
-
+                <Link href="/book" className="block w-full btn-secondary text-center text-sm">
+                  📅 Book a 30-min Strategy Call Instead
+                </Link>
                 <p className="text-xs text-gray-400 text-center pt-1">
                   🔒 Your information is secure and never shared.
                 </p>
@@ -182,7 +165,7 @@ export default function LandingPage() {
           <p className="text-primary-100 mb-6">Get your free R360 Revenue Leakage Audit today.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="#top" className="bg-white text-primary-600 font-bold px-8 py-3 rounded-lg hover:bg-gray-50 transition-colors">
-              Get Free Audit →
+              Get Free Revenue Leakage Audit →
             </a>
             <Link href="/book" className="border-2 border-white text-white font-bold px-8 py-3 rounded-lg hover:bg-primary-700 transition-colors">
               Book a Strategy Call
@@ -191,14 +174,13 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Minimal footer */}
-      <footer className="border-t border-gray-100 py-6 text-center">
+      {/* Minimal footer — NO global footer */}
+      <footer className="border-t border-gray-100 py-6 text-center bg-white">
         <p className="text-xs text-gray-400">
           © 2026 Riverr360. All rights reserved. ·{' '}
           <Link href="/contact" className="hover:text-gray-600">Privacy Policy</Link>
         </p>
       </footer>
-
     </div>
   );
 }

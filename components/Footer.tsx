@@ -1,6 +1,29 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  // Hide full footer only on ad landing page
+  if (pathname === '/lp') return null;
+
+  // Minimal footer for distraction-free pages
+  if (pathname === '/survey' || pathname === '/get-started') {
+    return (
+      <footer className="border-t border-gray-200 py-6 text-center bg-white">
+        <p className="text-xs text-gray-400">
+          © 2026 Riverr360. All rights reserved. ·{' '}
+          <Link href="/contact" className="hover:text-gray-600 transition-colors">Privacy Policy</Link>
+          {' · '}
+          <Link href="/contact" className="hover:text-gray-600 transition-colors">Terms of Service</Link>
+        </p>
+      </footer>
+    );
+  }
+
+  // Full footer for all other pages
   return (
     <footer className="bg-gray-900 text-white">
       <div className="container-custom py-12">
@@ -31,8 +54,8 @@ export default function Footer() {
                 { label: 'Blog', href: '/blog' },
                 { label: 'Webinars', href: '/webinars' },
                 { label: 'Contact', href: '/contact' },
-              ].map((item, i) => (
-                <li key={i}>
+              ].map((item) => (
+                <li key={item.href}>
                   <Link href={item.href} className="text-gray-400 hover:text-white text-sm transition-colors">
                     {item.label}
                   </Link>
@@ -52,8 +75,8 @@ export default function Footer() {
                 'Retention Systems',
                 'Scaling Framework',
                 'Attribution & Analytics',
-              ].map((item, i) => (
-                <li key={i}>
+              ].map((item) => (
+                <li key={item}>
                   <Link href="/get-started" className="text-gray-400 hover:text-white text-sm transition-colors">
                     {item}
                   </Link>

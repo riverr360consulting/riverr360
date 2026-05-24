@@ -82,7 +82,6 @@ export default function SurveyPage() {
     }
   };
 
-  // ── Thank you screen ──────────────────────────────────────────────────────
   if (showThankYou) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-primary-50 to-white flex items-center justify-center p-4">
@@ -155,9 +154,10 @@ export default function SurveyPage() {
   );
 
   return (
+    // layout.tsx Header is hidden for /survey via the pathname check
     <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-purple-50">
 
-      {/* Minimal header — no site nav, no distractions */}
+      {/* Single minimal header — no global header shown on this route */}
       <header className="bg-white border-b border-gray-100">
         <div className="max-w-3xl mx-auto px-4 flex justify-between items-center h-14">
           <Link href="/">
@@ -185,11 +185,9 @@ export default function SurveyPage() {
         </div>
       </div>
 
-      {/* Main content */}
       <main className="max-w-3xl mx-auto px-4 py-10">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
 
-          {/* ── Step 0: Intro ───────────────────────────────────────────────── */}
           {step === 0 && (
             <div className="text-center">
               <div className="inline-flex items-center gap-2 bg-primary-50 text-primary-700 text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
@@ -221,7 +219,6 @@ export default function SurveyPage() {
             </div>
           )}
 
-          {/* ── Step 1: Contact Info ─────────────────────────────────────────── */}
           {step === 1 && (
             <div>
               <span className="text-sm text-primary-600 font-semibold">Your Details</span>
@@ -256,138 +253,17 @@ export default function SurveyPage() {
             </div>
           )}
 
-          {/* ── Questions 1–10 ───────────────────────────────────────────────── */}
           {[
-            {
-              s: 2, q: 1, field: 'q1_current_situation',
-              title: 'How would you describe your current marketing situation?',
-              subtitle: 'Select the option that best describes where you are right now.',
-              options: [
-                'Just starting — no marketing in place yet',
-                'Running ads but not getting expected results',
-                'Getting leads but poor quality or high cost',
-                'Marketing is working but want to scale',
-                'Tried multiple agencies — disappointed with results',
-                'Have in-house team but results are inconsistent',
-              ],
-            },
-            {
-              s: 3, q: 2, field: 'q2_agency_experience',
-              title: 'Have you worked with a digital marketing agency or freelancer before?',
-              subtitle: null,
-              options: [
-                'Yes — and it worked well',
-                'Yes — but results were disappointing',
-                'Yes — currently working with one',
-                'No — first time exploring this',
-                'No — tried to do it in-house',
-                'Yes — multiple agencies, mixed results',
-              ],
-            },
-            {
-              s: 4, q: 3, field: 'q3_biggest_challenge',
-              title: 'What is your single biggest marketing challenge right now?',
-              subtitle: 'Pick the one that impacts you the most.',
-              options: [
-                'Not getting enough leads',
-                'Leads are low quality or not converting',
-                'High cost per lead / cost per acquisition',
-                'Poor ROAS on paid ads',
-                'No clarity on what is actually working',
-                'Scaling without knowing what to fix first',
-              ],
-            },
-            {
-              s: 5, q: 4, field: 'q4_marketing_budget',
-              title: 'What is your current monthly marketing budget?',
-              subtitle: 'Include ad spend and agency fees.',
-              options: [
-                'Under ₹25,000/month',
-                '₹25,000 – ₹1,00,000/month',
-                '₹1,00,000 – ₹3,00,000/month',
-                '₹3,00,000 – ₹10,00,000/month',
-                'Above ₹10,00,000/month',
-                'Not currently spending — planning to start',
-              ],
-            },
-            {
-              s: 6, q: 5, field: 'q5_results_satisfaction',
-              title: 'How satisfied are you with your current marketing results?',
-              subtitle: null,
-              options: [
-                'Very dissatisfied — wasting money with no results',
-                'Dissatisfied — some results but far below expectations',
-                'Neutral — getting results but not consistently',
-                'Satisfied — results are decent but want to grow',
-                'Very satisfied — but want to scale further',
-                'No marketing running — starting fresh',
-              ],
-            },
-            {
-              s: 7, q: 6, field: 'q6_knowledge_level',
-              title: 'How would you rate your own digital marketing knowledge?',
-              subtitle: 'Be honest — this helps us calibrate your diagnosis.',
-              options: [
-                'Beginner — I know very little about it',
-                'Basic — I understand the concepts but not execution',
-                'Intermediate — I can manage campaigns but not optimise',
-                'Advanced — I understand strategy and execution',
-                'Expert — I have deep experience',
-                'Variable — strong in some areas, weak in others',
-              ],
-            },
-            {
-              s: 8, q: 7, field: 'q7_learning_interest',
-              title: 'Would you like to understand the real marketing process behind results?',
-              subtitle: 'Understanding the process helps you make better decisions and avoid being misled.',
-              options: [
-                'Yes — I want to understand the complete process',
-                'Yes, but keep it simple',
-                'Maybe — depends on how much time it takes',
-                'No — I just want someone to handle it',
-                'I already understand it well',
-                'Not sure yet',
-              ],
-            },
-            {
-              s: 9, q: 8, field: 'q8_team_training',
-              title: 'Would you be interested in training your in-house team on marketing practices?',
-              subtitle: null,
-              options: [
-                'Yes — train my entire team',
-                'Yes — only key team members',
-                'Maybe — depends on cost and time',
-                'No — prefer to fully outsource',
-                'I do not have an in-house team',
-                'Already have trained staff',
-              ],
-            },
-            {
-              s: 10, q: 9, field: 'q9_expectations',
-              title: 'What timeline are you expecting for meaningful results?',
-              subtitle: 'Being realistic here helps us build the right plan for you.',
-              options: [
-                'Immediate — need results within days',
-                'Short-term — within 1-2 months',
-                'Medium-term — 3-6 months',
-                'Long-term — 6-12 months, done right',
-                'Realistic — I understand it takes time',
-                'Just want to stop wasting money first',
-              ],
-            },
-            {
-              s: 11, q: 10, field: 'q10_timeline',
-              title: 'When are you looking to start improving your marketing?',
-              subtitle: null,
-              options: [
-                'Immediately — I need help now',
-                'Within the next month',
-                'Next 2-3 months',
-                'Next quarter — planning ahead',
-                'Just exploring options for now',
-                'Not sure yet',
-              ],
-            },
+            { s: 2, q: 1, field: 'q1_current_situation', title: 'How would you describe your current marketing situation?', subtitle: 'Select the option that best describes where you are right now.', options: ['Just starting — no marketing in place yet', 'Running ads but not getting expected results', 'Getting leads but poor quality or high cost', 'Marketing is working but want to scale', 'Tried multiple agencies — disappointed with results', 'Have in-house team but results are inconsistent'] },
+            { s: 3, q: 2, field: 'q2_agency_experience', title: 'Have you worked with a digital marketing agency or freelancer before?', subtitle: null, options: ['Yes — and it worked well', 'Yes — but results were disappointing', 'Yes — currently working with one', 'No — first time exploring this', 'No — tried to do it in-house', 'Yes — multiple agencies, mixed results'] },
+            { s: 4, q: 3, field: 'q3_biggest_challenge', title: 'What is your single biggest marketing challenge right now?', subtitle: 'Pick the one that impacts you the most.', options: ['Not getting enough leads', 'Leads are low quality or not converting', 'High cost per lead / cost per acquisition', 'Poor ROAS on paid ads', 'No clarity on what is actually working', 'Scaling without knowing what to fix first'] },
+            { s: 5, q: 4, field: 'q4_marketing_budget', title: 'What is your current monthly marketing budget?', subtitle: 'Include ad spend and agency fees.', options: ['Under ₹25,000/month', '₹25,000 – ₹1,00,000/month', '₹1,00,000 – ₹3,00,000/month', '₹3,00,000 – ₹10,00,000/month', 'Above ₹10,00,000/month', 'Not currently spending — planning to start'] },
+            { s: 6, q: 5, field: 'q5_results_satisfaction', title: 'How satisfied are you with your current marketing results?', subtitle: null, options: ['Very dissatisfied — wasting money with no results', 'Dissatisfied — some results but far below expectations', 'Neutral — getting results but not consistently', 'Satisfied — results are decent but want to grow', 'Very satisfied — but want to scale further', 'No marketing running — starting fresh'] },
+            { s: 7, q: 6, field: 'q6_knowledge_level', title: 'How would you rate your own digital marketing knowledge?', subtitle: 'Be honest — this helps us calibrate your diagnosis.', options: ['Beginner — I know very little about it', 'Basic — I understand the concepts but not execution', 'Intermediate — I can manage campaigns but not optimise', 'Advanced — I understand strategy and execution', 'Expert — I have deep experience', 'Variable — strong in some areas, weak in others'] },
+            { s: 8, q: 7, field: 'q7_learning_interest', title: 'Would you like to understand the real marketing process behind results?', subtitle: 'Understanding the process helps you make better decisions and avoid being misled.', options: ['Yes — I want to understand the complete process', 'Yes, but keep it simple', 'Maybe — depends on how much time it takes', 'No — I just want someone to handle it', 'I already understand it well', 'Not sure yet'] },
+            { s: 9, q: 8, field: 'q8_team_training', title: 'Would you be interested in training your in-house team on marketing practices?', subtitle: null, options: ['Yes — train my entire team', 'Yes — only key team members', 'Maybe — depends on cost and time', 'No — prefer to fully outsource', 'I do not have an in-house team', 'Already have trained staff'] },
+            { s: 10, q: 9, field: 'q9_expectations', title: 'What timeline are you expecting for meaningful results?', subtitle: 'Being realistic here helps us build the right plan for you.', options: ['Immediate — need results within days', 'Short-term — within 1-2 months', 'Medium-term — 3-6 months', 'Long-term — 6-12 months, done right', 'Realistic — I understand it takes time', 'Just want to stop wasting money first'] },
+            { s: 11, q: 10, field: 'q10_timeline', title: 'When are you looking to start improving your marketing?', subtitle: null, options: ['Immediately — I need help now', 'Within the next month', 'Next 2-3 months', 'Next quarter — planning ahead', 'Just exploring options for now', 'Not sure yet'] },
           ].map(({ s, q, field, title, subtitle, options }) =>
             step === s ? (
               <div key={s}>
@@ -410,11 +286,9 @@ export default function SurveyPage() {
               </div>
             ) : null
           )}
-
         </div>
       </main>
 
-      {/* Minimal footer */}
       <footer className="text-center py-8">
         <p className="text-xs text-gray-400">
           © 2026 Riverr360. All rights reserved. · Your information is secure and never shared.
