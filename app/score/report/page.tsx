@@ -25,10 +25,10 @@ const fixes: Record<string, string> = {
 };
 
 function getBand(score: number) {
-  if (score <= 20) return { label: 'Critical', color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-300', emoji: '🔴', message: 'Your business has severe revenue leakage across multiple areas. Immediate action is needed to stop the financial drain.' };
-  if (score <= 35) return { label: 'High Risk', color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-300', emoji: '🟠', message: 'Significant revenue is leaking from your funnel. Several key systems are either missing or underperforming.' };
-  if (score <= 50) return { label: 'Moderate', color: 'text-yellow-600', bg: 'bg-yellow-50', border: 'border-yellow-300', emoji: '🟡', message: 'Some systems are working well, but clear gaps exist that are costing you revenue. Targeted fixes will make a big difference.' };
-  if (score <= 63) return { label: 'Good', color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-300', emoji: '🟢', message: 'You have a solid foundation. Optimising the weaker areas will significantly improve your revenue efficiency.' };
+  if (score <= 30) return { label: 'Critical', color: 'text-red-600', bg: 'bg-red-50', border: 'border-red-300', emoji: '🔴', message: 'Your business has severe revenue leakage across multiple areas. Immediate action is needed to stop the financial drain.' };
+  if (score <= 70) return { label: 'High Risk', color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-300', emoji: '🟠', message: 'Significant revenue is leaking from your funnel. Several key systems are either missing or underperforming.' };
+  if (score <= 70) return { label: 'Moderate', color: 'text-yellow-600', bg: 'bg-yellow-50', border: 'border-yellow-300', emoji: '🟡', message: 'Some systems are working well, but clear gaps exist that are costing you revenue. Targeted fixes will make a big difference.' };
+  if (score <= 85) return { label: 'Good', color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-300', emoji: '🟢', message: 'You have a solid foundation. Optimising the weaker areas will significantly improve your revenue efficiency.' };
   return { label: 'Excellent', color: 'text-primary-600', bg: 'bg-primary-50', border: 'border-primary-300', emoji: '🏆', message: 'Your systems are well-optimised. Focus on scaling what is working and testing new growth levers.' };
 }
 
@@ -52,11 +52,10 @@ function ReportContent() {
       {/* Header */}
       <header className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-4 max-w-4xl">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/">
-              <img src="/images/logo.png" alt="Riverr360" className="h-10 w-auto" />
-            </Link>
-            <div className="text-sm font-medium text-gray-500">Revenue Leakage Score Report</div>
+          <div className="flex items-center justify-between h-16">
+            <Link href="/" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">← Back to Home</Link>
+            <div className="text-lg font-bold text-primary-600">Revenue Leakage Score Report</div>
+            <div className="w-24"></div>
           </div>
         </div>
       </header>
@@ -66,7 +65,7 @@ function ReportContent() {
         {/* Score hero */}
         <div className={`rounded-2xl border-2 ${band.border} ${band.bg} p-8 mb-8 text-center`}>
           <p className="text-gray-600 mb-2">Hi {name}, your Revenue Leakage Score is</p>
-          <div className={`text-7xl font-bold ${band.color} mb-2`}>{total}<span className="text-3xl text-gray-400">/70</span></div>
+          <div className={`text-7xl font-bold ${band.color} mb-2`}>{total}<span className="text-3xl text-gray-400">/100</span></div>
           <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full font-bold text-lg ${band.color} ${band.bg} border ${band.border} mb-4`}>
             {band.emoji} {band.label}
           </div>
@@ -79,7 +78,7 @@ function ReportContent() {
           <div className="space-y-4">
             {areas.map((area, i) => {
               const score = scores[area.id] || 0;
-              const pct = (score / 10) * 100;
+              const pct = (score / 14) * 100;
               const barColor = score <= 2 ? 'bg-red-500' : score <= 4 ? 'bg-orange-400' : score <= 6 ? 'bg-yellow-400' : score <= 8 ? 'bg-green-400' : 'bg-primary-500';
               return (
                 <div key={i}>
@@ -88,7 +87,7 @@ function ReportContent() {
                       <span>{area.icon}</span>
                       <span className="text-sm font-semibold text-gray-700">{area.title}</span>
                     </div>
-                    <span className="text-sm font-bold text-gray-900">{score}/10</span>
+                    <span className="text-sm font-bold text-gray-900">{score}/14</span>
                   </div>
                   <div className="w-full bg-gray-100 rounded-full h-2.5">
                     <div className={`${barColor} h-2.5 rounded-full transition-all`} style={{ width: `${pct}%` }}></div>

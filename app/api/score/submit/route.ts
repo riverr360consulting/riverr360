@@ -11,10 +11,10 @@ const areaLabels: Record<string, string> = {
 };
 
 function getBand(score: number) {
-  if (score <= 20) return 'Critical';
-  if (score <= 35) return 'High Risk';
-  if (score <= 50) return 'Moderate';
-  if (score <= 63) return 'Good';
+  if (score <= 30) return 'Critical';
+  if (score <= 70) return 'High Risk';
+  if (score <= 70) return 'Moderate';
+  if (score <= 85) return 'Good';
   return 'Excellent';
 }
 
