@@ -72,8 +72,8 @@ export default function SolutionsSection() {
             Start with a free diagnosis across all 5 layers of the R360 Framework — no commitment, no fluff, just clarity.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/get-started" className="inline-block bg-white text-primary-700 font-bold px-10 py-4 rounded-xl hover:bg-gray-50 transition-all shadow-lg">
-              Start Free Diagnosis →
+            <Link href="/score" className="inline-block bg-white text-primary-700 font-bold px-10 py-4 rounded-xl hover:bg-gray-50 transition-all shadow-lg">
+              Get Your Revenue Leakage Score →
             </Link>
             <Link href="/framework" className="inline-block bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-semibold px-10 py-4 rounded-xl hover:bg-white/20 transition-all">
               Explore the Framework

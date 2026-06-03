@@ -101,8 +101,8 @@ export default function ProblemsSection() {
               The <strong className="text-primary-600">R360 Revenue Leakage Framework</strong> was built to diagnose and resolve all 5 of these problems — simultaneously, not in isolation.
             </p>
             <p className="text-gray-500 text-sm mb-6">Each problem maps directly to one of the 5 layers of the framework.</p>
-            <Link href="/framework" className="inline-block bg-primary-600 text-white font-bold px-8 py-3 rounded-xl hover:bg-primary-700 transition-all shadow-md">
-              See the Framework →
+            <Link href="/score" className="inline-block bg-primary-600 text-white font-bold px-8 py-3 rounded-xl hover:bg-primary-700 transition-all shadow-md">
+              Get Your Revenue Leakage Score →
             </Link>
           </div>
         </div>

@@ -1,29 +1,6 @@
-'use client';
-
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 
 export default function Footer() {
-  const pathname = usePathname();
-
-  // Hide full footer only on ad landing page
-  if (pathname === '/lp') return null;
-
-  // Minimal footer for distraction-free pages
-  if (pathname === '/survey' || pathname === '/get-started') {
-    return (
-      <footer className="border-t border-gray-200 py-6 text-center bg-white">
-        <p className="text-xs text-gray-400">
-          © 2026 Riverr360. All rights reserved. ·{' '}
-          <Link href="/contact" className="hover:text-gray-600 transition-colors">Privacy Policy</Link>
-          {' · '}
-          <Link href="/contact" className="hover:text-gray-600 transition-colors">Terms of Service</Link>
-        </p>
-      </footer>
-    );
-  }
-
-  // Full footer for all other pages
   return (
     <footer className="bg-gray-900 text-white">
       <div className="container-custom py-12">
@@ -54,8 +31,8 @@ export default function Footer() {
                 { label: 'Blog', href: '/blog' },
                 { label: 'Webinars', href: '/webinars' },
                 { label: 'Contact', href: '/contact' },
-              ].map((item) => (
-                <li key={item.href}>
+              ].map((item, i) => (
+                <li key={i}>
                   <Link href={item.href} className="text-gray-400 hover:text-white text-sm transition-colors">
                     {item.label}
                   </Link>
@@ -75,9 +52,9 @@ export default function Footer() {
                 'Retention Systems',
                 'Scaling Framework',
                 'Attribution & Analytics',
-              ].map((item) => (
-                <li key={item}>
-                  <Link href="/get-started" className="text-gray-400 hover:text-white text-sm transition-colors">
+              ].map((item, i) => (
+                <li key={i}>
+                  <Link href="/score" className="text-gray-400 hover:text-white text-sm transition-colors">
                     {item}
                   </Link>
                 </li>
@@ -94,8 +71,8 @@ export default function Footer() {
           <div className="flex items-center gap-6">
             <Link href="/contact" className="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</Link>
             <Link href="/contact" className="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</Link>
-            <Link href="/get-started" className="bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all">
-              Free Audit
+            <Link href="/score" className="bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all">
+              Get Leakage Score
             </Link>
           </div>
         </div>

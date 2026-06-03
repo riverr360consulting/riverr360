@@ -110,8 +110,8 @@ export default function FrameworkDiagram() {
           <Link href="/framework" className="inline-block text-center bg-primary-600 text-white font-bold px-8 py-4 rounded-xl hover:bg-primary-700 transition-all shadow-lg">
             Explore Full Framework →
           </Link>
-          <Link href="/get-started" className="inline-block text-center bg-white text-primary-600 font-bold px-8 py-4 rounded-xl border-2 border-primary-600 hover:bg-primary-50 transition-all">
-            Get Free Diagnosis
+          <Link href="/score" className="inline-block text-center bg-white text-primary-600 font-bold px-8 py-4 rounded-xl border-2 border-primary-600 hover:bg-primary-50 transition-all">
+            Get Your Revenue Leakage Score
           </Link>
         </div>
 

@@ -1,4 +1,3 @@
-import CTAButton from './CTAButton';
 import Link from 'next/link';
 
 const stats = [
@@ -30,38 +29,26 @@ export default function HeroSection() {
             ))}
           </div>
 
-          {/* Headline
-            * CLS fix: the <span class="text-primary-600"> was shifting because the
-            * Inter font wasn't loaded yet when the browser first painted, causing
-            * a reflow as font metrics changed. Two fixes applied:
-            *   1. `size-adjust` via font-display:swap is already set in layout.tsx
-            *   2. Explicit `will-change: auto` + `min-h` on the h1 reserves space
-            *      so the font swap doesn't push surrounding content around.
-            */}
+          {/* Headline */}
           <div className="text-center mb-8">
-            <h1
-              className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight"
-              style={{ minHeight: '1lh' }} /* reserves line height space before font loads */
-            >
-              Stop Losing Revenue Across{' '}
-              {/* inline-block prevents the span from causing a line-break reflow */}
-              <span className="text-primary-600 inline-block">
-                Your Marketing Funnel
-              </span>
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+              Stop Losing Revenue Across <span className="text-primary-600">Your Marketing Funnel</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-4 max-w-3xl mx-auto leading-relaxed">
               Riverr360 helps growing businesses identify hidden revenue leaks in acquisition, conversion, retention, and scaling — then builds systems that recover profitability.
             </p>
             <p className="text-base text-gray-500 max-w-2xl mx-auto">
-              Using the proprietary <strong className="text-gray-700">R360 Revenue Leakage Framework</strong> — a 5-layer diagnostic system that identifies exactly where your business is losing money and builds a roadmap to recover it.
+              Using the proprietary 5-layer <strong className="text-gray-700">R360 Revenue Leakage Framework</strong> — engineered to solve revenue leakage across acquisition, conversion, retention, and scaling systems.
             </p>
           </div>
 
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <CTAButton text="Get Free Revenue Leakage Audit" variant="primary" href="/get-started" />
+            <Link href="/score" className="inline-flex items-center justify-center bg-primary-600 text-white font-bold px-8 py-4 rounded-xl hover:bg-primary-700 transition-all shadow-lg text-lg">
+              Get Your Revenue Leakage Score →
+            </Link>
             <Link href="/framework" className="inline-flex items-center justify-center gap-2 border-2 border-gray-300 text-gray-700 font-semibold px-8 py-3 rounded-xl hover:border-primary-400 hover:text-primary-600 transition-all">
-              See How We Find Lost Revenue →
+              See How We Find Lost Revenue
             </Link>
           </div>
 
