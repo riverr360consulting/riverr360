@@ -6,7 +6,7 @@
 export const CALL_DURATION_MINUTES = 30;
 
 // Available days of the week (0 = Sun, 6 = Sat)
-export const AVAILABLE_DAYS = [0, 6]; // Sunday and Saturday
+export const AVAILABLE_DAYS = [0,1,2,3,4,5,6]; // Sunday to Saturday
 
 // Time slots shown to visitors (IST — adjust to your timezone)
 export const TIME_SLOTS = [
