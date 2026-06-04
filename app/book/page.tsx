@@ -94,46 +94,70 @@ export default function BookPage() {
 
         {/* ── Step 1: Date & Time ─────────────────────────────────────────── */}
         {step === 'datetime' && (
-          <div className="max-w-2xl mx-auto space-y-4">
+          <div className="max-w-4xl mx-auto space-y-4">
 
-            {/* Calendar card */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
-                Pick a date &amp; time
-              </p>
-              <BookingCalendar
-                onSelect={handleSelect}
-                selectedDate={selectedDate}
-                selectedTime={selectedTime}
-              />
-            </div>
+            {/* On desktop: calendar + what to expect side by side
+                On mobile: stacked */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-            {/* What to expect — horizontal chips on mobile */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
-                What to expect
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {[
-                  { icon: '🕐', text: '30-minute focused call' },
-                  { icon: '📊', text: 'Review your current marketing spend' },
-                  { icon: '🔍', text: 'Identify your top 3 revenue leaks' },
-                  { icon: '📋', text: 'Leave with a clear action plan' },
-                  { icon: '💰', text: 'Zero cost, zero obligation' },
-                ].map(({ icon, text }) => (
-                  <div key={text} className="flex items-center gap-2 text-sm text-gray-700 bg-gray-50 rounded-lg px-3 py-2">
-                    <span className="text-base flex-shrink-0">{icon}</span>
-                    <span>{text}</span>
+              {/* Calendar */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
+                  Pick a date &amp; time
+                </p>
+                <BookingCalendar
+                  onSelect={handleSelect}
+                  selectedDate={selectedDate}
+                  selectedTime={selectedTime}
+                />
+              </div>
+
+              {/* What to expect */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col justify-between">
+                <div>
+                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
+                    What to expect
+                  </p>
+                  <div className="space-y-3">
+                    {[
+                      { icon: '🕐', text: '30-minute focused call' },
+                      { icon: '📊', text: 'Review your current marketing spend' },
+                      { icon: '🔍', text: 'Identify your top 3 revenue leaks' },
+                      { icon: '📋', text: 'Leave with a clear action plan' },
+                      { icon: '💰', text: 'Zero cost, zero obligation' },
+                    ].map(({ icon, text }) => (
+                      <div key={text} className="flex items-center gap-3 text-sm text-gray-700 bg-gray-50 rounded-lg px-3 py-2.5">
+                        <span className="text-base flex-shrink-0">{icon}</span>
+                        <span>{text}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+
+                {/* Continue button inside right card on desktop */}
+                <button
+                  disabled={!selectedDate || !selectedTime}
+                  onClick={() => setStep('details')}
+                  className="mt-6 w-full py-3 rounded-xl font-semibold text-sm transition-colors hidden md:block"
+                  style={{
+                    background: selectedDate && selectedTime ? '#1d4ed8' : '#e2e8f0',
+                    color: selectedDate && selectedTime ? '#fff' : '#94a3b8',
+                    border: 'none',
+                    cursor: selectedDate && selectedTime ? 'pointer' : 'default',
+                  }}
+                >
+                  {selectedDate && selectedTime
+                    ? `Continue — ${formattedDate} at ${selectedTime}`
+                    : 'Select a date and time to continue'}
+                </button>
               </div>
             </div>
 
-            {/* Continue button */}
+            {/* Continue button below cards on mobile only */}
             <button
               disabled={!selectedDate || !selectedTime}
               onClick={() => setStep('details')}
-              className="w-full py-4 rounded-xl font-semibold text-base transition-colors"
+              className="w-full py-4 rounded-xl font-semibold text-base transition-colors md:hidden"
               style={{
                 background: selectedDate && selectedTime ? '#1d4ed8' : '#e2e8f0',
                 color: selectedDate && selectedTime ? '#fff' : '#94a3b8',
