@@ -216,6 +216,7 @@ export default function ScorePage() {
 
   function goNext() {
     setShowValidation(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     if (currentArea < areas.length - 1) {
       setCurrentArea(currentArea + 1);
     } else {
