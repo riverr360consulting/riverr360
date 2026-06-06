@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'R360 Revenue Leakage Framework | Riverr360',
+  title: 'R360 Revenue Leakage Framework | Riverr360 Consulting',
   description: 'The R360 Revenue Leakage Framework — a 5-layer diagnostic system that identifies exactly where your business is losing revenue across Acquisition, Attribution, Conversion, Retention, and Scaling.',
 };
 
@@ -149,8 +149,8 @@ export default function FrameworkPage() {
               </div>
             ))}
           </div>
-          <Link href="/get-started" className="inline-block bg-white text-primary-700 font-bold px-10 py-4 rounded-xl hover:bg-gray-50 transition-all shadow-lg">
-            Diagnose My Revenue Leakage →
+          <Link href="/score" className="inline-block bg-white text-primary-700 font-bold px-10 py-4 rounded-xl hover:bg-gray-50 transition-all shadow-lg">
+            Get Your Revenue Leakage Score →
           </Link>
         </div>
       </section>
@@ -234,8 +234,8 @@ export default function FrameworkPage() {
             Get a personalised assessment across all 5 layers of the R360 Framework — completely free.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/get-started" className="inline-block bg-white text-primary-700 font-bold px-10 py-4 rounded-xl hover:bg-gray-50 transition-all shadow-lg">
-              Start Free Diagnosis →
+            <Link href="/score" className="inline-block bg-white text-primary-700 font-bold px-10 py-4 rounded-xl hover:bg-gray-50 transition-all shadow-lg">
+              Get Your Revenue Leakage Score →
             </Link>
             <Link href="/contact" className="inline-block bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white font-semibold px-10 py-4 rounded-xl hover:bg-white/20 transition-all">
               Talk to an Expert
