@@ -160,12 +160,192 @@ function ReportContent() {
 
   const [aiAnalysis, setAiAnalysis] = useState('');
   const [aiLoading, setAiLoading] = useState(true);
+  const [pdfLoading, setPdfLoading] = useState(false);
 
   // Get weakest 3 areas
   const rankedAreas = areas
     .map(a => ({ ...a, score: scores[a.id] || 0 }))
     .sort((a, b) => a.score - b.score);
   const weakest3 = rankedAreas.slice(0, 3);
+
+  async function downloadPDF() {
+    setPdfLoading(true);
+    try {
+      const { jsPDF } = await import('jspdf');
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const W = 210;
+      const margin = 16;
+      const contentW = W - margin * 2;
+      let y = 0;
+
+      function addPage() {
+        doc.addPage();
+        y = 16;
+      }
+
+      function checkY(needed: number) {
+        if (y + needed > 275) addPage();
+      }
+
+      // Header banner
+      doc.setFillColor(37, 99, 235);
+      doc.rect(0, 0, W, 40, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(20);
+      doc.setFont('helvetica', 'bold');
+      doc.text('R360 Revenue Leakage Score Report', margin, 18);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`riverr360.com  |  ${new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}`, margin, 28);
+      doc.text(`Prepared for: ${name}`, margin, 35);
+      y = 50;
+
+      // Score summary box
+      const bandColors: Record<string, [number, number, number]> = {
+        Critical: [254, 242, 242],
+        'High Risk': [255, 247, 237],
+        Moderate: [254, 252, 232],
+        Good: [240, 253, 244],
+        Excellent: [239, 246, 255],
+      };
+      const bgColor = bandColors[band.label] || [239, 246, 255];
+      doc.setFillColor(...bgColor);
+      doc.roundedRect(margin, y, contentW, 30, 4, 4, 'F');
+      doc.setTextColor(17, 24, 39);
+      doc.setFontSize(28);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`${total}/100`, margin + 8, y + 18);
+      doc.setFontSize(14);
+      doc.text(band.label, margin + 45, y + 14);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(75, 85, 99);
+      const msgLines = doc.splitTextToSize(band.message, contentW - 55);
+      doc.text(msgLines, margin + 45, y + 21);
+      y += 38;
+
+      // AI Analysis
+      if (aiAnalysis) {
+        checkY(20);
+        doc.setFillColor(243, 244, 246);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(37, 99, 235);
+        doc.text('AI-POWERED ANALYSIS', margin, y);
+        y += 6;
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(55, 65, 81);
+        doc.setFontSize(9);
+        const aiLines = doc.splitTextToSize(aiAnalysis, contentW);
+        checkY(aiLines.length * 5 + 4);
+        doc.setFillColor(249, 250, 251);
+        doc.roundedRect(margin, y, contentW, aiLines.length * 5 + 6, 3, 3, 'F');
+        doc.text(aiLines, margin + 3, y + 5);
+        y += aiLines.length * 5 + 12;
+      }
+
+      // Score breakdown
+      checkY(20);
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(17, 24, 39);
+      doc.text('Score Breakdown by Area', margin, y);
+      y += 7;
+
+      areas.forEach(area => {
+        checkY(22);
+        const score = scores[area.id] || 0;
+        const areaChecked = checkedData[area.id] || [];
+        const passed = areaChecked.filter(Boolean).length;
+        const failed = 7 - passed;
+
+        doc.setFillColor(249, 250, 251);
+        doc.roundedRect(margin, y, contentW, 18, 3, 3, 'F');
+
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(17, 24, 39);
+        doc.text(`${area.title}`, margin + 4, y + 7);
+
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(107, 114, 128);
+        doc.text(`${area.layer}  |  ${passed} passed · ${failed} failed`, margin + 4, y + 13);
+
+        // Score text
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(37, 99, 235);
+        doc.setFontSize(11);
+        doc.text(`${score}/14`, W - margin - 16, y + 9);
+
+        // Progress bar background
+        const barX = margin + 4;
+        const barY = y + 15.5;
+        const barW = contentW - 25;
+        doc.setFillColor(229, 231, 235);
+        doc.roundedRect(barX, barY, barW, 2, 1, 1, 'F');
+
+        // Progress bar fill
+        const pct = score / 14;
+        const fillColor: [number, number, number] = score <= 4 ? [239, 68, 68] : score <= 7 ? [249, 115, 22] : score <= 10 ? [234, 179, 8] : [34, 197, 94];
+        doc.setFillColor(...fillColor);
+        doc.roundedRect(barX, barY, barW * pct, 2, 1, 1, 'F');
+
+        y += 22;
+      });
+
+      // Top 3 priority fixes
+      y += 4;
+      checkY(20);
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(17, 24, 39);
+      doc.text('Top 3 Priority Fixes & Solutions', margin, y);
+      y += 7;
+
+      weakest3.forEach((area, i) => {
+        checkY(16);
+        doc.setFillColor(239, 246, 255);
+        doc.roundedRect(margin, y, contentW, 10, 3, 3, 'F');
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(37, 99, 235);
+        doc.text(`${i + 1}. ${area.title}  —  Score: ${area.score}/14`, margin + 4, y + 7);
+        y += 13;
+
+        area.solutions.forEach((sol, j) => {
+          const solLines = doc.splitTextToSize(`${j + 1}. ${sol}`, contentW - 6);
+          checkY(solLines.length * 5 + 2);
+          doc.setFontSize(8.5);
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(55, 65, 81);
+          doc.text(solLines, margin + 4, y);
+          y += solLines.length * 5 + 2;
+        });
+        y += 5;
+      });
+
+      // Footer on all pages
+      const pageCount = doc.getNumberOfPages();
+      for (let p = 1; p <= pageCount; p++) {
+        doc.setPage(p);
+        doc.setFillColor(37, 99, 235);
+        doc.rect(0, 285, W, 12, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'normal');
+        doc.text('Riverr360 Consulting  |  riverr360.com  |  R360 Revenue Leakage Framework', margin, 292);
+        doc.text(`Page ${p} of ${pageCount}`, W - margin - 20, 292);
+      }
+
+      doc.save(`R360-Revenue-Leakage-Score-${name.replace(/\s+/g, '-')}.pdf`);
+    } catch (err) {
+      console.error('PDF error:', err);
+      alert('Could not generate PDF. Please try printing the page instead.');
+    } finally {
+      setPdfLoading(false);
+    }
+  }
 
   useEffect(() => {
     async function getAIAnalysis() {
@@ -221,7 +401,17 @@ Be specific, direct, and actionable. Do not use bullet points. Write in second p
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="text-sm text-gray-400 hover:text-gray-600 transition-colors">← Back to Home</Link>
             <div className="text-base font-bold text-primary-600">Revenue Leakage Score Report</div>
-            <div className="w-24"></div>
+            <button
+              onClick={downloadPDF}
+              disabled={pdfLoading || aiLoading}
+              className="flex items-center gap-2 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-all"
+            >
+              {pdfLoading ? (
+                <><span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></span> Generating...</>
+              ) : (
+                <>⬇ Download PDF</>
+              )}
+            </button>
           </div>
         </div>
       </header>
@@ -236,6 +426,18 @@ Be specific, direct, and actionable. Do not use bullet points. Write in second p
             {band.emoji} {band.label}
           </div>
           <p className="text-gray-700 max-w-2xl mx-auto text-sm leading-relaxed">{band.message}</p>
+          <button
+            onClick={downloadPDF}
+            disabled={pdfLoading || aiLoading}
+            className="mt-5 inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 text-white font-bold px-8 py-3 rounded-xl transition-all shadow-md"
+          >
+            {pdfLoading ? (
+              <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span> Generating PDF...</>
+            ) : (
+              <>⬇ Download Full Report as PDF</>
+            )}
+          </button>
+          {aiLoading && <p className="text-xs text-gray-400 mt-2">PDF available after AI analysis completes</p>}
         </div>
 
         {/* AI Analysis */}
