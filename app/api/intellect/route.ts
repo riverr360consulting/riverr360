@@ -27,7 +27,7 @@ Rules:
 - NEVER mention scores, checklists, or forms during the chat
 - Keep responses under 80 words — concise and conversational
 - Ask only ONE question per message
-- After collecting enough context (4-6 exchanges), give a 2-3 sentence diagnosis and suggest next steps
+- After 4-6 exchanges give a 2-3 sentence diagnosis and suggest next steps
 - Always stay focused on their marketing and revenue challenges
 - If asked who you are: "I'm Intellect, Riverr360's AI marketing consultant. I'm here to help you identify where your revenue might be leaking."`;
 
@@ -35,48 +35,34 @@ export async function POST(req: NextRequest) {
   try {
     const { messages } = await req.json();
 
-    // Build Gemini conversation history
-    // Gemini uses 'user' and 'model' roles (not 'assistant')
-    const history = messages.slice(0, -1).map((m: { role: string; content: string }) => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: m.content }],
-    }));
-
-    // Latest user message
-    const lastMessage = messages[messages.length - 1];
-
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GOOGLE_AI_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system_instruction: {
-            parts: [{ text: SYSTEM_PROMPT }],
-          },
-          contents: [
-            ...history,
-            {
-              role: 'user',
-              parts: [{ text: lastMessage.content }],
-            },
-          ],
-          generationConfig: {
-            maxOutputTokens: 300,
-            temperature: 0.7,
-          },
-        }),
-      }
-    );
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        max_tokens: 300,
+        temperature: 0.7,
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          ...messages.map((m: { role: string; content: string }) => ({
+            role: m.role === 'assistant' ? 'assistant' : 'user',
+            content: m.content,
+          })),
+        ],
+      }),
+    });
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error('Gemini API error:', data);
-      return NextResponse.json({ error: 'Gemini API error' }, { status: 500 });
+      console.error('Groq API error:', data);
+      return NextResponse.json({ error: 'Groq API error' }, { status: 500 });
     }
 
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text
+    const text = data.choices?.[0]?.message?.content
       || "I'm sorry, I couldn't process that. Could you try again?";
 
     return NextResponse.json({ message: text });
