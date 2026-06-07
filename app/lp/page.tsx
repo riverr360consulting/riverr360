@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import SmoothScrollLink from '@/components/SmoothScrollLink';
 
 export const metadata: Metadata = {
   title: 'Stop Losing Revenue | Free Marketing Audit — Riverr360',
@@ -9,16 +10,15 @@ export const metadata: Metadata = {
 
 export default function LandingPage() {
   return (
-    // No global Header or Footer — this page uses pathname check in Header.tsx
     <div className="min-h-screen bg-white">
 
       {/* Minimal header */}
       <header className="border-b border-gray-100 bg-white">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/">
-            <img src="/images/logo.png" alt="Riverr360" className="h-8 w-auto" />
+            <img src="/images/logo.png" alt="Riverr360" className="h-8 w-auto" width={120} height={32} />
           </Link>
-          <a href="tel:+919876543210" className="text-sm text-gray-600 hover:text-primary-600 font-medium">
+          <a href="tel:+917411129188" className="text-sm text-gray-600 hover:text-primary-600 font-medium">
             📞 Call us now
           </a>
         </div>
@@ -61,7 +61,7 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Right: Form */}
+            {/* Right: Form — id here is the scroll target */}
             <div id="audit-form" className="bg-white rounded-2xl shadow-md border border-gray-100 p-8">
               <h2 className="text-xl font-bold text-gray-900 mb-2">Get Your Free Revenue Leakage Audit</h2>
               <p className="text-sm text-gray-500 mb-6">Takes 2 minutes. No commitment required.</p>
@@ -158,15 +158,15 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Bottom CTA */}
+      {/* Bottom CTA — uses SmoothScrollLink for smooth JS scroll */}
       <section className="py-12 bg-primary-600">
         <div className="max-w-2xl mx-auto px-4 text-center">
           <h2 className="text-2xl font-bold text-white mb-3">Ready to Stop the Leaks?</h2>
           <p className="text-primary-100 mb-6">Get your free R360 Revenue Leakage Audit today.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#audit-form" className="bg-white text-primary-600 font-bold px-8 py-3 rounded-lg hover:bg-gray-50 transition-colors">
+            <SmoothScrollLink href="#audit-form" className="bg-white text-primary-600 font-bold px-8 py-3 rounded-lg hover:bg-gray-50 transition-colors">
               Get Free Revenue Leakage Audit →
-            </a>
+            </SmoothScrollLink>
             <Link href="/book" className="border-2 border-white text-white font-bold px-8 py-3 rounded-lg hover:bg-primary-700 transition-colors">
               Book a Strategy Call
             </Link>
@@ -174,7 +174,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Minimal footer — NO global footer */}
+      {/* Minimal footer */}
       <footer className="border-t border-gray-100 py-6 text-center bg-white">
         <p className="text-xs text-gray-400">
           © 2026 Riverr360. All rights reserved. ·{' '}
