@@ -62,7 +62,7 @@ export default function LandingPage() {
             </div>
 
             {/* Right: Form */}
-            <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-8">
+            <div id="audit-form" className="bg-white rounded-2xl shadow-md border border-gray-100 p-8">
               <h2 className="text-xl font-bold text-gray-900 mb-2">Get Your Free Revenue Leakage Audit</h2>
               <p className="text-sm text-gray-500 mb-6">Takes 2 minutes. No commitment required.</p>
               <form action="https://api.web3forms.com/submit" method="POST" className="space-y-4">
@@ -164,7 +164,7 @@ export default function LandingPage() {
           <h2 className="text-2xl font-bold text-white mb-3">Ready to Stop the Leaks?</h2>
           <p className="text-primary-100 mb-6">Get your free R360 Revenue Leakage Audit today.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#top" className="bg-white text-primary-600 font-bold px-8 py-3 rounded-lg hover:bg-gray-50 transition-colors">
+            <a href="#audit-form" className="bg-white text-primary-600 font-bold px-8 py-3 rounded-lg hover:bg-gray-50 transition-colors">
               Get Free Revenue Leakage Audit →
             </a>
             <Link href="/book" className="border-2 border-white text-white font-bold px-8 py-3 rounded-lg hover:bg-primary-700 transition-colors">

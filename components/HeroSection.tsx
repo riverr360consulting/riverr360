@@ -43,13 +43,22 @@ export default function HeroSection() {
           </div>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Link href="/score" className="inline-flex items-center justify-center bg-primary-600 text-white font-bold px-8 py-4 rounded-xl hover:bg-primary-700 transition-all shadow-lg text-lg">
-              Get Your Revenue Leakage Score →
-            </Link>
-            <Link href="/framework" className="inline-flex items-center justify-center gap-2 border-2 border-gray-300 text-gray-700 font-semibold px-8 py-3 rounded-xl hover:border-primary-400 hover:text-primary-600 transition-all">
-              See How We Find Lost Revenue
-            </Link>
+          <div className="flex flex-col items-center gap-4 mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/score" className="inline-flex items-center justify-center bg-primary-600 text-white font-bold px-8 py-4 rounded-xl hover:bg-primary-700 transition-all shadow-lg text-lg">
+                Get Your Revenue Leakage Score →
+              </Link>
+              <Link href="/framework" className="inline-flex items-center justify-center gap-2 border-2 border-gray-300 text-gray-700 font-semibold px-8 py-3 rounded-xl hover:border-primary-400 hover:text-primary-600 transition-all">
+                See How We Find Lost Revenue
+              </Link>
+            </div>
+            {/* AI Audit subtle link */}
+            <p className="text-sm text-gray-400">
+              Not sure where to start?{' '}
+              <Link href="/ai-audit" className="text-primary-600 font-semibold hover:text-primary-700 underline underline-offset-2">
+                Try our free AI Marketing Audit →
+              </Link>
+            </p>
           </div>
 
           {/* Proof Stats */}
