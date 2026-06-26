@@ -22,6 +22,10 @@ export default function BookingCalendar({ onSelect, selectedDate, selectedTime }
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
+  // Earliest bookable date = tomorrow (today's slots are considered gone)
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+
   const [viewYear, setViewYear] = useState(today.getFullYear());
   const [viewMonth, setViewMonth] = useState(today.getMonth());
 
@@ -29,11 +33,18 @@ export default function BookingCalendar({ onSelect, selectedDate, selectedTime }
   maxDate.setDate(today.getDate() + BOOKING_WINDOW_DAYS);
 
   function isAvailable(d: Date) {
-    if (d < today || d > maxDate) return false;
+    // Must be strictly in the future (tomorrow or later)
+    if (d < tomorrow) return false;
+    // Must be within booking window
+    if (d > maxDate) return false;
+    // Must be an available day of week
     if (!AVAILABLE_DAYS.includes(d.getDay())) return false;
+    // Must not be a blocked date
     if (BLOCKED_DATES.includes(formatDate(d))) return false;
     return true;
   }
+
+  const isPast = (d: Date) => d < tomorrow;
 
   const days = useMemo(() => {
     const first = new Date(viewYear, viewMonth, 1);
@@ -45,7 +56,11 @@ export default function BookingCalendar({ onSelect, selectedDate, selectedTime }
     return cells;
   }, [viewYear, viewMonth]);
 
+  // Prevent navigating to months before the current one
+  const canGoPrev = viewYear > today.getFullYear() || viewMonth > today.getMonth();
+
   function prevMonth() {
+    if (!canGoPrev) return;
     if (viewMonth === 0) { setViewMonth(11); setViewYear(y => y - 1); }
     else setViewMonth(m => m - 1);
   }
@@ -62,7 +77,20 @@ export default function BookingCalendar({ onSelect, selectedDate, selectedTime }
     <div>
       {/* Month navigation */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-        <button onClick={prevMonth} aria-label="Previous month" style={{ background: 'none', border: '0.5px solid #e2e8f0', borderRadius: 6, width: 30, height: 30, cursor: 'pointer', fontSize: 16, color: '#64748b' }}>‹</button>
+        <button
+          onClick={prevMonth}
+          aria-label="Previous month"
+          disabled={!canGoPrev}
+          style={{
+            background: 'none',
+            border: '0.5px solid #e2e8f0',
+            borderRadius: 6,
+            width: 30, height: 30,
+            cursor: canGoPrev ? 'pointer' : 'default',
+            fontSize: 16,
+            color: canGoPrev ? '#64748b' : '#cbd5e1',
+          }}
+        >‹</button>
         <span style={{ fontSize: 14, fontWeight: 500, color: '#0f172a' }}>{monthLabel}</span>
         <button onClick={nextMonth} aria-label="Next month" style={{ background: 'none', border: '0.5px solid #e2e8f0', borderRadius: 6, width: 30, height: 30, cursor: 'pointer', fontSize: 16, color: '#64748b' }}>›</button>
       </div>
@@ -80,6 +108,7 @@ export default function BookingCalendar({ onSelect, selectedDate, selectedTime }
           if (!day) return <div key={`empty-${i}`} />;
           const dateStr = formatDate(day);
           const available = isAvailable(day);
+          const past = isPast(day);
           const isSelected = dateStr === selectedDate;
           const isToday = formatDate(day) === formatDate(today);
 
@@ -93,12 +122,19 @@ export default function BookingCalendar({ onSelect, selectedDate, selectedTime }
                 textAlign: 'center',
                 padding: '7px 2px',
                 borderRadius: 6,
-                border: isToday && !isSelected ? '0.5px solid #1d4ed8' : 'none',
+                // Today gets a subtle ring but is NOT bookable
+                border: isToday && !isSelected ? '0.5px solid #94a3b8' : 'none',
                 cursor: available ? 'pointer' : 'default',
                 background: isSelected ? '#1d4ed8' : 'none',
-                color: isSelected ? '#fff' : available ? '#0f172a' : '#cbd5e1',
-                textDecoration: !available && day >= today ? 'line-through' : 'none',
-                opacity: !available ? 0.4 : 1,
+                color: isSelected
+                  ? '#fff'
+                  : past
+                  ? '#e2e8f0'        // very faded — clearly unavailable
+                  : available
+                  ? '#0f172a'        // normal dark text
+                  : '#cbd5e1',       // non-available future days (weekends etc.)
+                textDecoration: past ? 'line-through' : 'none',
+                opacity: past ? 0.5 : !available ? 0.4 : 1,
                 fontWeight: isSelected ? 500 : 400,
               }}
             >
