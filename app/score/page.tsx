@@ -294,7 +294,7 @@ export default function ScorePage() {
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
             <div className="text-3xl mb-3">⏸️</div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Save your progress</h3>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Save your progress</h2>
             <p className="text-gray-600 mb-5 text-sm">You are {getProgress()}% through your Revenue Leakage Score. Enter your email and we will send you a link to continue later.</p>
             {exitSaved ? (
               <p className="text-green-600 font-semibold">✅ Saved! Check your email.</p>
@@ -597,7 +597,7 @@ export default function ScorePage() {
             </div>
 
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
-              <h3 className="font-bold text-gray-900 mb-1">Where Should We Send Your AI Report?</h3>
+              <h2 className="font-bold text-gray-900 mb-1">Where Should We Send Your AI Report?</h2>
               <p className="text-gray-500 text-sm mb-5">Your personalised AI-powered Revenue Leakage Score Report includes full breakdown, passed/failed checkpoints, solutions, and a recovery roadmap.</p>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
