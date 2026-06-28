@@ -3,8 +3,9 @@ import type { Metadata } from 'next';
 import { getAllPosts, getFeaturedPosts } from '@/lib/blog';
 
 export const metadata: Metadata = {
-  title: 'Blog | Riverr360 Digital Marketing',
-  description: 'Digital marketing insights, tips, and strategies to stop wasting your marketing budget and maximize ROI.',
+  title: 'Marketing Insights Blog | Riverr360',
+  description: 'Practical strategies to plug marketing leaks and maximize ROI. Real-world examples and data-driven insights from Riverr360.',
+  alternates: { canonical: 'https://riverr360.com/blog' },
 };
 
 const categoryColors: { [key: string]: string } = {
@@ -19,6 +20,15 @@ const categoryColors: { [key: string]: string } = {
   'General': 'bg-gray-100 text-gray-800',
 };
 
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'Riverr360 Marketing Insights Blog',
+  description: 'Practical strategies to plug marketing leaks and maximize ROI.',
+  url: 'https://riverr360.com/blog',
+  publisher: { '@type': 'Organization', name: 'Riverr360', url: 'https://riverr360.com' },
+};
+
 export default function BlogPage() {
   const allPosts = getAllPosts();
   const featuredPosts = getFeaturedPosts();
@@ -26,14 +36,13 @@ export default function BlogPage() {
 
   return (
     <main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+
       <section className="bg-gradient-to-br from-primary-50 to-white py-16">
         <div className="container-custom">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl font-bold text-gray-900 mb-6">Marketing Insights Blog</h1>
-            <p className="text-xl text-gray-600">
-              Practical strategies to plug your marketing leaks and maximize ROI.
-              Learn from real-world examples and data-driven insights.
-            </p>
+            <p className="text-xl text-gray-600">Practical strategies to plug your marketing leaks and maximize ROI. Learn from real-world examples and data-driven insights.</p>
           </div>
         </div>
       </section>
@@ -55,6 +64,7 @@ export default function BlogPage() {
                       <span className={`text-xs font-semibold px-3 py-1 rounded-full ${categoryColors[post.category]}`}>{post.category}</span>
                       <span className="text-sm text-gray-500">{new Date(post.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                     </div>
+                    {/* h3 is fine here — parent section has h2 "Featured Posts" */}
                     <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">{post.title}</h3>
                     <p className="text-gray-600 mb-4">{post.excerpt}</p>
                     <div className="flex items-center justify-between">
@@ -91,6 +101,7 @@ export default function BlogPage() {
                       <span className={`text-xs font-semibold px-3 py-1 rounded-full ${categoryColors[post.category]}`}>{post.category}</span>
                       <span className="text-sm text-gray-500">{new Date(post.publishedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                     </div>
+                    {/* h3 is fine here — parent section has h2 "Latest Posts" */}
                     <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">{post.title}</h3>
                     <p className="text-gray-600 text-sm mb-4 line-clamp-3">{post.excerpt}</p>
                     {post.tags && post.tags.length > 0 && (
@@ -112,7 +123,8 @@ export default function BlogPage() {
       <section className="section-padding bg-white">
         <div className="container-custom max-w-4xl mx-auto">
           <div className="bg-primary-600 text-white p-8 rounded-lg text-center">
-            <h3 className="text-3xl font-bold mb-4">Stop Learning, Start Doing</h3>
+            {/* h2 not h3 — no parent h2 in this section */}
+            <h2 className="text-3xl font-bold mb-4">Stop Learning, Start Doing</h2>
             <p className="text-xl mb-6 text-primary-100">Ready to apply these insights to your business? Let's plug your marketing leaks.</p>
             <Link href="/contact" className="btn-secondary">Plug Now</Link>
           </div>
