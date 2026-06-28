@@ -5,7 +5,7 @@ import type { Metadata } from 'next';
 const caseStudiesData: { [key: string]: any } = {
   'ecommerce-conversion-optimization': {
     title: 'E-commerce Brand Increases Conversion Rate by 240%',
-    metaTitle: 'E-commerce Conversion Rate +240% | Riverr360',
+    metaTitle: 'E-commerce Conversion Rate +240%',
     metaDescription: 'How Riverr360 helped a fashion e-commerce brand triple conversion rates and recover ₹108K/mo in lost revenue.',
     industry: 'E-commerce - Fashion Retail',
     challenge: 'Low website conversion and cart abandonment',
@@ -32,7 +32,7 @@ const caseStudiesData: { [key: string]: any } = {
   },
   'saas-ppc-roi-improvement': {
     title: 'SaaS Company Cuts PPC Costs 60% While Doubling Leads',
-    metaTitle: 'SaaS PPC Costs Cut 60%, Leads Doubled | Riverr360',
+    metaTitle: 'SaaS PPC Costs Cut 60%, Leads Doubled',
     metaDescription: 'How Riverr360 helped a B2B SaaS company drop cost per lead from ₹450 to ₹180 while doubling qualified lead volume.',
     industry: 'B2B SaaS - Project Management',
     challenge: 'Wasted ad spend with poor targeting',
@@ -59,7 +59,7 @@ const caseStudiesData: { [key: string]: any } = {
   },
   'local-business-seo-domination': {
     title: 'Law Firm Achieves #1 SEO Rankings in 90 Days',
-    metaTitle: 'Local Business #1 SEO Rankings in 90 Days | Riverr360',
+    metaTitle: 'Local Business #1 SEO Rankings in 90 Days',
     metaDescription: 'How Riverr360 took a local law firm from zero organic presence to #1 rankings for 12 keywords in just 90 days.',
     industry: 'Professional Services - Legal',
     challenge: 'Zero organic visibility and traffic',

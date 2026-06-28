@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const post = getPostBySlug(params.slug);
   if (!post) return { title: 'Post Not Found' };
   return {
-    title: `${trimTitle(post.title)} | Riverr360`,
+    title: trimTitle(post.title),
     description: trimDesc(post.excerpt),
     alternates: { canonical: `https://riverr360.com/blog/${params.slug}` },
     openGraph: {
