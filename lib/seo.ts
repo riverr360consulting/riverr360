@@ -1,15 +1,21 @@
 // lib/seo.ts
 //
-// Central module for reading/writing SEO settings from the database.
-// Uses Vercel Postgres (@vercel/postgres) — works seamlessly with Vercel deployments.
+// Reads/writes SEO settings via a JSON file committed to your GitHub repo.
+// No database needed — Vercel auto-redeploys when the file changes on GitHub,
+// and the new settings become the build's static data within ~60 seconds.
 //
 // SETUP REQUIRED:
-// 1. In Vercel dashboard → Storage → Create Database → Postgres
-// 2. Vercel auto-injects POSTGRES_URL env vars — no manual config needed
-// 3. Run the SQL in schema.sql once (via Vercel's Postgres query tab, or `psql`)
-// 4. npm install @vercel/postgres
+// 1. Create a GitHub Personal Access Token:
+//    GitHub → Settings → Developer settings → Personal access tokens →
+//    Fine-grained tokens → Generate new token
+//    - Repository access: Only your riverr360 repo
+//    - Permissions: Contents → Read and write
+// 2. In Vercel → your project → Settings → Environment Variables, add:
+//    GITHUB_SEO_TOKEN = <the token you generated>
+//    GITHUB_REPO      = yourusername/riverr360   (e.g. "riverr360/riverr360-consulting")
+// 3. Redeploy after adding the env vars.
 
-import { sql } from '@vercel/postgres';
+import data from '@/data/seo.json';
 
 export type SiteSettings = {
   siteTitle: string;
@@ -18,84 +24,64 @@ export type SiteSettings = {
   gtmId: string;
 };
 
-const DEFAULTS: SiteSettings = {
-  siteTitle: 'Riverr360 | Revenue Leakage Consulting',
-  siteDesc: 'Riverr360 helps businesses identify and fix revenue leakage through strategic consulting and data-driven solutions.',
-  metaPixelId: '1529840028657513',
-  gtmId: '',
-};
-
 /**
- * Reads all site settings from the database.
- * Falls back to DEFAULTS if the table is empty or unreachable (e.g. local dev without DB).
+ * Reads current settings directly from the bundled JSON file.
+ * This is fast (no network call) because Next.js bundles the file at build time —
+ * which is exactly why a fresh deploy is needed after every save.
  */
-export async function getSiteSettings(): Promise<SiteSettings> {
-  try {
-    const { rows } = await sql`SELECT key, value FROM site_settings`;
-    if (rows.length === 0) return DEFAULTS;
-
-    const map = Object.fromEntries(rows.map(r => [r.key, r.value]));
-    return {
-      siteTitle: map.site_title ?? DEFAULTS.siteTitle,
-      siteDesc: map.site_description ?? DEFAULTS.siteDesc,
-      metaPixelId: map.meta_pixel_id ?? DEFAULTS.metaPixelId,
-      gtmId: map.gtm_id ?? DEFAULTS.gtmId,
-    };
-  } catch (err) {
-    console.error('[seo-settings] Failed to read from DB, using defaults:', err);
-    return DEFAULTS;
-  }
+export function getSiteSettings(): SiteSettings {
+  return data as SiteSettings;
 }
 
 /**
- * Writes site settings to the database. Upserts each key individually.
+ * Saves new settings by committing an updated data/seo.json to GitHub
+ * using the GitHub Contents API. This triggers Vercel's auto-deploy hook.
  */
 export async function saveSiteSettings(settings: SiteSettings): Promise<void> {
-  await sql`
-    INSERT INTO site_settings (key, value, updated_at)
-    VALUES ('site_title', ${settings.siteTitle}, NOW())
-    ON CONFLICT (key) DO UPDATE SET value = ${settings.siteTitle}, updated_at = NOW()
-  `;
-  await sql`
-    INSERT INTO site_settings (key, value, updated_at)
-    VALUES ('site_description', ${settings.siteDesc}, NOW())
-    ON CONFLICT (key) DO UPDATE SET value = ${settings.siteDesc}, updated_at = NOW()
-  `;
-  await sql`
-    INSERT INTO site_settings (key, value, updated_at)
-    VALUES ('meta_pixel_id', ${settings.metaPixelId}, NOW())
-    ON CONFLICT (key) DO UPDATE SET value = ${settings.metaPixelId}, updated_at = NOW()
-  `;
-  await sql`
-    INSERT INTO site_settings (key, value, updated_at)
-    VALUES ('gtm_id', ${settings.gtmId}, NOW())
-    ON CONFLICT (key) DO UPDATE SET value = ${settings.gtmId}, updated_at = NOW()
-  `;
-}
+  const token = process.env.GITHUB_SEO_TOKEN;
+  const repo = process.env.GITHUB_REPO; // format: "owner/repo"
 
-// ── Per-page SEO overrides (for blog posts, case studies, etc.) ────────────────
-
-export type PageSEO = {
-  title: string;
-  description: string;
-};
-
-export async function getPageSEO(path: string): Promise<PageSEO | null> {
-  try {
-    const { rows } = await sql`SELECT title, description FROM page_seo WHERE path = ${path}`;
-    if (rows.length === 0) return null;
-    return { title: rows[0].title, description: rows[0].description };
-  } catch (err) {
-    console.error('[seo-settings] Failed to read page SEO:', err);
-    return null;
+  if (!token || !repo) {
+    throw new Error('Missing GITHUB_SEO_TOKEN or GITHUB_REPO environment variables');
   }
-}
 
-export async function savePageSEO(path: string, seo: PageSEO): Promise<void> {
-  await sql`
-    INSERT INTO page_seo (path, title, description, updated_at)
-    VALUES (${path}, ${seo.title}, ${seo.description}, NOW())
-    ON CONFLICT (path) DO UPDATE
-    SET title = ${seo.title}, description = ${seo.description}, updated_at = NOW()
-  `;
+  const filePath = 'data/seo.json';
+  const apiUrl = `https://api.github.com/repos/${repo}/contents/${filePath}`;
+
+  // GitHub requires the current file's SHA to update it (prevents overwrite conflicts)
+  const getRes = await fetch(apiUrl, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github+json',
+    },
+  });
+
+  if (!getRes.ok) {
+    throw new Error(`Failed to fetch current file from GitHub: ${getRes.status}`);
+  }
+
+  const currentFile = await getRes.json();
+  const sha = currentFile.sha;
+
+  const newContent = JSON.stringify(settings, null, 2);
+  const encodedContent = Buffer.from(newContent, 'utf-8').toString('base64');
+
+  const putRes = await fetch(apiUrl, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/vnd.github+json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      message: 'chore: update SEO settings via admin panel',
+      content: encodedContent,
+      sha,
+    }),
+  });
+
+  if (!putRes.ok) {
+    const errBody = await putRes.text();
+    throw new Error(`Failed to commit to GitHub: ${putRes.status} — ${errBody}`);
+  }
 }
