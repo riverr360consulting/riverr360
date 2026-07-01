@@ -4,10 +4,6 @@ import Script from 'next/script';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, Suspense } from 'react';
 
-// ─── Your Meta Pixel / Dataset ID ───────────────────────────────────────────
-const META_PIXEL_ID = '1529840028657513';
-// ─────────────────────────────────────────────────────────────────────────────
-
 declare global {
   interface Window {
     fbq: (...args: unknown[]) => void;
@@ -33,11 +29,17 @@ function MetaPixelInner() {
   return null;
 }
 
+interface MetaPixelProps {
+  pixelId: string;
+}
+
 /**
- * Drop <MetaPixel /> into your root layout once.
+ * Drop <MetaPixel pixelId="..." /> into your root layout once.
  * It loads the fbevents script and tracks every page view automatically.
  */
-export default function MetaPixel() {
+export default function MetaPixel({ pixelId }: MetaPixelProps) {
+  if (!pixelId) return null;
+
   return (
     <>
       {/* ── Meta Pixel base code ── */}
@@ -55,7 +57,7 @@ export default function MetaPixel() {
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
 
-            fbq('init', '${META_PIXEL_ID}');
+            fbq('init', '${pixelId}');
             fbq('track', 'PageView');
           `,
         }}
@@ -68,7 +70,7 @@ export default function MetaPixel() {
           height="1"
           width="1"
           style={{ display: 'none' }}
-          src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
+          src={`https://www.facebook.com/tr?id=${pixelId}&ev=PageView&noscript=1`}
           alt=""
         />
       </noscript>
