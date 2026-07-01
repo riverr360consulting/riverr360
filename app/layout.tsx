@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Script from 'next/script';
+import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MetaPixel from '@/components/MetaPixel';
@@ -46,6 +47,8 @@ export function generateMetadata(): Metadata {
   };
 }
 
+// Inline critical CSS for above-the-fold first paint, before the full
+// Tailwind stylesheet (imported via globals.css) loads.
 const CRITICAL_CSS = `
   *, *::before, *::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; line-height: 1.5; -webkit-text-size-adjust: 100%; }
@@ -108,16 +111,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="preload" href="/images/logo.png" as="image" type="image/png" />
         <style dangerouslySetInnerHTML={{ __html: CRITICAL_CSS }} />
-        <link
-          rel="stylesheet"
-          href="/_next/static/css/aaa50ee16a6d65d6.css"
-          media="print"
-          // @ts-ignore
-          onLoad="this.media='all';this.onload=null"
-        />
-        <noscript>
-          <link rel="stylesheet" href="/_next/static/css/aaa50ee16a6d65d6.css" />
-        </noscript>
       </head>
       <body className={inter.className}>
         {/* MetaPixel now reads pixel ID from DB-backed settings */}
