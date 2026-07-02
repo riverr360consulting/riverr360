@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 const caseStudies = [
   {
     "slug": "ecommerce-conversion-optimization",
-    "title": "E-commerce Brand Increases Conversion Rate by 240%",
+    "title": "E-commerce Brand Increases Conversion Rate by 240%. Get to Know How?",
     "industry": "E-commerce",
     "challenge": "Low website conversion and cart abandonment",
     "result": "240% increase in conversion rate",
