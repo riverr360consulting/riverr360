@@ -7,122 +7,101 @@ const postsDirectory = path.join(process.cwd(), 'content/blog');
 export interface BlogPost {
   slug: string;
   title: string;
+  metaTitle: string;
+  metaDescription: string;
   excerpt: string;
   category: string;
   author: string;
   publishedDate: string;
   coverImage?: string;
+  coverImageAlt?: string;
   featured: boolean;
   tags: string[];
+  schemaType?: string;
   content: string;
 }
 
-// Get all blog posts
 export function getAllPosts(): BlogPost[] {
-  // Check if directory exists
-  if (!fs.existsSync(postsDirectory)) {
-    return [];
-  }
+  if (!fs.existsSync(postsDirectory)) return [];
 
   const fileNames = fs.readdirSync(postsDirectory);
-  
+
   const allPostsData = fileNames
-    .filter(fileName => fileName.endsWith('.md') && !fileName.startsWith('TEMPLATE'))
+    .filter(f => f.endsWith('.md') && !f.startsWith('TEMPLATE'))
     .map(fileName => {
-      // Remove ".md" from file name to get slug
       const slug = fileName.replace(/\.md$/, '');
-
-      // Read markdown file as string
       const fullPath = path.join(postsDirectory, fileName);
-      const fileContents = fs.readFileSync(fullPath, 'utf8');
+      const { data, content } = matter(fs.readFileSync(fullPath, 'utf8'));
 
-      // Use gray-matter to parse the post metadata section
-      const { data, content } = matter(fileContents);
-
-      // Combine the data with the slug
       return {
         slug,
         title: data.title || 'Untitled',
+        // metaTitle/metaDescription fall back to title/excerpt if not set in frontmatter
+        metaTitle: data.metaTitle || data.title || 'Untitled',
+        metaDescription: data.metaDescription || data.excerpt || '',
         excerpt: data.excerpt || '',
         category: data.category || 'General',
         author: data.author || 'Riverr360 Team',
         publishedDate: data.publishedDate || new Date().toISOString().split('T')[0],
         coverImage: data.coverImage || '',
+        coverImageAlt: data.coverImageAlt || data.title || '',
         featured: data.featured || false,
         tags: data.tags || [],
+        schemaType: data.schemaType || 'BlogPosting',
         content,
       };
     });
 
-  // Sort posts by date (newest first)
-  return allPostsData.sort((a, b) => {
-    if (a.publishedDate < b.publishedDate) {
-      return 1;
-    } else {
-      return -1;
-    }
-  });
+  return allPostsData.sort((a, b) => (a.publishedDate < b.publishedDate ? 1 : -1));
 }
 
-// Get a single post by slug
 export function getPostBySlug(slug: string): BlogPost | null {
   try {
     const fullPath = path.join(postsDirectory, `${slug}.md`);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const { data, content } = matter(fileContents);
+    const { data, content } = matter(fs.readFileSync(fullPath, 'utf8'));
 
     return {
       slug,
       title: data.title || 'Untitled',
+      metaTitle: data.metaTitle || data.title || 'Untitled',
+      metaDescription: data.metaDescription || data.excerpt || '',
       excerpt: data.excerpt || '',
       category: data.category || 'General',
       author: data.author || 'Riverr360 Team',
       publishedDate: data.publishedDate || new Date().toISOString().split('T')[0],
       coverImage: data.coverImage || '',
+      coverImageAlt: data.coverImageAlt || data.title || '',
       featured: data.featured || false,
       tags: data.tags || [],
+      schemaType: data.schemaType || 'BlogPosting',
       content,
     };
-  } catch (error) {
+  } catch {
     return null;
   }
 }
 
-// Get all post slugs for generating static pages
 export function getAllPostSlugs(): string[] {
-  if (!fs.existsSync(postsDirectory)) {
-    return [];
-  }
-
-  const fileNames = fs.readdirSync(postsDirectory);
-  return fileNames
-    .filter(fileName => fileName.endsWith('.md') && !fileName.startsWith('TEMPLATE'))
-    .map(fileName => fileName.replace(/\.md$/, ''));
+  if (!fs.existsSync(postsDirectory)) return [];
+  return fs.readdirSync(postsDirectory)
+    .filter(f => f.endsWith('.md') && !f.startsWith('TEMPLATE'))
+    .map(f => f.replace(/\.md$/, ''));
 }
 
-// Get featured posts
 export function getFeaturedPosts(): BlogPost[] {
-  const allPosts = getAllPosts();
-  return allPosts.filter(post => post.featured);
+  return getAllPosts().filter(p => p.featured);
 }
 
-// Get posts by category
 export function getPostsByCategory(category: string): BlogPost[] {
-  const allPosts = getAllPosts();
-  return allPosts.filter(post => post.category === category);
+  return getAllPosts().filter(p => p.category === category);
 }
 
-// Get previous and next posts
-export function getAdjacentPosts(currentSlug: string): { prev: BlogPost | null; next: BlogPost | null } {
+export function getAdjacentPosts(currentSlug: string) {
   const allPosts = getAllPosts();
-  const currentIndex = allPosts.findIndex(post => post.slug === currentSlug);
-  
-  if (currentIndex === -1) {
-    return { prev: null, next: null };
-  }
-
+  const i = allPosts.findIndex(p => p.slug === currentSlug);
+  if (i === -1) return { prev: null, next: null };
   return {
-    prev: currentIndex > 0 ? allPosts[currentIndex - 1] : null,
-    next: currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null,
+    prev: i > 0 ? allPosts[i - 1] : null,
+    next: i < allPosts.length - 1 ? allPosts[i + 1] : null,
   };
 }

@@ -16,24 +16,18 @@ const categoryColors: { [key: string]: string } = {
   'General': 'bg-gray-100 text-gray-800',
 };
 
-// Trim title to 60 chars max, description to 160 chars max
-function trimTitle(t: string) {
-  return t.length > 60 ? t.slice(0, 57).trimEnd() + '...' : t;
-}
-function trimDesc(d: string) {
-  return d.length > 160 ? d.slice(0, 157).trimEnd() + '...' : d;
-}
-
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const post = getPostBySlug(params.slug);
   if (!post) return { title: 'Post Not Found' };
   return {
-    title: trimTitle(post.title),
-    description: trimDesc(post.excerpt),
+    // Use metaTitle/metaDescription set in admin panel — these are the source of truth.
+    // Falls back to title/excerpt if not set (for older posts without frontmatter fields).
+    title: post.metaTitle || post.title,
+    description: post.metaDescription || post.excerpt,
     alternates: { canonical: `https://riverr360.com/blog/${params.slug}` },
     openGraph: {
-      title: trimTitle(post.title),
-      description: trimDesc(post.excerpt),
+      title: post.metaTitle || post.title,
+      description: post.metaDescription || post.excerpt,
       type: 'article',
       publishedTime: post.publishedDate,
       authors: [post.author],
@@ -56,14 +50,14 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   // BlogPosting schema
   const schema = {
     '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: trimDesc(post.excerpt),
+    '@type': post.schemaType || 'BlogPosting',
+    headline: post.metaTitle || post.title,
+    description: post.metaDescription || post.excerpt,
     author: { '@type': 'Person', name: post.author },
     publisher: { '@type': 'Organization', name: 'Riverr360', url: 'https://riverr360.com' },
     datePublished: post.publishedDate,
     url: `https://riverr360.com/blog/${params.slug}`,
-    image: post.coverImage,
+    image: { '@type': 'ImageObject', url: post.coverImage, description: post.coverImageAlt || post.title },
     keywords: post.tags?.join(', '),
   };
 
