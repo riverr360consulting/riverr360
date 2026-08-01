@@ -1,21 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 const categories = ['Google Ads', 'SEO', 'PPC', 'Content Marketing', 'Email Marketing', 'Social Media', 'Analytics', 'Conversion', 'General'];
 
+const SCHEMA_TYPES = ['None', 'Article', 'BlogPosting', 'HowTo', 'FAQPage'];
+
 interface BlogPost {
   filename: string;
   title: string;
+  metaTitle: string;
+  metaDescription: string;
   excerpt: string;
   category: string;
   author: string;
   publishedDate: string;
   coverImage: string;
+  coverImageAlt: string;
   featured: boolean;
   tags: string;
+  slug: string;
+  schemaType: string;
+  internalLinks: string;
   content: string;
 }
 
@@ -23,23 +31,105 @@ function emptyPost(): BlogPost {
   return {
     filename: '',
     title: '',
+    metaTitle: '',
+    metaDescription: '',
     excerpt: '',
     category: 'General',
-    author: 'Bijeesh Kuttikrishnan',
+    author: 'Team Riverr360',
     publishedDate: new Date().toISOString().split('T')[0],
     coverImage: '',
+    coverImageAlt: '',
     featured: false,
     tags: '',
+    slug: '',
+    schemaType: 'BlogPosting',
+    internalLinks: '',
     content: '## Introduction\n\nWrite your blog post here...\n\n## Main Section\n\nYour content here.\n\n## Conclusion\n\nWrap up your post here.\n\n**[Contact us for help](/contact)**',
   };
 }
 
+// Parse frontmatter from a markdown string
+function parseFrontmatter(raw: string): BlogPost {
+  const match = raw.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+  if (!match) return { ...emptyPost(), content: raw };
+
+  const fm = match[1];
+  const content = match[2].trim();
+
+  function get(key: string) {
+    const m = fm.match(new RegExp(`^${key}:\\s*"?([^"\\n]*)"?`, 'm'));
+    return m ? m[1].trim() : '';
+  }
+  function getBool(key: string) {
+    const m = fm.match(new RegExp(`^${key}:\\s*(true|false)`, 'm'));
+    return m ? m[1] === 'true' : false;
+  }
+  function getArray(key: string) {
+    const m = fm.match(new RegExp(`^${key}:\\s*\\[([^\\]]*)\\]`, 'm'));
+    if (!m) return '';
+    return m[1].replace(/"/g, '').split(',').map((t: string) => t.trim()).filter(Boolean).join(', ');
+  }
+
+  return {
+    filename: '',
+    title: get('title'),
+    metaTitle: get('metaTitle'),
+    metaDescription: get('metaDescription'),
+    excerpt: get('excerpt'),
+    category: get('category') || 'General',
+    author: get('author') || 'Team Riverr360',
+    publishedDate: get('publishedDate'),
+    coverImage: get('coverImage'),
+    coverImageAlt: get('coverImageAlt'),
+    featured: getBool('featured'),
+    tags: getArray('tags'),
+    slug: get('slug'),
+    schemaType: get('schemaType') || 'BlogPosting',
+    internalLinks: get('internalLinks'),
+    content,
+  };
+}
+
+function buildFrontmatter(post: BlogPost): string {
+  const tagsArray = post.tags.split(',').map(t => t.trim()).filter(Boolean);
+  const metaTitle = post.metaTitle || post.title;
+  const metaDesc = post.metaDescription || post.excerpt;
+  const slug = post.slug || post.filename || post.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+  return `---
+title: "${post.title}"
+metaTitle: "${metaTitle}"
+metaDescription: "${metaDesc}"
+excerpt: "${post.excerpt}"
+category: "${post.category}"
+author: "${post.author}"
+publishedDate: "${post.publishedDate}"
+coverImage: "${post.coverImage}"
+coverImageAlt: "${post.coverImageAlt || post.title}"
+featured: ${post.featured}
+tags: [${tagsArray.map(t => `"${t}"`).join(', ')}]
+slug: "${slug}"
+schemaType: "${post.schemaType}"
+internalLinks: "${post.internalLinks}"
+---
+
+${post.content}`;
+}
+
+const KNOWN_POSTS = [
+  'cut-ppc-costs-in-half',
+  'email-marketing-that-converts',
+  'google-ads-landing-page-problem',
+  'seo-basics-every-business-owner-should-know',
+];
+
 export default function AdminBlogPage() {
-  const [view, setView] = useState<'list' | 'edit' | 'new'>('list');
+  const [view, setView] = useState<'list' | 'edit'>('list');
   const [post, setPost] = useState<BlogPost>(emptyPost());
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [preview, setPreview] = useState(false);
+  const [activeTab, setActiveTab] = useState<'content' | 'seo' | 'schema' | 'links'>('content');
   const router = useRouter();
 
   async function handleLogout() {
@@ -47,11 +137,33 @@ export default function AdminBlogPage() {
     router.push('/admin/login');
   }
 
+  // Load existing post from GitHub
+  async function loadPost(slug: string) {
+    setLoading(true);
+    setMessage('');
+    try {
+      const res = await fetch(`/api/admin/get-blog?slug=${slug}`);
+      if (res.ok) {
+        const data = await res.json();
+        const parsed = parseFrontmatter(data.content);
+        setPost({ ...parsed, filename: slug });
+        setView('edit');
+        setActiveTab('content');
+      } else {
+        setMessage('load-error');
+      }
+    } catch {
+      setMessage('load-error');
+    } finally {
+      setLoading(false);
+    }
+  }
+
   function startNew() {
     setPost(emptyPost());
-    setView('new');
+    setView('edit');
     setMessage('');
-    setPreview(false);
+    setActiveTab('content');
   }
 
   async function handleSave() {
@@ -60,20 +172,7 @@ export default function AdminBlogPage() {
     setMessage('');
 
     const filename = post.filename || post.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    const tagsArray = post.tags.split(',').map(t => t.trim()).filter(Boolean);
-
-    const frontmatter = `---
-title: "${post.title}"
-excerpt: "${post.excerpt}"
-category: "${post.category}"
-author: "${post.author}"
-publishedDate: "${post.publishedDate}"
-coverImage: "${post.coverImage}"
-featured: ${post.featured}
-tags: [${tagsArray.map(t => `"${t}"`).join(', ')}]
----
-
-${post.content}`;
+    const frontmatter = buildFrontmatter({ ...post, filename });
 
     const res = await fetch('/api/admin/save-blog', {
       method: 'POST',
@@ -82,12 +181,20 @@ ${post.content}`;
     });
 
     setMessage(res.ok ? 'success' : 'error');
+    if (res.ok) setPost(p => ({ ...p, filename }));
     setSaving(false);
   }
 
-  const inp = { width: '100%', padding: '0.65rem 0.875rem', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '0.9375rem', boxSizing: 'border-box' as const, background: 'white', color: '#111827' };
-  const lbl = { fontSize: '0.875rem', color: '#374151', fontWeight: 500, display: 'block', marginBottom: '4px' } as React.CSSProperties;
+  const inp: React.CSSProperties = { width: '100%', padding: '0.65rem 0.875rem', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '0.9375rem', boxSizing: 'border-box', background: 'white', color: '#111827' };
+  const lbl: React.CSSProperties = { fontSize: '0.875rem', color: '#374151', fontWeight: 500, display: 'block', marginBottom: '4px' };
+  const hint: React.CSSProperties = { fontSize: '0.8125rem', color: '#9ca3af', marginTop: '3px' };
+  const tabBtn = (active: boolean): React.CSSProperties => ({
+    padding: '0.5rem 1rem', borderRadius: '8px', fontSize: '0.875rem', fontWeight: active ? 600 : 400,
+    background: active ? '#2563eb' : 'white', color: active ? 'white' : '#6b7280',
+    border: active ? 'none' : '1px solid #e5e7eb', cursor: 'pointer',
+  });
 
+  // ── LIST VIEW ────────────────────────────────────────────────────────────────
   if (view === 'list') {
     return (
       <div style={{ minHeight: '100vh', background: '#f9fafb', padding: '2rem 1rem' }}>
@@ -104,128 +211,276 @@ ${post.content}`;
             </div>
           </div>
 
-          <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '12px', padding: '1rem 1.25rem', marginBottom: '1.25rem' }}>
-            <p style={{ fontSize: '0.875rem', color: '#1d4ed8', margin: 0 }}>
-              Your existing blog posts are in <code>content/blog/</code> on GitHub. Click <strong>+ New Post</strong> to create a new one — it will be saved directly to GitHub.
-            </p>
-          </div>
+          {message === 'load-error' && (
+            <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '1rem', color: '#dc2626', marginBottom: '1rem' }}>
+              ❌ Failed to load post. Check your GitHub token and repo settings.
+            </div>
+          )}
 
-          <div style={{ background: 'white', borderRadius: '12px', border: '1px solid #e5e7eb', padding: '1.5rem', textAlign: 'center' }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>📝</div>
-            <h3 style={{ fontWeight: 600, color: '#111827', margin: '0 0 0.5rem' }}>Your Existing Blog Posts</h3>
-            <p style={{ fontSize: '0.875rem', color: '#6b7280', margin: '0 0 1.25rem' }}>
-              cut-ppc-costs-in-half.md • email-marketing-that-converts.md • google-ads-landing-page-problem.md • seo-basics-every-business-owner-should-know.md
-            </p>
-            <p style={{ fontSize: '0.8125rem', color: '#9ca3af', margin: 0 }}>
-              To edit existing posts, use <strong>+ New Post</strong>, enter the same filename, and it will overwrite the existing file on GitHub.
-            </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {KNOWN_POSTS.map(slug => (
+              <div key={slug} style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div>
+                  <div style={{ fontWeight: 600, color: '#111827', fontSize: '0.9375rem' }}>{slug}</div>
+                  <div style={{ fontSize: '0.8125rem', color: '#9ca3af', marginTop: '2px' }}>content/blog/{slug}.md</div>
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <a href={`/blog/${slug}`} target="_blank" rel="noopener noreferrer"
+                    style={{ padding: '0.4rem 0.75rem', borderRadius: '6px', background: '#f3f4f6', color: '#374151', fontSize: '0.8125rem', textDecoration: 'none', border: '1px solid #e5e7eb' }}>
+                    View →
+                  </a>
+                  <button onClick={() => loadPost(slug)} disabled={loading}
+                    style={{ padding: '0.4rem 0.875rem', borderRadius: '6px', background: '#eff6ff', color: '#2563eb', fontSize: '0.8125rem', border: '1px solid #bfdbfe', cursor: 'pointer', fontWeight: 600 }}>
+                    {loading ? 'Loading...' : 'Edit'}
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
     );
   }
 
+  // ── EDIT VIEW ────────────────────────────────────────────────────────────────
   return (
     <div style={{ minHeight: '100vh', background: '#f9fafb', padding: '2rem 1rem' }}>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
 
+        {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <button onClick={() => { setView('list'); setMessage(''); }} style={{ color: '#6b7280', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.875rem' }}>← Blog Posts</button>
             <span style={{ color: '#d1d5db' }}>|</span>
-            <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>New Blog Post</h1>
+            <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>
+              {post.filename ? `Editing: ${post.filename}` : 'New Post'}
+            </h1>
           </div>
           <div style={{ display: 'flex', gap: '8px' }}>
-            <button onClick={() => setPreview(!preview)} style={{ padding: '0.5rem 1rem', borderRadius: '8px', background: preview ? '#f3f4f6' : 'white', color: '#374151', fontSize: '0.875rem', border: '1px solid #d1d5db', cursor: 'pointer' }}>
-              {preview ? 'Edit' : 'Preview'}
-            </button>
-            <button onClick={handleSave} disabled={saving} style={{ padding: '0.5rem 1rem', borderRadius: '8px', background: '#2563eb', color: 'white', fontWeight: 600, fontSize: '0.875rem', border: 'none', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}>
+            {post.filename && (
+              <a href={`/blog/${post.filename}`} target="_blank" rel="noopener noreferrer"
+                style={{ padding: '0.5rem 1rem', borderRadius: '8px', background: 'white', color: '#374151', fontSize: '0.875rem', border: '1px solid #d1d5db', textDecoration: 'none' }}>
+                View Live →
+              </a>
+            )}
+            <button onClick={handleSave} disabled={saving}
+              style={{ padding: '0.5rem 1.25rem', borderRadius: '8px', background: '#2563eb', color: 'white', fontWeight: 600, fontSize: '0.875rem', border: 'none', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}>
               {saving ? 'Saving...' : '💾 Save to GitHub'}
             </button>
           </div>
         </div>
 
-        {/* Metadata section */}
-        <div style={{ background: 'white', borderRadius: '12px', border: '1px solid #e5e7eb', padding: '1.5rem', marginBottom: '1rem' }}>
-          <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: '0 0 1rem' }}>Post Details</p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
-            <div>
-              <label style={lbl}>Title *</label>
-              <input style={inp} type="text" placeholder="5 Ways to Cut Your PPC Costs in Half" value={post.title} onChange={e => setPost({ ...post, title: e.target.value })} />
-            </div>
-            <div>
-              <label style={lbl}>Filename (leave empty to auto-generate)</label>
-              <input style={inp} type="text" placeholder="cut-ppc-costs-in-half" value={post.filename} onChange={e => setPost({ ...post, filename: e.target.value })} />
-              <p style={{ fontSize: '0.8125rem', color: '#9ca3af', marginTop: '3px' }}>Use same filename as existing post to overwrite it. Lowercase, dashes only.</p>
-            </div>
-            <div>
-              <label style={lbl}>Excerpt / Summary *</label>
-              <textarea style={{ ...inp, resize: 'vertical' }} rows={2} placeholder="Short description shown on blog listing page..." value={post.excerpt} onChange={e => setPost({ ...post, excerpt: e.target.value })} />
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-              <div>
-                <label style={lbl}>Category</label>
-                <select style={inp} value={post.category} onChange={e => setPost({ ...post, category: e.target.value })}>
-                  {categories.map(c => <option key={c}>{c}</option>)}
-                </select>
-              </div>
-              <div>
-                <label style={lbl}>Published Date</label>
-                <input style={inp} type="date" value={post.publishedDate} onChange={e => setPost({ ...post, publishedDate: e.target.value })} />
-              </div>
-            </div>
-            <div>
-              <label style={lbl}>Author</label>
-              <input style={inp} type="text" value={post.author} onChange={e => setPost({ ...post, author: e.target.value })} />
-            </div>
-            <div>
-              <label style={lbl}>Cover Image URL</label>
-              <input style={inp} type="text" placeholder="https://images.unsplash.com/photo-...?w=1200&q=80" value={post.coverImage} onChange={e => setPost({ ...post, coverImage: e.target.value })} />
-              <p style={{ fontSize: '0.8125rem', color: '#9ca3af', marginTop: '3px' }}>Get free images from unsplash.com — right-click image → Copy image address</p>
-            </div>
-            <div>
-              <label style={lbl}>Tags (comma separated)</label>
-              <input style={inp} type="text" placeholder="ppc, google-ads, cost-reduction" value={post.tags} onChange={e => setPost({ ...post, tags: e.target.value })} />
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <input type="checkbox" id="featured" checked={post.featured} onChange={e => setPost({ ...post, featured: e.target.checked })} style={{ width: '16px', height: '16px' }} />
-              <label htmlFor="featured" style={{ fontSize: '0.875rem', color: '#374151', fontWeight: 500 }}>Featured post (shown at top of blog page)</label>
-            </div>
-          </div>
+        {/* Tabs */}
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '1rem', flexWrap: 'wrap' }}>
+          {(['content', 'seo', 'schema', 'links'] as const).map(tab => (
+            <button key={tab} onClick={() => setActiveTab(tab)} style={tabBtn(activeTab === tab)}>
+              {tab === 'content' && '📝 Content'}
+              {tab === 'seo' && '🔍 SEO'}
+              {tab === 'schema' && '🏗 Schema'}
+              {tab === 'links' && '🔗 Links & Slug'}
+            </button>
+          ))}
         </div>
 
-        {/* Content editor */}
-        <div style={{ background: 'white', borderRadius: '12px', border: '1px solid #e5e7eb', padding: '1.5rem', marginBottom: '1rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-            <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: 0 }}>Blog Content (Markdown)</p>
-            <div style={{ fontSize: '0.8125rem', color: '#9ca3af' }}>## Heading &nbsp;|&nbsp; **bold** &nbsp;|&nbsp; *italic* &nbsp;|&nbsp; - list</div>
-          </div>
-
-          {preview ? (
-            <div style={{ minHeight: '400px', padding: '1rem', border: '1px solid #e5e7eb', borderRadius: '8px', background: '#f9fafb' }}>
-              <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'Georgia, serif', fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7 }}>{post.content}</pre>
+        {/* ── CONTENT TAB ── */}
+        {activeTab === 'content' && (
+          <>
+            <div style={{ background: 'white', borderRadius: '12px', border: '1px solid #e5e7eb', padding: '1.5rem', marginBottom: '1rem' }}>
+              <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: '0 0 1rem' }}>Post Details</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+                <div>
+                  <label style={lbl}>Title *</label>
+                  <input style={inp} type="text" placeholder="5 Ways to Cut Your PPC Costs in Half" value={post.title} onChange={e => setPost({ ...post, title: e.target.value })} />
+                </div>
+                <div>
+                  <label style={lbl}>Excerpt / Summary</label>
+                  <textarea style={{ ...inp, resize: 'vertical' }} rows={2} placeholder="Short description shown on blog listing page..." value={post.excerpt} onChange={e => setPost({ ...post, excerpt: e.target.value })} />
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                  <div>
+                    <label style={lbl}>Category</label>
+                    <select style={inp} value={post.category} onChange={e => setPost({ ...post, category: e.target.value })}>
+                      {categories.map(c => <option key={c}>{c}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={lbl}>Published Date</label>
+                    <input style={inp} type="date" value={post.publishedDate} onChange={e => setPost({ ...post, publishedDate: e.target.value })} />
+                  </div>
+                </div>
+                <div>
+                  <label style={lbl}>Author</label>
+                  <input style={inp} type="text" value={post.author} onChange={e => setPost({ ...post, author: e.target.value })} />
+                </div>
+                <div>
+                  <label style={lbl}>Cover Image URL</label>
+                  <input style={inp} type="text" placeholder="https://images.unsplash.com/photo-...?w=1200&q=80" value={post.coverImage} onChange={e => setPost({ ...post, coverImage: e.target.value })} />
+                  <p style={hint}>Get free images from unsplash.com → right-click image → Copy image address</p>
+                </div>
+                <div>
+                  <label style={lbl}>Cover Image Alt Text</label>
+                  <input style={inp} type="text" placeholder="Person reviewing PPC campaign analytics on laptop" value={post.coverImageAlt} onChange={e => setPost({ ...post, coverImageAlt: e.target.value })} />
+                  <p style={hint}>Describe what's in the image — used by screen readers and improves SEO</p>
+                </div>
+                {post.coverImage && (
+                  <div>
+                    <p style={{ ...hint, marginBottom: '6px' }}>Image preview:</p>
+                    <img src={post.coverImage} alt={post.coverImageAlt || 'Cover preview'} style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #e5e7eb' }} />
+                  </div>
+                )}
+                <div>
+                  <label style={lbl}>Tags (comma separated)</label>
+                  <input style={inp} type="text" placeholder="ppc, google-ads, cost-reduction" value={post.tags} onChange={e => setPost({ ...post, tags: e.target.value })} />
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <input type="checkbox" id="featured" checked={post.featured} onChange={e => setPost({ ...post, featured: e.target.checked })} style={{ width: '16px', height: '16px' }} />
+                  <label htmlFor="featured" style={{ fontSize: '0.875rem', color: '#374151', fontWeight: 500 }}>Featured post (shown at top of blog page)</label>
+                </div>
+              </div>
             </div>
-          ) : (
-            <textarea
-              style={{ ...inp, resize: 'vertical', fontFamily: 'monospace', fontSize: '0.875rem', lineHeight: 1.6, minHeight: '400px' }}
-              value={post.content}
-              onChange={e => setPost({ ...post, content: e.target.value })}
-              placeholder="## Introduction&#10;&#10;Write your blog post here...&#10;&#10;## Main Section&#10;&#10;Your content here."
-            />
-          )}
 
-          <div style={{ marginTop: '0.75rem', background: '#f9fafb', borderRadius: '8px', padding: '0.75rem', fontSize: '0.8125rem', color: '#6b7280' }}>
-            <strong>Markdown tips:</strong> ## for headings &nbsp;|&nbsp; **bold** &nbsp;|&nbsp; *italic* &nbsp;|&nbsp; - bullet &nbsp;|&nbsp; 1. numbered &nbsp;|&nbsp; [link text](/contact) &nbsp;|&nbsp; &gt; quote
+            <div style={{ background: 'white', borderRadius: '12px', border: '1px solid #e5e7eb', padding: '1.5rem', marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: 0 }}>Blog Content (Markdown)</p>
+                <span style={{ fontSize: '0.8125rem', color: '#9ca3af' }}>## H2 &nbsp;|&nbsp; ### H3 &nbsp;|&nbsp; **bold** &nbsp;|&nbsp; *italic* &nbsp;|&nbsp; - list &nbsp;|&nbsp; [text](/url)</span>
+              </div>
+              <textarea
+                style={{ ...inp, resize: 'vertical', fontFamily: 'monospace', fontSize: '0.875rem', lineHeight: 1.6, minHeight: '450px' }}
+                value={post.content}
+                onChange={e => setPost({ ...post, content: e.target.value })}
+              />
+              <div style={{ marginTop: '0.75rem', background: '#f9fafb', borderRadius: '8px', padding: '0.75rem', fontSize: '0.8125rem', color: '#6b7280' }}>
+                <strong>Internal link example:</strong> [See our framework](/framework) &nbsp;|&nbsp; [Book a call](/book) &nbsp;|&nbsp; [Read case studies](/case-studies)
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* ── SEO TAB ── */}
+        {activeTab === 'seo' && (
+          <div style={{ background: 'white', borderRadius: '12px', border: '1px solid #e5e7eb', padding: '1.5rem', marginBottom: '1rem' }}>
+            <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: '0 0 1rem' }}>SEO Settings</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <label style={lbl}>Meta Title</label>
+                <input style={inp} type="text" placeholder="Leave empty to use post title" value={post.metaTitle} onChange={e => setPost({ ...post, metaTitle: e.target.value })} maxLength={70} />
+                <p style={hint}>{(post.metaTitle || post.title).length}/70 characters — shown in Google search results tab. Leave empty to use post title.</p>
+                {/* Live preview */}
+                <div style={{ marginTop: '8px', background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '8px', padding: '12px' }}>
+                  <p style={{ fontSize: '0.75rem', color: '#9ca3af', margin: '0 0 4px' }}>Google preview:</p>
+                  <p style={{ fontSize: '1rem', color: '#1a0dab', margin: '0 0 2px', fontFamily: 'Arial, sans-serif', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {post.metaTitle || post.title || 'Your post title'} | Riverr360
+                  </p>
+                  <p style={{ fontSize: '0.8125rem', color: '#006621', margin: '0 0 2px', fontFamily: 'Arial, sans-serif' }}>
+                    https://riverr360.com/blog/{post.slug || post.filename || 'your-post-slug'}
+                  </p>
+                  <p style={{ fontSize: '0.8125rem', color: '#545454', margin: 0, fontFamily: 'Arial, sans-serif', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    {post.metaDescription || post.excerpt || 'Your meta description will appear here...'}
+                  </p>
+                </div>
+              </div>
+              <div>
+                <label style={lbl}>Meta Description</label>
+                <textarea style={{ ...inp, resize: 'vertical' }} rows={3} placeholder="Leave empty to use excerpt" value={post.metaDescription} onChange={e => setPost({ ...post, metaDescription: e.target.value })} maxLength={160} />
+                <p style={hint}>{(post.metaDescription || post.excerpt).length}/160 characters — shown under the title in Google. Leave empty to use excerpt.</p>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
 
+        {/* ── SCHEMA TAB ── */}
+        {activeTab === 'schema' && (
+          <div style={{ background: 'white', borderRadius: '12px', border: '1px solid #e5e7eb', padding: '1.5rem', marginBottom: '1rem' }}>
+            <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: '0 0 0.5rem' }}>Schema Markup</p>
+            <p style={{ fontSize: '0.8125rem', color: '#6b7280', margin: '0 0 1.25rem' }}>
+              Schema tells Google what type of content this is — helps it appear in rich results. <strong>BlogPosting</strong> is the right choice for most blog posts.
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {SCHEMA_TYPES.map(type => (
+                <label key={type} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '0.875rem', border: `2px solid ${post.schemaType === type ? '#2563eb' : '#e5e7eb'}`, borderRadius: '10px', cursor: 'pointer', background: post.schemaType === type ? '#eff6ff' : 'white' }}>
+                  <input type="radio" name="schema" value={type} checked={post.schemaType === type} onChange={() => setPost({ ...post, schemaType: type })} style={{ marginTop: '2px' }} />
+                  <div>
+                    <div style={{ fontWeight: 600, color: '#111827', fontSize: '0.9375rem' }}>{type}</div>
+                    <div style={{ fontSize: '0.8125rem', color: '#6b7280', marginTop: '2px' }}>
+                      {type === 'None' && 'No schema — not recommended'}
+                      {type === 'Article' && 'General article — good for news or editorial content'}
+                      {type === 'BlogPosting' && 'Blog post — recommended for most posts ✓'}
+                      {type === 'HowTo' && 'Step-by-step guide — shows steps in Google results'}
+                      {type === 'FAQPage' && 'FAQ content — shows questions in Google results'}
+                    </div>
+                  </div>
+                </label>
+              ))}
+            </div>
+            {post.schemaType !== 'None' && (
+              <div style={{ marginTop: '1rem', background: '#f9fafb', borderRadius: '8px', padding: '1rem', fontSize: '0.8125rem', color: '#6b7280' }}>
+                <strong>Auto-generated from your content:</strong> The schema will use your post title, meta description, author, published date, and cover image automatically — no extra input needed.
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── LINKS & SLUG TAB ── */}
+        {activeTab === 'links' && (
+          <div style={{ background: 'white', borderRadius: '12px', border: '1px solid #e5e7eb', padding: '1.5rem', marginBottom: '1rem' }}>
+            <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: '0 0 1rem' }}>Slug & Internal Links</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <label style={lbl}>URL Slug</label>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.875rem', color: '#9ca3af', whiteSpace: 'nowrap' }}>riverr360.com/blog/</span>
+                  <input style={{ ...inp, flex: 1 }} type="text"
+                    placeholder="cut-ppc-costs-in-half"
+                    value={post.filename}
+                    onChange={e => setPost({ ...post, filename: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-') })} />
+                </div>
+                <p style={hint}>Lowercase letters and dashes only. This is the URL of your post. Use the same slug as an existing post to overwrite it.</p>
+                <div style={{ marginTop: '6px', background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '6px', padding: '8px 12px', fontSize: '0.8125rem', color: '#2563eb' }}>
+                  🔗 {`https://riverr360.com/blog/${post.filename || 'your-post-slug'}`}
+                </div>
+              </div>
+
+              <div style={{ borderTop: '1px solid #f3f4f6', paddingTop: '1rem' }}>
+                <label style={lbl}>Internal Links (for reference)</label>
+                <textarea style={{ ...inp, resize: 'vertical', fontFamily: 'monospace', fontSize: '0.875rem' }} rows={4}
+                  placeholder={`/framework — R360 Framework page\n/contact — Contact us\n/case-studies — See results\n/book — Book a strategy call`}
+                  value={post.internalLinks}
+                  onChange={e => setPost({ ...post, internalLinks: e.target.value })} />
+                <p style={hint}>Keep notes on which internal pages you've linked to from this post. Use these in your content as: [anchor text](/page)</p>
+              </div>
+
+              <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '10px', padding: '1rem' }}>
+                <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#15803d', margin: '0 0 0.5rem' }}>📌 Suggested internal links for this post</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  {[
+                    { path: '/framework', label: 'R360 Revenue Leakage Framework', use: 'Link when mentioning the framework' },
+                    { path: '/contact', label: 'Contact / Free Audit', use: 'CTA at the end of every post' },
+                    { path: '/case-studies', label: 'Case Studies', use: 'Link when citing results' },
+                    { path: '/book', label: 'Book a Strategy Call', use: 'Alternative CTA' },
+                    { path: '/score', label: 'Revenue Leakage Score', use: 'Link when discussing diagnostics' },
+                  ].map(link => (
+                    <div key={link.path} style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                      <code style={{ fontSize: '0.8125rem', background: '#dcfce7', padding: '2px 6px', borderRadius: '4px', color: '#15803d', whiteSpace: 'nowrap' }}>{link.path}</code>
+                      <div style={{ fontSize: '0.8125rem', color: '#374151' }}><strong>{link.label}</strong> — {link.use}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Messages */}
         {message === 'error-title' && <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '1rem', color: '#dc2626', marginBottom: '0.75rem' }}>Please enter a title before saving.</div>}
         {message === 'success' && (
           <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '1rem', color: '#15803d' }}>
-            ✅ Blog post saved to GitHub! Vercel will deploy in ~60 seconds and your post will be live.
+            ✅ Saved to GitHub! Vercel will redeploy in ~60 seconds and your post will be live at{' '}
+            <a href={`/blog/${post.filename}`} target="_blank" rel="noopener noreferrer" style={{ color: '#15803d', fontWeight: 600 }}>
+              riverr360.com/blog/{post.filename}
+            </a>
           </div>
         )}
-        {message === 'error' && <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '1rem', color: '#dc2626' }}>❌ Something went wrong. Please try again.</div>}
+        {message === 'error' && <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '1rem', color: '#dc2626' }}>❌ Something went wrong. Check your GitHub token and repo settings in Vercel env vars.</div>}
       </div>
     </div>
   );
