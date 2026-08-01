@@ -397,8 +397,8 @@ export default function AdminBlogPage() {
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {SCHEMA_TYPES.map(type => (
-                <label key={type} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '0.875rem', border: `2px solid ${post.schemaType === type ? '#2563eb' : '#e5e7eb'}`, borderRadius: '10px', cursor: 'pointer', background: post.schemaType === type ? '#eff6ff' : 'white' }}>
-                  <input type="radio" name="schema" value={type} checked={post.schemaType === type} onChange={() => setPost({ ...post, schemaType: type })} style={{ marginTop: '2px' }} />
+                <label key={type} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '0.875rem 1rem', border: `2px solid ${post.schemaType === type ? '#2563eb' : '#e5e7eb'}`, borderRadius: '10px', cursor: 'pointer', background: post.schemaType === type ? '#eff6ff' : 'white' }}>
+                  <input type="radio" name="schema" value={type} checked={post.schemaType === type} onChange={() => setPost({ ...post, schemaType: type })} style={{ width: '16px', height: '16px', flexShrink: 0, accentColor: '#2563eb' }} />
                   <div>
                     <div style={{ fontWeight: 600, color: '#111827', fontSize: '0.9375rem' }}>{type}</div>
                     <div style={{ fontSize: '0.8125rem', color: '#6b7280', marginTop: '2px' }}>
