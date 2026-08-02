@@ -20,8 +20,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const post = getPostBySlug(params.slug);
   if (!post) return { title: 'Post Not Found' };
   return {
-    // Use metaTitle/metaDescription set in admin panel — these are the source of truth.
-    // Falls back to title/excerpt if not set (for older posts without frontmatter fields).
+    // metaTitle / metaDescription are set in the admin panel — source of truth.
+    // Falls back to title / excerpt for older posts without these frontmatter fields.
     title: post.metaTitle || post.title,
     description: post.metaDescription || post.excerpt,
     alternates: { canonical: `https://riverr360.com/blog/${params.slug}` },
@@ -47,7 +47,6 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const { prev, next } = getAdjacentPosts(params.slug);
   const readingTime = Math.ceil(post.content.split(/\s+/).length / 200);
 
-  // BlogPosting schema
   const schema = {
     '@context': 'https://schema.org',
     '@type': post.schemaType || 'BlogPosting',
@@ -65,7 +64,6 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     <main>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <article>
-        {/* Header */}
         <section className="bg-gradient-to-br from-primary-50 to-white py-16">
           <div className="container-custom max-w-4xl mx-auto">
             <nav className="mb-6">
@@ -92,19 +90,17 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             </div>
             {post.coverImage && (
               <div className="rounded-lg overflow-hidden mb-8">
-                <img src={post.coverImage} alt={post.title} className="w-full h-auto" />
+                <img src={post.coverImage} alt={post.coverImageAlt || post.title} className="w-full h-auto" />
               </div>
             )}
           </div>
         </section>
 
-        {/* Content */}
         <section className="section-padding bg-white">
           <div className="container-custom max-w-3xl mx-auto">
             <div className="prose prose-lg max-w-none">
               <ReactMarkdown
                 components={{
-                  // Map h1 in markdown to h2 so we don't have multiple h1s
                   h1: ({node, ...props}) => <h2 className="text-3xl font-bold mt-8 mb-4" {...props} />,
                   h2: ({node, ...props}) => <h2 className="text-3xl font-bold mt-8 mb-4" {...props} />,
                   h3: ({node, ...props}) => <h3 className="text-2xl font-semibold mt-6 mb-3" {...props} />,
@@ -124,7 +120,6 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
             {post.tags && post.tags.length > 0 && (
               <div className="mt-12 pt-8 border-t">
-                {/* h2 before h3 tags — fixes heading hierarchy */}
                 <h2 className="text-sm font-semibold text-gray-900 mb-4">Tags</h2>
                 <div className="flex flex-wrap gap-2">
                   {post.tags.map((tag: string, idx: number) => (
@@ -162,7 +157,6 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           </div>
         </section>
 
-        {/* Author Bio */}
         <section className="section-padding bg-gray-50">
           <div className="container-custom max-w-3xl mx-auto">
             <div className="bg-white p-8 rounded-lg shadow-sm">
@@ -178,7 +172,6 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           </div>
         </section>
 
-        {/* Related Posts */}
         {relatedPosts.length > 0 && (
           <section className="section-padding bg-white">
             <div className="container-custom max-w-6xl mx-auto">
@@ -188,7 +181,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                   <Link key={rp.slug} href={`/blog/${rp.slug}`} className="group bg-gray-50 rounded-lg overflow-hidden hover:shadow-xl transition-shadow">
                     {rp.coverImage && (
                       <div className="aspect-video bg-gray-200 overflow-hidden">
-                        <img src={rp.coverImage} alt={rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                        <img src={rp.coverImage} alt={rp.coverImageAlt || rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       </div>
                     )}
                     <div className="p-6">
@@ -203,7 +196,6 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           </section>
         )}
 
-        {/* CTA */}
         <section className="section-padding bg-gray-50">
           <div className="container-custom max-w-4xl mx-auto">
             <div className="bg-primary-600 text-white p-8 rounded-lg text-center">
