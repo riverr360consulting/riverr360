@@ -222,7 +222,7 @@ export default function AdminCaseStudiesPage() {
             )}
             <button onClick={saveToGitHub}
               style={{ padding: '0.5rem 1.25rem', borderRadius: '8px', background: '#2563eb', color: 'white', fontWeight: 600, fontSize: '0.875rem', border: 'none', cursor: 'pointer' }}>
-              {isNew ? '+ Add' : '✓ Update'}
+              {saving ? 'Saving...' : '💾 Save to GitHub'}
             </button>
           </div>
         </div>
