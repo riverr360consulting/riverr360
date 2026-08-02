@@ -117,25 +117,28 @@ export default function AdminCaseStudiesPage() {
     setEditing({ ...editing, approach: editing.approach.filter((_, i) => i !== idx) });
   }
 
-  function saveLocal() {
-    if (!editing) return;
-    const slug = editing.slug || editing.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    const updated = { ...editing, slug };
-    if (isNew) setStudies([...studies, updated]);
-    else setStudies(studies.map(s => s.slug === editing.slug ? updated : s));
-    setEditing(null);
-    setMessage('saved-local');
-  }
-
   async function saveToGitHub() {
+    if (!editing) return;
+    if (!editing.title) { setMessage('error-title'); return; }
     setSaving(true);
     setMessage('');
+    const slug = editing.slug || editing.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const updated = { ...editing, slug };
+    const updatedStudies = isNew
+      ? [...studies, updated]
+      : studies.map(s => s.slug === editing.slug ? updated : s);
+    setStudies(updatedStudies);
     const res = await fetch('/api/admin/save-case-studies', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ studies }),
+      body: JSON.stringify({ studies: updatedStudies }),
     });
-    setMessage(res.ok ? 'success' : 'error');
+    if (res.ok) {
+      setMessage('success');
+      setEditing(null);
+    } else {
+      setMessage('error');
+    }
     setSaving(false);
   }
 
@@ -190,12 +193,6 @@ export default function AdminCaseStudiesPage() {
             </div>
           )}
 
-          <button onClick={saveToGitHub} disabled={saving || loading}
-            style={{ width: '100%', padding: '0.875rem', borderRadius: '8px', background: '#059669', color: 'white', fontWeight: 600, fontSize: '1rem', border: 'none', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1, marginBottom: '0.75rem' }}>
-            {saving ? 'Saving...' : '💾 Save All to GitHub'}
-          </button>
-
-          {message === 'saved-local' && <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '8px', padding: '1rem', color: '#1d4ed8' }}>✏️ Updated locally. Click Save All to GitHub when done with all edits.</div>}
           {message === 'success' && <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '1rem', color: '#15803d' }}>✅ Saved to GitHub! Vercel will redeploy in ~60 seconds.</div>}
           {message === 'error' && <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '1rem', color: '#dc2626' }}>❌ Something went wrong. Check GitHub token and repo settings.</div>}
         </div>
@@ -223,7 +220,7 @@ export default function AdminCaseStudiesPage() {
                 View Live →
               </a>
             )}
-            <button onClick={saveLocal}
+            <button onClick={saveToGitHub}
               style={{ padding: '0.5rem 1.25rem', borderRadius: '8px', background: '#2563eb', color: 'white', fontWeight: 600, fontSize: '0.875rem', border: 'none', cursor: 'pointer' }}>
               {isNew ? '+ Add' : '✓ Update'}
             </button>
@@ -430,12 +427,15 @@ export default function AdminCaseStudiesPage() {
           </div>
         )}
 
+        {message === 'error-title' && <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '1rem', color: '#dc2626', marginBottom: '0.75rem' }}>Please enter a title before saving.</div>}
         <div style={{ marginTop: '1rem', display: 'flex', gap: '8px' }}>
-          <button onClick={saveLocal} style={{ flex: 1, padding: '0.875rem', borderRadius: '8px', background: '#2563eb', color: 'white', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
-            {isNew ? '+ Add Case Study' : '✓ Update Case Study'}
+          <button onClick={saveToGitHub} disabled={saving} style={{ flex: 1, padding: '0.875rem', borderRadius: '8px', background: '#2563eb', color: 'white', fontWeight: 600, border: 'none', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}>
+            {saving ? 'Saving...' : isNew ? '💾 Save to GitHub' : '💾 Save to GitHub'}
           </button>
           <button onClick={() => setEditing(null)} style={{ padding: '0.875rem 1.25rem', borderRadius: '8px', background: 'white', color: '#374151', border: '1px solid #d1d5db', cursor: 'pointer' }}>Cancel</button>
         </div>
+        {message === 'success' && <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '1rem', color: '#15803d', marginTop: '0.75rem' }}>✅ Saved to GitHub! Vercel will redeploy in ~60 seconds.</div>}
+        {message === 'error' && <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '8px', padding: '1rem', color: '#dc2626', marginTop: '0.75rem' }}>❌ Something went wrong. Check GitHub token and repo settings.</div>}
       </div>
     </div>
   );
