@@ -1,7 +1,7 @@
 ---
 title: "5 Ways to Cut Your PPC Costs in Half"
 metaTitle: "Best 5 Ways to Cut the PPC Cost in Your Marketing"
-metaDescription: "Discover proven strategies to reduce your Google Ads spending by 50% while maintaining or even improving your lead quality. xxxxxxxxxxxx"
+metaDescription: "Discover proven strategies to reduce your Google Ads spending by 50% while maintaining or even improving your lead quality."
 excerpt: "Discover proven strategies to reduce your Google Ads spending by 50% while maintaining or even improving your lead quality. These data-driven tactics work for businesses of all sizes."
 category: "Google Ads"
 author: "Team Riverr360"
