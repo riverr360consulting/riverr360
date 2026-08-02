@@ -1,0 +1,98 @@
+[
+  {
+    "slug": "ecommerce-conversion-optimization",
+    "title": "E-commerce Brand Increases Conversion Rate by 240%",
+    "metaTitle": "E-commerce Conversion Rate +240%",
+    "metaDescription": "How Riverr360 helped a fashion e-commerce brand triple conversion rates and recover ₹108K/mo in lost revenue.",
+    "industry": "E-commerce - Fashion Retail",
+    "client": "Fashion E-commerce Brand",
+    "timeline": "3 months",
+    "challenge": "Low website conversion and cart abandonment",
+    "result": "240% increase in conversion rate",
+    "excerpt": "An online retailer was getting traffic but struggling with a 0.8% conversion rate and 78% cart abandonment.",
+    "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&q=80",
+    "imageAlt": "E-commerce analytics dashboard showing conversion rate improvement",
+    "schemaType": "Article",
+    "internalLinks": "/contact, /framework, /case-studies",
+    "metrics": [
+      { "label": "Conversion Rate", "before": "0.8%", "after": "2.7%", "change": "+240%" },
+      { "label": "Cart Abandonment", "before": "78%", "after": "42%", "change": "-46%" },
+      { "label": "Revenue", "before": "₹45K/mo", "after": "₹153K/mo", "change": "+240%" },
+      { "label": "AOV", "before": "₹67", "after": "₹89", "change": "+33%" }
+    ],
+    "situation": "An online fashion retailer was driving 50,000 monthly visitors through paid ads but converting less than 1%. With a 78% cart abandonment rate, they were hemorrhaging money on traffic that wasn't buying.",
+    "approach": [
+      { "title": "Conversion Rate Audit", "description": "We analyzed heatmaps, session recordings, and checkout flow to identify friction points." },
+      { "title": "Landing Page Redesign", "description": "Rebuilt product pages with better images, social proof, and clear CTAs." },
+      { "title": "Checkout Optimization", "description": "Simplified checkout from 5 steps to 2, added trust badges and payment options." },
+      { "title": "Abandoned Cart Recovery", "description": "Implemented automated email sequence with 15% discount for abandoned carts." }
+    ],
+    "results": "Within 90 days, conversion rate tripled from 0.8% to 2.7%. Cart abandonment dropped to 42%. Monthly revenue jumped from ₹45K to ₹153K with the same traffic volume.",
+    "testimonial": "Riverr360 didn't just improve our conversion rate — they completely transformed our business. We're now profitable on paid traffic and scaling rapidly.",
+    "testimonialAuthor": "Marketing Director"
+  },
+  {
+    "slug": "saas-ppc-roi-improvement",
+    "title": "SaaS Company Cuts PPC Costs 60% While Doubling Leads",
+    "metaTitle": "SaaS PPC Costs Cut 60%, Leads Doubled",
+    "metaDescription": "How Riverr360 helped a B2B SaaS company drop cost per lead from ₹450 to ₹180 while doubling qualified lead volume.",
+    "industry": "B2B SaaS - Project Management",
+    "client": "B2B SaaS Platform",
+    "timeline": "4 months",
+    "challenge": "Wasted ad spend with poor targeting",
+    "result": "60% cost reduction, 2X qualified leads",
+    "excerpt": "A B2B SaaS company was spending ₹15K/month on Google Ads with minimal qualified leads.",
+    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80",
+    "imageAlt": "SaaS dashboard showing PPC campaign performance improvement",
+    "schemaType": "Article",
+    "internalLinks": "/contact, /framework, /case-studies",
+    "metrics": [
+      { "label": "Cost per Lead", "before": "₹450", "after": "₹180", "change": "-60%" },
+      { "label": "Monthly Leads", "before": "33", "after": "83", "change": "+152%" },
+      { "label": "Ad Spend", "before": "₹15K", "after": "₹6K", "change": "-60%" },
+      { "label": "Lead Quality Score", "before": "4.2/10", "after": "8.7/10", "change": "+107%" }
+    ],
+    "situation": "A B2B SaaS company was burning ₹15K/month on Google Ads with a ₹450 cost per lead. Most leads were unqualified, and the sales team was frustrated with poor lead quality.",
+    "approach": [
+      { "title": "Account Restructure", "description": "Completely rebuilt campaigns around buyer intent keywords instead of broad terms." },
+      { "title": "Negative Keywords Mastery", "description": "Added 500+ negative keywords to eliminate wasted spend on irrelevant searches." },
+      { "title": "Landing Page Optimization", "description": "Created dedicated landing pages for each ad group with specific messaging." },
+      { "title": "Audience Targeting", "description": "Implemented retargeting and lookalike audiences based on best customers." }
+    ],
+    "results": "Ad spend dropped from ₹15K to ₹6K while leads increased from 33 to 83 per month. Cost per lead fell to ₹180, and lead quality score jumped to 8.7/10.",
+    "testimonial": "We went from wasting money on Google Ads to it being our #1 lead source. The ROI is incredible now.",
+    "testimonialAuthor": "CEO"
+  },
+  {
+    "slug": "local-business-seo-domination",
+    "title": "Law Firm Achieves #1 SEO Rankings in 90 Days",
+    "metaTitle": "Local Business #1 SEO Rankings in 90 Days",
+    "metaDescription": "How Riverr360 took a local law firm from zero organic presence to #1 rankings for 12 keywords in just 90 days.",
+    "industry": "Professional Services - Legal",
+    "client": "Personal Injury Law Firm",
+    "timeline": "3 months",
+    "challenge": "Zero organic visibility and traffic",
+    "result": "#1 rankings for 12 high-value keywords",
+    "excerpt": "A local law firm had no SEO presence and was paying ₹8K/month for every client through ads.",
+    "image": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1200&q=80",
+    "imageAlt": "Legal documents and laptop showing SEO ranking improvements",
+    "schemaType": "Article",
+    "internalLinks": "/contact, /framework, /case-studies",
+    "metrics": [
+      { "label": "Organic Traffic", "before": "120/mo", "after": "2,400/mo", "change": "+1,900%" },
+      { "label": "Top 3 Rankings", "before": "0", "after": "12", "change": "+1,200%" },
+      { "label": "Organic Leads", "before": "2/mo", "after": "38/mo", "change": "+1,800%" },
+      { "label": "Cost per Lead", "before": "₹850", "after": "₹75", "change": "-91%" }
+    ],
+    "situation": "A local law firm was spending ₹8,000/month on PPC just to get clients. They had zero SEO presence and were invisible in organic search despite being in business for 15 years.",
+    "approach": [
+      { "title": "Technical SEO Foundation", "description": "Fixed site speed, mobile issues, and schema markup. Migrated to modern hosting." },
+      { "title": "Local SEO Dominance", "description": "Optimized Google Business Profile, built local citations, and earned reviews." },
+      { "title": "Content Strategy", "description": "Created 20+ location-specific service pages and practice area guides." },
+      { "title": "Link Building", "description": "Earned backlinks from legal directories, local news, and industry associations." }
+    ],
+    "results": "Within 90 days, achieved #1 rankings for 12 high-value keywords. Organic traffic grew from 120 to 2,400 monthly visitors. Organic leads jumped from 2 to 38 per month.",
+    "testimonial": "We've cut our ad spend in half and get more clients than ever. SEO is now our main lead source.",
+    "testimonialAuthor": "Managing Partner"
+  }
+]
