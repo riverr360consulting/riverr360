@@ -1,0 +1,26 @@
+name: Fetch GSC Data
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  fetch-gsc-data:
+    runs-on: ubuntu-latest
+    steps:
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: 'projects/873926140086/locations/global/workloadIdentityPools/github-actions/providers/github-provider'
+          service_account: 'gsc-deployer@riverr360.iam.gserviceaccount.com'
+
+      - name: Call Search Console API
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
+            -H "Content-Type: application/json" \
+            -d '{"startDate":"2026-08-01","endDate":"2026-08-13","dimensions":["query"]}' \
+            "https://searchconsole.googleapis.com/webmasters/v3/sites/https%3A%2F%2Friverr360.vercel.app%2F/searchAnalytics/query"
