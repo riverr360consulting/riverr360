@@ -15,10 +15,8 @@ jobs:
           service_account: 'gsc-deployer@riverr360.iam.gserviceaccount.com'
           token_format: 'access_token'
           access_token_scopes: 'https://www.googleapis.com/auth/webmasters.readonly'
-      - name: Call Search Console API
+      - name: List accessible sites
         run: |
-          curl -X POST \
+          curl -X GET \
             -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
-            -H "Content-Type: application/json" \
-            -d '{"startDate":"2026-08-01","endDate":"2026-08-13","dimensions":["query"]}' \
-            "https://searchconsole.googleapis.com/webmasters/v3/sites/https%3A%2F%2Friverr360.com%2F/searchAnalytics/query"
+            "https://searchconsole.googleapis.com/webmasters/v3/sites"
