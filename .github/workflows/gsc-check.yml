@@ -17,6 +17,7 @@ jobs:
           workload_identity_provider: 'projects/873926140086/locations/global/workloadIdentityPools/github-actions/providers/github-provider'
           service_account: 'gsc-deployer@riverr360.iam.gserviceaccount.com'
           token_format: 'access_token'
+          access_token_scopes: 'https://www.googleapis.com/auth/webmasters.readonly'
 
       - name: Call Search Console API
         run: |
