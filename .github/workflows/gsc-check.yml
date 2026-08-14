@@ -1,12 +1,9 @@
 name: Fetch GSC Data
-
 on:
   workflow_dispatch:
-
 permissions:
   id-token: write
   contents: read
-
 jobs:
   fetch-gsc-data:
     runs-on: ubuntu-latest
@@ -18,8 +15,7 @@ jobs:
           service_account: 'gsc-deployer@riverr360.iam.gserviceaccount.com'
           token_format: 'access_token'
           access_token_scopes: 'https://www.googleapis.com/auth/webmasters.readonly'
-
-     - name: Call Search Console API
+      - name: Call Search Console API
         run: |
           curl -X POST \
             -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
