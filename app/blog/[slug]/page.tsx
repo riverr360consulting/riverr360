@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       description: post.metaDescription || post.excerpt,
       type: 'article',
       publishedTime: post.publishedDate,
+      modifiedTime: post.updatedDate || post.publishedDate,
       authors: [post.author],
     },
   };
@@ -56,6 +57,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     author: { '@type': 'Person', name: post.author },
     publisher: { '@type': 'Organization', name: 'Riverr360', url: 'https://riverr360.com' },
     datePublished: post.publishedDate,
+    dateModified: post.updatedDate || post.publishedDate,
     url: `https://riverr360.com/blog/${params.slug}`,
     image: { '@type': 'ImageObject', url: post.coverImage, description: post.coverImageAlt || post.title },
     keywords: post.tags?.join(', '),
@@ -78,7 +80,8 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             </nav>
             <div className="flex items-center gap-4 mb-6">
               <span className={`text-sm font-semibold px-4 py-2 rounded-full ${categoryColors[post.category]}`}>{post.category}</span>
-              <span className="text-gray-600">{new Date(post.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              <span className="text-gray-600">{new Date(post.publishedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              {post.updatedDate && post.updatedDate !== post.publishedDate && (<> · Updated {new Date(post.updatedDate).toLocaleDateString('en-US', { year: 'numeric',      month:'long', day: 'numeric' })}</>)}</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{post.title}</h1>
             <p className="text-xl text-gray-600 mb-6">{post.excerpt}</p>

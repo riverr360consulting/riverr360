@@ -17,6 +17,7 @@ interface BlogPost {
   category: string;
   author: string;
   publishedDate: string;
+  updatedDate?: string;
   coverImage: string;
   coverImageAlt: string;
   featured: boolean;
@@ -79,6 +80,7 @@ function parseFrontmatter(raw: string): BlogPost {
     category: get('category') || 'General',
     author: get('author') || 'Team Riverr360',
     publishedDate: get('publishedDate'),
+    updatedDate: get('updatedDate') || undefined,
     coverImage: get('coverImage'),
     coverImageAlt: get('coverImageAlt'),
     featured: getBool('featured'),
@@ -104,6 +106,7 @@ excerpt: "${post.excerpt}"
 category: "${post.category}"
 author: "${post.author}"
 publishedDate: "${post.publishedDate}"
+updatedDate: "${post.updatedDate || ''}"
 coverImage: "${post.coverImage}"
 coverImageAlt: "${post.coverImageAlt || post.title}"
 featured: ${post.featured}
@@ -145,6 +148,7 @@ export default function AdminBlogPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [activeTab, setActiveTab] = useState<'content' | 'seo' | 'schema' | 'links'>('content');
+  const [isEditingExisting, setIsEditingExisting] = useState(false);   // ← ADD HERE
   const router = useRouter();
 
   // --- Content Opportunities state (manual query entry — auto-detection
@@ -312,6 +316,7 @@ export default function AdminBlogPage() {
         const data = await res.json();
         const parsed = parseFrontmatter(data.content);
         setPost({ ...parsed, filename: slug });
+        setIsEditingExisting(true);
         setView('edit');
         setActiveTab('content');
       } else {
@@ -326,28 +331,32 @@ export default function AdminBlogPage() {
 
   function startNew() {
     setPost(emptyPost());
+    setIsEditingExisting(false);
     setView('edit');
     setMessage('');
     setActiveTab('content');
   }
 
   async function handleSave() {
-    if (!post.title) { setMessage('error-title'); return; }
-    setSaving(true);
-    setMessage('');
+  if (!post.title) { setMessage('error-title'); return; }
+  setSaving(true);
+  setMessage('');
 
-    const filename = post.filename || post.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    const frontmatter = buildFrontmatter({ ...post, filename });
+  const filename = post.filename || post.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  const postToSave = isEditingExisting
+    ? { ...post, updatedDate: new Date().toISOString().split('T')[0] }
+    : post;
+  const frontmatter = buildFrontmatter({ ...postToSave, filename });
 
-    const res = await fetch('/api/admin/save-blog', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ filename, content: frontmatter }),
-    });
+  const res = await fetch('/api/admin/save-blog', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ filename, content: frontmatter }),
+  });
 
-    setMessage(res.ok ? 'success' : 'error');
-    if (res.ok) setPost(p => ({ ...p, filename }));
-    setSaving(false);
+  setMessage(res.ok ? 'success' : 'error');
+  if (res.ok) setPost(p => ({ ...p, filename, ...(isEditingExisting ? { updatedDate: postToSave.updatedDate } : {}) }));
+  setSaving(false);
   }
 
   const inp: React.CSSProperties = { width: '100%', padding: '0.65rem 0.875rem', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '0.9375rem', boxSizing: 'border-box', background: 'white', color: '#111827' };

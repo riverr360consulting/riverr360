@@ -13,6 +13,7 @@ export interface BlogPost {
   category: string;
   author: string;
   publishedDate: string;
+  updatedDate?: string;
   coverImage?: string;
   coverImageAlt?: string;
   featured: boolean;
@@ -43,6 +44,7 @@ export function getAllPosts(): BlogPost[] {
         category: data.category || 'General',
         author: data.author || 'Riverr360 Team',
         publishedDate: data.publishedDate || new Date().toISOString().split('T')[0],
+        updatedDate: data.updatedDate || undefined,
         coverImage: data.coverImage || '',
         coverImageAlt: data.coverImageAlt || data.title || '',
         featured: data.featured || false,
@@ -69,6 +71,7 @@ export function getPostBySlug(slug: string): BlogPost | null {
       category: data.category || 'General',
       author: data.author || 'Riverr360 Team',
       publishedDate: data.publishedDate || new Date().toISOString().split('T')[0],
+      updatedDate: data.updatedDate || undefined,
       coverImage: data.coverImage || '',
       coverImageAlt: data.coverImageAlt || data.title || '',
       featured: data.featured || false,
