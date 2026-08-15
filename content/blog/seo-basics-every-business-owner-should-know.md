@@ -15,8 +15,6 @@ schemaType: "BlogPosting"
 internalLinks: ""
 ---
 
-# SEO Basics for Business Owners: Fundamentals Every Business Owner Should Know
-
 Search Engine Optimization (SEO) doesn’t have to be a mystery. If you’re a business owner, understanding the **seo basics for business** can dramatically improve your visibility on Google and bring more qualified leads to your site.
 
 ## SEO Basics for Business Owners – What It Really Means
