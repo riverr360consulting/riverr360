@@ -42,7 +42,9 @@ export async function POST(req: NextRequest) {
         'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        // Llama 3.3 70B Versatile is being decommissioned by Groq on Aug 16, 2026 —
+        // switched to their recommended replacement.
+        model: 'openai/gpt-oss-120b',
         max_tokens: 300,
         temperature: 0.7,
         messages: [
