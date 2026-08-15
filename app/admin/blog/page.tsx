@@ -504,15 +504,15 @@ export default function AdminBlogPage() {
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
 
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', gap: '1rem', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, flex: '1 1 auto' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, overflow: 'hidden', flex: '1 1 0%' }}>
             <button onClick={() => { setView('list'); setMessage(''); }} style={{ color: '#6b7280', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.875rem', flexShrink: 0, whiteSpace: 'nowrap' }}>← Blog Posts</button>
             <span style={{ color: '#d1d5db', flexShrink: 0 }}>|</span>
             <h1
-              title={post.filename ? `Editing: ${post.filename}` : 'New Post'}
-              style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}
+              title={post.filename || 'New Post'}
+              style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}
             >
-              {post.filename ? `Editing: ${post.filename}` : 'New Post'}
+              {post.filename || 'New Post'}{post.filename && ' ✏️'}
             </h1>
           </div>
           <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
