@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getPostBySlug, getAllPostSlugs, getPostsByCategory, getAdjacentPosts } from '@/lib/blog';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const categoryColors: { [key: string]: string } = {
   'Google Ads': 'bg-red-100 text-red-800',
@@ -100,6 +101,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           <div className="container-custom max-w-3xl mx-auto">
             <div className="prose prose-lg max-w-none">
               <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
                 components={{
                   h1: ({node, ...props}) => <h2 className="text-3xl font-bold mt-8 mb-4" {...props} />,
                   h2: ({node, ...props}) => <h2 className="text-3xl font-bold mt-8 mb-4" {...props} />,
@@ -112,6 +114,16 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                   strong: ({node, ...props}) => <strong className="font-bold text-gray-900" {...props} />,
                   blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-primary-600 pl-6 italic my-6" {...props} />,
                   code: ({node, ...props}) => <code className="bg-gray-100 px-2 py-1 rounded text-sm" {...props} />,
+                  table: ({node, ...props}) => (
+                    <div className="overflow-x-auto mb-6">
+                      <table className="w-full border-collapse border border-gray-200" {...props} />
+                    </div>
+                  ),
+                  thead: ({node, ...props}) => <thead className="bg-gray-50" {...props} />,
+                  tbody: ({node, ...props}) => <tbody {...props} />,
+                  tr: ({node, ...props}) => <tr className="border-b border-gray-200" {...props} />,
+                  th: ({node, ...props}) => <th className="text-left font-semibold text-gray-900 px-4 py-3 border border-gray-200" {...props} />,
+                  td: ({node, ...props}) => <td className="text-gray-700 px-4 py-3 border border-gray-200 align-top" {...props} />,
                 }}
               >
                 {post.content}
