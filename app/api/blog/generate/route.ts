@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const XAI_API_URL = 'https://api.x.ai/v1/chat/completions';
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 type InternalLinkCandidate = { title: string; slug: string };
 
 async function getExistingBlogSlugs(): Promise<InternalLinkCandidate[]> {
   // Reads your GitHub repo's content/blog folder listing via the GitHub API
-  // so Grok can suggest real internal links instead of inventing URLs.
+  // so the model can suggest real internal links instead of inventing URLs.
   const owner = 'riverr360consulting';
   const repo = 'riverr360';
   const path = 'content/blog';
@@ -48,13 +48,16 @@ export async function POST(req: NextRequest) {
       .map((p) => `- ${p.title} (slug: ${p.slug})`)
       .join('\n');
 
+    const positionLine = position != null ? `Current Google position: ${position}` : '';
+    const impressionsLine = impressions != null ? `Weekly impressions: ${impressions}` : '';
+
     const prompt = `You are writing a blog post draft for riverr360.com, a marketing solutions consultancy.
 
 The target search query is: "${query}"
-Current Google position: ${position}
-Weekly impressions: ${impressions}
+${positionLine}
+${impressionsLine}
 
-This query is trending upward in Search Console — write a blog post optimized to capture more clicks for it.
+Write a blog post optimized to capture more clicks for this query.
 
 Existing blog posts on the site (for internal linking):
 ${existingPostsList || 'None available'}
@@ -71,26 +74,26 @@ Return ONLY valid JSON, no markdown fences, no preamble, in this exact shape:
   ]
 }`;
 
-    const grokRes = await fetch(XAI_API_URL, {
+    const groqRes = await fetch(GROQ_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.XAI_API_KEY}`,
+        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'grok-4',
+        model: 'openai/gpt-oss-120b',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.7,
       }),
     });
 
-    if (!grokRes.ok) {
-      const errText = await grokRes.text();
-      throw new Error(`Grok API error: ${errText}`);
+    if (!groqRes.ok) {
+      const errText = await groqRes.text();
+      throw new Error(`Groq API error: ${errText}`);
     }
 
-    const grokData = await grokRes.json();
-    const rawContent = grokData.choices?.[0]?.message?.content || '';
+    const groqData = await groqRes.json();
+    const rawContent = groqData.choices?.[0]?.message?.content || '';
 
     // Strip accidental markdown fences if the model adds them anyway
     const cleaned = rawContent.replace(/^```json\s*|\s*```$/g, '').trim();
@@ -99,7 +102,7 @@ Return ONLY valid JSON, no markdown fences, no preamble, in this exact shape:
     try {
       draft = JSON.parse(cleaned);
     } catch {
-      throw new Error('Grok returned invalid JSON — try regenerating');
+      throw new Error('Model returned invalid JSON — try regenerating');
     }
 
     return NextResponse.json({ draft, sourceQuery: query, position, impressions });

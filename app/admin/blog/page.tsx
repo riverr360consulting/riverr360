@@ -123,14 +123,6 @@ const KNOWN_POSTS = [
   'seo-basics-every-business-owner-should-know',
 ];
 
-interface ImprovingQuery {
-  query: string;
-  from: number;
-  to: number;
-  delta: number;
-  impressions: number;
-}
-
 interface ExternalLinkSuggestion {
   anchorText: string;
   url: string;
@@ -155,50 +147,34 @@ export default function AdminBlogPage() {
   const [activeTab, setActiveTab] = useState<'content' | 'seo' | 'schema' | 'links'>('content');
   const router = useRouter();
 
-  // --- Content Opportunities state ---
-  const [oppQueries, setOppQueries] = useState<ImprovingQuery[]>([]);
-  const [oppLoading, setOppLoading] = useState(false);
-  const [oppError, setOppError] = useState('');
-  const [oppUpdatedAt, setOppUpdatedAt] = useState<string | null>(null);
+  // --- Content Opportunities state (manual query entry — auto-detection
+  // from GSC trends needs persistent storage, not set up yet) ---
+  const [targetQuery, setTargetQuery] = useState('');
   const [generatingFor, setGeneratingFor] = useState<string | null>(null);
   const [genError, setGenError] = useState('');
   const [draft, setDraft] = useState<Draft | null>(null);
-  const [draftSource, setDraftSource] = useState<ImprovingQuery | null>(null);
+  const [draftSource, setDraftSource] = useState<string | null>(null);
   const [selectedInternal, setSelectedInternal] = useState<Set<string>>(new Set());
   const [selectedExternal, setSelectedExternal] = useState<Set<number>>(new Set());
-
-  async function loadOpportunities() {
-    setOppLoading(true);
-    setOppError('');
-    try {
-      const res = await fetch('/api/gsc/improving');
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to load');
-      setOppQueries(data.queries || []);
-      setOppUpdatedAt(data.updatedAt);
-    } catch (err: any) {
-      setOppError(err.message);
-    } finally {
-      setOppLoading(false);
-    }
-  }
 
   function openOpportunities() {
     setView('opportunities');
     setDraft(null);
     setGenError('');
-    loadOpportunities();
+    setTargetQuery('');
   }
 
-  async function handleGenerateDraft(q: ImprovingQuery) {
-    setGeneratingFor(q.query);
+  async function handleGenerateDraft() {
+    const q = targetQuery.trim();
+    if (!q) return;
+    setGeneratingFor(q);
     setGenError('');
     setDraft(null);
     try {
       const res = await fetch('/api/blog/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: q.query, position: q.to, impressions: q.impressions }),
+        body: JSON.stringify({ query: q, position: null, impressions: null }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to generate draft');
@@ -264,7 +240,7 @@ export default function AdminBlogPage() {
       filename: draft.slug,
       content,
       category: 'SEO',
-      tags: draftSource ? draftSource.query : '',
+      tags: draftSource || '',
     });
     setView('edit');
     setActiveTab('content');
@@ -397,44 +373,33 @@ export default function AdminBlogPage() {
           </div>
 
           <div style={card}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
-              <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: 0 }}>Improving queries from Search Console</p>
-              {oppUpdatedAt && <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Updated {new Date(oppUpdatedAt).toLocaleDateString()}</span>}
+            <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: '0 0 0.5rem' }}>Generate a blog draft for a target keyword</p>
+            <p style={{ fontSize: '0.8125rem', color: '#9ca3af', margin: '0 0 1rem' }}>
+              Auto-detecting improving queries from Search Console needs persistent storage, not set up yet — for now, enter any target keyword or phrase manually.
+            </p>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <input
+                type="text"
+                value={targetQuery}
+                onChange={(e) => setTargetQuery(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleGenerateDraft()}
+                placeholder="e.g. how to reduce ppc costs"
+                style={{ flex: 1, padding: '0.65rem 0.875rem', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '0.9375rem' }}
+              />
+              <button
+                onClick={handleGenerateDraft}
+                disabled={!targetQuery.trim() || !!generatingFor}
+                style={{ fontSize: '0.875rem', padding: '0.65rem 1.1rem', borderRadius: '8px', border: '1px solid #2563eb', background: '#2563eb', color: 'white', cursor: 'pointer', fontWeight: 600, whiteSpace: 'nowrap' }}
+              >
+                {generatingFor ? 'Generating…' : 'Generate Draft'}
+              </button>
             </div>
-
-            {oppLoading && <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>Loading…</p>}
-            {oppError && <p style={{ color: '#dc2626', fontSize: '0.875rem' }}>{oppError}</p>}
-            {!oppLoading && !oppError && oppQueries.length === 0 && (
-              <p style={{ color: '#9ca3af', fontSize: '0.875rem' }}>
-                No improving queries yet — this fills in after the weekly SEO report has run at least twice.
-              </p>
-            )}
-
-            {!oppLoading && oppQueries.length > 0 && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {oppQueries.map((q) => (
-                  <div key={q.query} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem', border: '1px solid #f3f4f6', borderRadius: '8px', gap: '0.75rem' }}>
-                    <div style={{ minWidth: 0 }}>
-                      <div style={{ fontSize: '0.875rem', fontWeight: 500, color: '#111827' }}>{q.query}</div>
-                      <div style={{ fontSize: '0.75rem', color: '#16a34a' }}>{q.from.toFixed(1)} → {q.to.toFixed(1)} (+{q.delta.toFixed(1)}) · {q.impressions} impressions</div>
-                    </div>
-                    <button
-                      onClick={() => handleGenerateDraft(q)}
-                      disabled={generatingFor === q.query}
-                      style={{ fontSize: '0.8125rem', padding: '0.5rem 0.9rem', borderRadius: '6px', border: '1px solid #2563eb', background: '#2563eb', color: 'white', cursor: 'pointer', fontWeight: 600, whiteSpace: 'nowrap' }}
-                    >
-                      {generatingFor === q.query ? 'Generating…' : 'Generate Draft'}
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
             {genError && <p style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '0.75rem' }}>{genError}</p>}
           </div>
 
           {draft && draftSource && (
             <div style={card}>
-              <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: '0 0 1rem' }}>Draft preview for "{draftSource.query}"</p>
+              <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: '0 0 1rem' }}>Draft preview for "{draftSource}"</p>
               <p style={{ fontSize: '0.9375rem', fontWeight: 600, color: '#111827', margin: '0 0 4px' }}>{draft.title}</p>
               <p style={{ fontSize: '0.8125rem', color: '#6b7280', margin: '0 0 1rem' }}>{draft.metaDescription}</p>
               <div style={{ background: '#f9fafb', border: '1px solid #f3f4f6', borderRadius: '8px', padding: '0.875rem', maxHeight: '260px', overflowY: 'auto', fontSize: '0.8125rem', color: '#374151', whiteSpace: 'pre-wrap', marginBottom: '1rem' }}>

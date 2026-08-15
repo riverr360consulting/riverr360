@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { google } from 'googleapis';
-import { kv } from '@vercel/kv';
 
 const SITE_URL = 'sc-domain:riverr360.com';
-const HISTORY_INDEX_KEY = 'gsc:fetch:index';
-const MAX_HISTORY_ENTRIES = 100; // keep the index from growing forever
 
 export async function GET(req: NextRequest) {
   try {
@@ -38,34 +35,7 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    const data = response.data;
-
-    // --- Persist this fetch to KV for history ---
-    try {
-      const fetchedAt = new Date().toISOString();
-      const rangeKey = `${startDate}_${endDate}`;
-      const entry = {
-        startDate,
-        endDate,
-        fetchedAt,
-        rowCount: data.rows?.length || 0,
-        rows: data.rows || [],
-      };
-
-      // Save this specific fetch (overwrites if same range fetched again same day)
-      await kv.set(`gsc:fetch:${rangeKey}:${fetchedAt}`, entry);
-
-      // Maintain a lightweight index of recent fetches (for listing history later)
-      const index = ((await kv.get(HISTORY_INDEX_KEY)) as string[]) || [];
-      index.unshift(`${rangeKey}:${fetchedAt}`);
-      await kv.set(HISTORY_INDEX_KEY, index.slice(0, MAX_HISTORY_ENTRIES));
-    } catch (kvError) {
-      // Don't fail the whole request if KV saving has an issue —
-      // the dashboard should still show live data even if history saving hiccups
-      console.error('KV history save failed:', kvError);
-    }
-
-    return NextResponse.json(data);
+    return NextResponse.json(response.data);
   } catch (error: any) {
     console.error(error);
     return NextResponse.json(
