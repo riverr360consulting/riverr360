@@ -504,27 +504,30 @@ export default function AdminBlogPage() {
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
 
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <button onClick={() => { setView('list'); setMessage(''); }} style={{ color: '#6b7280', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.875rem' }}>← Blog Posts</button>
-            <span style={{ color: '#d1d5db' }}>|</span>
-            <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', gap: '1rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0, flex: '1 1 auto' }}>
+            <button onClick={() => { setView('list'); setMessage(''); }} style={{ color: '#6b7280', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.875rem', flexShrink: 0, whiteSpace: 'nowrap' }}>← Blog Posts</button>
+            <span style={{ color: '#d1d5db', flexShrink: 0 }}>|</span>
+            <h1
+              title={post.filename ? `Editing: ${post.filename}` : 'New Post'}
+              style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}
+            >
               {post.filename ? `Editing: ${post.filename}` : 'New Post'}
             </h1>
           </div>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
             {post.filename && (
               <a href={`/blog/${post.filename}`} target="_blank" rel="noopener noreferrer"
-                style={{ padding: '0.5rem 1rem', borderRadius: '8px', background: 'white', color: '#374151', fontSize: '0.875rem', border: '1px solid #d1d5db', textDecoration: 'none' }}>
+                style={{ padding: '0.5rem 1rem', borderRadius: '8px', background: 'white', color: '#374151', fontSize: '0.875rem', border: '1px solid #d1d5db', textDecoration: 'none', whiteSpace: 'nowrap' }}>
                 View Live →
               </a>
             )}
             <button onClick={() => setShowStrengthen(true)}
-              style={{ padding: '0.5rem 1rem', borderRadius: '8px', background: '#f0fdf4', color: '#15803d', fontWeight: 600, fontSize: '0.875rem', border: '1px solid #bbf7d0', cursor: 'pointer' }}>
+              style={{ padding: '0.5rem 1rem', borderRadius: '8px', background: '#f0fdf4', color: '#15803d', fontWeight: 600, fontSize: '0.875rem', border: '1px solid #bbf7d0', cursor: 'pointer', whiteSpace: 'nowrap' }}>
               🚀 Strengthen with AI
             </button>
             <button onClick={handleSave} disabled={saving}
-              style={{ padding: '0.5rem 1.25rem', borderRadius: '8px', background: '#2563eb', color: 'white', fontWeight: 600, fontSize: '0.875rem', border: 'none', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}>
+              style={{ padding: '0.5rem 1.25rem', borderRadius: '8px', background: '#2563eb', color: 'white', fontWeight: 600, fontSize: '0.875rem', border: 'none', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1, whiteSpace: 'nowrap' }}>
               {saving ? 'Saving...' : '💾 Save to GitHub'}
             </button>
           </div>
