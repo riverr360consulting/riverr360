@@ -8,7 +8,7 @@ const sections = [
   { href: '/admin/blog', icon: '📝', title: 'Blog Posts', desc: 'Add, edit, and manage blog posts' },
   { href: '/admin/case-studies', icon: '💼', title: 'Case Studies', desc: 'Update case study metrics and content' },
   { href: '/admin/contact', icon: '📞', title: 'Contact Info', desc: 'Update email, phone, and office hours' },
-  { href: '/admin/settings', icon: '⚙️', title: 'Site Settings', desc: 'SEO, meta tags, and general settings' },
+  { href: '/admin/settings', icon: '⚙️', title: 'SEO & Analytics', desc: 'SEO, meta tags, and general settings' },
 ];
 
 export default function AdminDashboard() {

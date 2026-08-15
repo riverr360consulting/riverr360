@@ -123,14 +123,153 @@ const KNOWN_POSTS = [
   'seo-basics-every-business-owner-should-know',
 ];
 
+interface ImprovingQuery {
+  query: string;
+  from: number;
+  to: number;
+  delta: number;
+  impressions: number;
+}
+
+interface ExternalLinkSuggestion {
+  anchorText: string;
+  url: string;
+  reason: string;
+}
+
+interface Draft {
+  title: string;
+  metaDescription: string;
+  slug: string;
+  body: string;
+  suggestedInternalLinks: string[];
+  suggestedExternalLinks: ExternalLinkSuggestion[];
+}
+
 export default function AdminBlogPage() {
-  const [view, setView] = useState<'list' | 'edit'>('list');
+  const [view, setView] = useState<'list' | 'edit' | 'opportunities'>('list');
   const [post, setPost] = useState<BlogPost>(emptyPost());
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [activeTab, setActiveTab] = useState<'content' | 'seo' | 'schema' | 'links'>('content');
   const router = useRouter();
+
+  // --- Content Opportunities state ---
+  const [oppQueries, setOppQueries] = useState<ImprovingQuery[]>([]);
+  const [oppLoading, setOppLoading] = useState(false);
+  const [oppError, setOppError] = useState('');
+  const [oppUpdatedAt, setOppUpdatedAt] = useState<string | null>(null);
+  const [generatingFor, setGeneratingFor] = useState<string | null>(null);
+  const [genError, setGenError] = useState('');
+  const [draft, setDraft] = useState<Draft | null>(null);
+  const [draftSource, setDraftSource] = useState<ImprovingQuery | null>(null);
+  const [selectedInternal, setSelectedInternal] = useState<Set<string>>(new Set());
+  const [selectedExternal, setSelectedExternal] = useState<Set<number>>(new Set());
+
+  async function loadOpportunities() {
+    setOppLoading(true);
+    setOppError('');
+    try {
+      const res = await fetch('/api/gsc/improving');
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to load');
+      setOppQueries(data.queries || []);
+      setOppUpdatedAt(data.updatedAt);
+    } catch (err: any) {
+      setOppError(err.message);
+    } finally {
+      setOppLoading(false);
+    }
+  }
+
+  function openOpportunities() {
+    setView('opportunities');
+    setDraft(null);
+    setGenError('');
+    loadOpportunities();
+  }
+
+  async function handleGenerateDraft(q: ImprovingQuery) {
+    setGeneratingFor(q.query);
+    setGenError('');
+    setDraft(null);
+    try {
+      const res = await fetch('/api/blog/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: q.query, position: q.to, impressions: q.impressions }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to generate draft');
+      setDraft(data.draft);
+      setDraftSource(q);
+      setSelectedInternal(new Set(data.draft.suggestedInternalLinks || []));
+      setSelectedExternal(
+        new Set((data.draft.suggestedExternalLinks || []).map((_: any, i: number) => i))
+      );
+    } catch (err: any) {
+      setGenError(err.message);
+    } finally {
+      setGeneratingFor(null);
+    }
+  }
+
+  function toggleInternal(slug: string) {
+    setSelectedInternal((prev) => {
+      const next = new Set(prev);
+      next.has(slug) ? next.delete(slug) : next.add(slug);
+      return next;
+    });
+  }
+
+  function toggleExternal(i: number) {
+    setSelectedExternal((prev) => {
+      const next = new Set(prev);
+      next.has(i) ? next.delete(i) : next.add(i);
+      return next;
+    });
+  }
+
+  // Pulls the generated draft into the normal post editor so it uses your
+  // existing Save-to-GitHub flow, SEO tab, schema tab, etc.
+  function useThisDraft() {
+    if (!draft) return;
+
+    let content = draft.body;
+
+    const internalLinksList = Array.from(selectedInternal);
+    if (internalLinksList.length) {
+      content += '\n\n## Related reading\n\n';
+      content += internalLinksList
+        .map((slug) => `- [${slug.replace(/-/g, ' ')}](/blog/${slug})`)
+        .join('\n');
+    }
+
+    const externalLinksList = (draft.suggestedExternalLinks || []).filter((_, i) =>
+      selectedExternal.has(i)
+    );
+    if (externalLinksList.length) {
+      content += '\n\n## Sources\n\n';
+      content += externalLinksList.map((l) => `- [${l.anchorText}](${l.url})`).join('\n');
+    }
+
+    setPost({
+      ...emptyPost(),
+      title: draft.title,
+      metaTitle: draft.title,
+      metaDescription: draft.metaDescription,
+      excerpt: draft.metaDescription,
+      slug: draft.slug,
+      filename: draft.slug,
+      content,
+      category: 'SEO',
+      tags: draftSource ? draftSource.query : '',
+    });
+    setView('edit');
+    setActiveTab('content');
+    setMessage('');
+  }
 
   async function handleLogout() {
     await fetch('/api/admin/logout', { method: 'POST' });
@@ -206,6 +345,7 @@ export default function AdminBlogPage() {
               <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>Blog Posts</h1>
             </div>
             <div style={{ display: 'flex', gap: '8px' }}>
+              <button onClick={openOpportunities} style={{ padding: '0.5rem 1rem', borderRadius: '8px', background: '#f0fdf4', color: '#15803d', fontWeight: 600, fontSize: '0.875rem', border: '1px solid #bbf7d0', cursor: 'pointer' }}>🚀 AI Opportunities</button>
               <button onClick={startNew} style={{ padding: '0.5rem 1rem', borderRadius: '8px', background: '#2563eb', color: 'white', fontWeight: 600, fontSize: '0.875rem', border: 'none', cursor: 'pointer' }}>+ New Post</button>
               <button onClick={handleLogout} style={{ fontSize: '0.875rem', color: '#6b7280', background: 'none', border: '1px solid #d1d5db', padding: '0.4rem 0.875rem', borderRadius: '8px', cursor: 'pointer' }}>Logout</button>
             </div>
@@ -237,6 +377,107 @@ export default function AdminBlogPage() {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── OPPORTUNITIES VIEW ──────────────────────────────────────────────────────
+  if (view === 'opportunities') {
+    const card: React.CSSProperties = { background: 'white', borderRadius: '12px', border: '1px solid #e5e7eb', padding: '1.5rem', marginBottom: '1rem' };
+    return (
+      <div style={{ minHeight: '100vh', background: '#f9fafb', padding: '2rem 1rem' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <button onClick={() => setView('list')} style={{ color: '#6b7280', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.875rem' }}>← Blog Posts</button>
+              <span style={{ color: '#d1d5db' }}>|</span>
+              <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>AI Content Opportunities</h1>
+            </div>
+          </div>
+
+          <div style={card}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1rem' }}>
+              <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: 0 }}>Improving queries from Search Console</p>
+              {oppUpdatedAt && <span style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Updated {new Date(oppUpdatedAt).toLocaleDateString()}</span>}
+            </div>
+
+            {oppLoading && <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>Loading…</p>}
+            {oppError && <p style={{ color: '#dc2626', fontSize: '0.875rem' }}>{oppError}</p>}
+            {!oppLoading && !oppError && oppQueries.length === 0 && (
+              <p style={{ color: '#9ca3af', fontSize: '0.875rem' }}>
+                No improving queries yet — this fills in after the weekly SEO report has run at least twice.
+              </p>
+            )}
+
+            {!oppLoading && oppQueries.length > 0 && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                {oppQueries.map((q) => (
+                  <div key={q.query} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem', border: '1px solid #f3f4f6', borderRadius: '8px', gap: '0.75rem' }}>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: '0.875rem', fontWeight: 500, color: '#111827' }}>{q.query}</div>
+                      <div style={{ fontSize: '0.75rem', color: '#16a34a' }}>{q.from.toFixed(1)} → {q.to.toFixed(1)} (+{q.delta.toFixed(1)}) · {q.impressions} impressions</div>
+                    </div>
+                    <button
+                      onClick={() => handleGenerateDraft(q)}
+                      disabled={generatingFor === q.query}
+                      style={{ fontSize: '0.8125rem', padding: '0.5rem 0.9rem', borderRadius: '6px', border: '1px solid #2563eb', background: '#2563eb', color: 'white', cursor: 'pointer', fontWeight: 600, whiteSpace: 'nowrap' }}
+                    >
+                      {generatingFor === q.query ? 'Generating…' : 'Generate Draft'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {genError && <p style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '0.75rem' }}>{genError}</p>}
+          </div>
+
+          {draft && draftSource && (
+            <div style={card}>
+              <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: '0 0 1rem' }}>Draft preview for "{draftSource.query}"</p>
+              <p style={{ fontSize: '0.9375rem', fontWeight: 600, color: '#111827', margin: '0 0 4px' }}>{draft.title}</p>
+              <p style={{ fontSize: '0.8125rem', color: '#6b7280', margin: '0 0 1rem' }}>{draft.metaDescription}</p>
+              <div style={{ background: '#f9fafb', border: '1px solid #f3f4f6', borderRadius: '8px', padding: '0.875rem', maxHeight: '260px', overflowY: 'auto', fontSize: '0.8125rem', color: '#374151', whiteSpace: 'pre-wrap', marginBottom: '1rem' }}>
+                {draft.body}
+              </div>
+
+              {draft.suggestedInternalLinks?.length > 0 && (
+                <div style={{ marginBottom: '1rem' }}>
+                  <p style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#374151', margin: '0 0 0.4rem' }}>Internal links to include</p>
+                  {draft.suggestedInternalLinks.map((slug) => (
+                    <label key={slug} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', marginBottom: '0.25rem' }}>
+                      <input type="checkbox" checked={selectedInternal.has(slug)} onChange={() => toggleInternal(slug)} />
+                      {slug}
+                    </label>
+                  ))}
+                </div>
+              )}
+
+              {draft.suggestedExternalLinks?.length > 0 && (
+                <div style={{ marginBottom: '1rem' }}>
+                  <p style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#374151', margin: '0 0 0.4rem' }}>External links to include</p>
+                  {draft.suggestedExternalLinks.map((link, i) => (
+                    <label key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.8125rem', marginBottom: '0.4rem' }}>
+                      <input type="checkbox" checked={selectedExternal.has(i)} onChange={() => toggleExternal(i)} style={{ marginTop: '2px' }} />
+                      <span><strong>{link.anchorText}</strong> — {link.url}<br /><span style={{ color: '#9ca3af' }}>{link.reason}</span></span>
+                    </label>
+                  ))}
+                </div>
+              )}
+
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button onClick={useThisDraft} style={{ padding: '0.6rem 1.1rem', borderRadius: '8px', background: '#2563eb', color: 'white', fontWeight: 600, fontSize: '0.875rem', border: 'none', cursor: 'pointer' }}>
+                  Use this draft →
+                </button>
+                <button onClick={() => setDraft(null)} style={{ padding: '0.6rem 1.1rem', borderRadius: '8px', background: 'white', color: '#374151', fontWeight: 500, fontSize: '0.875rem', border: '1px solid #d1d5db', cursor: 'pointer' }}>
+                  Discard
+                </button>
+              </div>
+              <p style={{ fontSize: '0.75rem', color: '#9ca3af', marginTop: '0.75rem' }}>
+                "Use this draft" loads it into the normal post editor — nothing is saved or published yet. Review it there, adjust SEO/schema/links, then hit Save.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     );

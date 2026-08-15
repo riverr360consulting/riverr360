@@ -202,14 +202,14 @@ export default function AdminSettingsPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <Link href="/admin" style={{ color: '#6b7280', textDecoration: 'none', fontSize: '0.875rem' }}>← Dashboard</Link>
             <span style={{ color: '#d1d5db' }}>|</span>
-            <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>Site Settings</h1>
+            <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#111827', margin: 0 }}>SEO & Analytics</h1>
           </div>
           <button onClick={handleLogout} style={{ fontSize: '0.875rem', color: '#6b7280', background: 'none', border: '1px solid #d1d5db', padding: '0.4rem 0.875rem', borderRadius: '8px', cursor: 'pointer' }}>Logout</button>
         </div>
 
         {/* Tabs */}
         <div style={{ display: 'flex', gap: '0.25rem', borderBottom: '1px solid #e5e7eb', marginBottom: '1.25rem' }}>
-          {tabBtn('settings', 'Site Settings')}
+          {tabBtn('settings', 'SEO & Analytics')}
           {tabBtn('gsc', 'Search Console')}
         </div>
 
