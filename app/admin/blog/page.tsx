@@ -207,6 +207,56 @@ export default function AdminBlogPage() {
     });
   }
 
+  // --- Strengthen with AI (for existing posts being edited) ---
+  const [showStrengthen, setShowStrengthen] = useState(false);
+  const [strengthenKeywords, setStrengthenKeywords] = useState('');
+  const [strengthening, setStrengthening] = useState(false);
+  const [strengthenError, setStrengthenError] = useState('');
+  const [strengthenResult, setStrengthenResult] = useState<{ improvedContent: string; summary: string } | null>(null);
+
+  async function handleStrengthen() {
+    const kws = strengthenKeywords
+      .split('\n')
+      .map((k) => k.trim())
+      .filter(Boolean)
+      .map((line) => {
+        // supports pasting either "keyword" or "keyword, position, impressions"
+        const parts = line.split(',').map((p) => p.trim());
+        return {
+          query: parts[0],
+          position: parts[1] ? parseFloat(parts[1]) : undefined,
+          impressions: parts[2] ? parseInt(parts[2]) : undefined,
+        };
+      });
+
+    if (!kws.length) return;
+    setStrengthening(true);
+    setStrengthenError('');
+    setStrengthenResult(null);
+    try {
+      const res = await fetch('/api/blog/improve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: post.title, content: post.content, keywords: kws }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to improve content');
+      setStrengthenResult(data);
+    } catch (err: any) {
+      setStrengthenError(err.message);
+    } finally {
+      setStrengthening(false);
+    }
+  }
+
+  function applyStrengthenedContent() {
+    if (!strengthenResult) return;
+    setPost({ ...post, content: strengthenResult.improvedContent });
+    setShowStrengthen(false);
+    setStrengthenResult(null);
+    setStrengthenKeywords('');
+  }
+
   // Pulls the generated draft into the normal post editor so it uses your
   // existing Save-to-GitHub flow, SEO tab, schema tab, etc.
   function useThisDraft() {
@@ -469,12 +519,67 @@ export default function AdminBlogPage() {
                 View Live →
               </a>
             )}
+            <button onClick={() => setShowStrengthen(true)}
+              style={{ padding: '0.5rem 1rem', borderRadius: '8px', background: '#f0fdf4', color: '#15803d', fontWeight: 600, fontSize: '0.875rem', border: '1px solid #bbf7d0', cursor: 'pointer' }}>
+              🚀 Strengthen with AI
+            </button>
             <button onClick={handleSave} disabled={saving}
               style={{ padding: '0.5rem 1.25rem', borderRadius: '8px', background: '#2563eb', color: 'white', fontWeight: 600, fontSize: '0.875rem', border: 'none', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}>
               {saving ? 'Saving...' : '💾 Save to GitHub'}
             </button>
           </div>
         </div>
+
+        {/* ── STRENGTHEN WITH AI PANEL ── */}
+        {showStrengthen && (
+          <div style={{ background: 'white', borderRadius: '12px', border: '1px solid #bbf7d0', padding: '1.5rem', marginBottom: '1.25rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.75rem' }}>
+              <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#374151', margin: 0 }}>🚀 Strengthen this post for target keywords</p>
+              <button onClick={() => { setShowStrengthen(false); setStrengthenResult(null); }} style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', fontSize: '0.875rem' }}>✕</button>
+            </div>
+            <p style={{ fontSize: '0.8125rem', color: '#6b7280', margin: '0 0 0.75rem' }}>
+              Paste target keywords from your Search Console data, one per line. Optionally add current position and impressions, comma-separated:{' '}
+              <code style={{ background: '#f3f4f6', padding: '1px 5px', borderRadius: '4px' }}>keyword, position, impressions</code>
+            </p>
+            <textarea
+              value={strengthenKeywords}
+              onChange={(e) => setStrengthenKeywords(e.target.value)}
+              placeholder={'seo basics for business owners, 17.5, 2\nseo for business owners, 13.6, 16\nseo fundamentals every business owner should know, 4.3, 18'}
+              rows={4}
+              style={{ width: '100%', padding: '0.65rem 0.875rem', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '0.8125rem', fontFamily: 'monospace', boxSizing: 'border-box', resize: 'vertical', marginBottom: '0.75rem' }}
+            />
+            <button
+              onClick={handleStrengthen}
+              disabled={strengthening || !strengthenKeywords.trim() || !post.content.trim()}
+              style={{ padding: '0.6rem 1.1rem', borderRadius: '8px', background: '#2563eb', color: 'white', fontWeight: 600, fontSize: '0.875rem', border: 'none', cursor: 'pointer' }}
+            >
+              {strengthening ? 'Analyzing & rewriting…' : 'Analyze & Improve'}
+            </button>
+            {strengthenError && <p style={{ color: '#dc2626', fontSize: '0.8125rem', marginTop: '0.75rem' }}>{strengthenError}</p>}
+
+            {strengthenResult && (
+              <div style={{ marginTop: '1.25rem', paddingTop: '1.25rem', borderTop: '1px solid #f3f4f6' }}>
+                <p style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#374151', margin: '0 0 0.5rem' }}>What changed:</p>
+                <p style={{ fontSize: '0.8125rem', color: '#6b7280', margin: '0 0 1rem' }}>{strengthenResult.summary}</p>
+                <p style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#374151', margin: '0 0 0.5rem' }}>Preview of improved content:</p>
+                <div style={{ background: '#f9fafb', border: '1px solid #f3f4f6', borderRadius: '8px', padding: '0.875rem', maxHeight: '280px', overflowY: 'auto', fontSize: '0.8125rem', color: '#374151', whiteSpace: 'pre-wrap', marginBottom: '1rem' }}>
+                  {strengthenResult.improvedContent}
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button onClick={applyStrengthenedContent} style={{ padding: '0.6rem 1.1rem', borderRadius: '8px', background: '#16a34a', color: 'white', fontWeight: 600, fontSize: '0.875rem', border: 'none', cursor: 'pointer' }}>
+                    Apply to editor
+                  </button>
+                  <button onClick={() => setStrengthenResult(null)} style={{ padding: '0.6rem 1.1rem', borderRadius: '8px', background: 'white', color: '#374151', fontSize: '0.875rem', border: '1px solid #d1d5db', cursor: 'pointer' }}>
+                    Discard
+                  </button>
+                </div>
+                <p style={{ fontSize: '0.75rem', color: '#9ca3af', marginTop: '0.75rem' }}>
+                  Applying only updates the editor — nothing is saved until you click "Save to GitHub".
+                </p>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Tabs */}
         <div style={{ display: 'flex', gap: '8px', marginBottom: '1rem', flexWrap: 'wrap' }}>
