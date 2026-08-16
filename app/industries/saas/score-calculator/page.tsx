@@ -90,6 +90,11 @@ const QUESTIONS: {
 ];
 
 export default function ScoreCalculatorPage() {
+  const [email, setEmail] = useState('');
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [submittingEmail, setSubmittingEmail] = useState(false);
+
   const [answers, setAnswers] = useState<Partial<Record<Layer, number>>>({});
   const [showResult, setShowResult] = useState(false);
 
@@ -100,6 +105,33 @@ export default function ScoreCalculatorPage() {
         QUESTIONS.reduce((sum, q) => sum + (answers[q.layer]! * WEIGHTS[q.layer]), 0)
       )
     : 0;
+
+  async function handleEmailSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const trimmed = email.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      setEmailError('Please enter a valid email address');
+      return;
+    }
+    setEmailError('');
+    setSubmittingEmail(true);
+    try {
+      await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          access_key: 'bd8222f1-81ef-4ed7-9182-09c0c52ae333',
+          subject: `New SaaS Score Calculator lead — ${trimmed}`,
+          Email: trimmed,
+          Source: 'SaaS Score Calculator',
+        }),
+      });
+    } catch {
+      /* don't block the user if lead capture fails silently */
+    }
+    setEmailSubmitted(true);
+    setSubmittingEmail(false);
+  }
 
   function selectAnswer(layer: Layer, score: number) {
     setAnswers((prev) => ({ ...prev, [layer]: score }));
@@ -123,14 +155,36 @@ export default function ScoreCalculatorPage() {
             SaaS Revenue Leakage Calculator
           </h1>
           <p className="text-gray-600">
-            5 quick questions across the R360 framework. Get your score instantly — no email required.
+            5 quick questions across the R360 framework. Get your score instantly.
           </p>
         </div>
       </section>
 
       <section className="section-padding bg-white">
         <div className="container-custom max-w-2xl mx-auto">
-          {!showResult ? (
+          {!emailSubmitted ? (
+            <div className="bg-gray-50 rounded-xl p-8 border border-gray-100 max-w-md mx-auto text-center">
+              <div className="text-3xl mb-3">📩</div>
+              <h2 className="text-lg font-bold text-gray-900 mb-2">Enter your email to start</h2>
+              <p className="text-sm text-gray-600 mb-6">
+                We'll use this to send you the full breakdown if you'd like a deeper analysis later.
+              </p>
+              <form onSubmit={handleEmailSubmit} className="space-y-3">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@company.com"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm"
+                  required
+                />
+                {emailError && <p className="text-sm text-red-600 text-left">{emailError}</p>}
+                <button type="submit" disabled={submittingEmail} className="btn-primary w-full py-3">
+                  {submittingEmail ? 'Starting...' : 'Start Calculator →'}
+                </button>
+              </form>
+            </div>
+          ) : !showResult ? (
             <div className="space-y-8">
               {QUESTIONS.map((q, idx) => (
                 <div key={q.layer} className="bg-gray-50 rounded-xl p-6 border border-gray-100">
@@ -202,7 +256,7 @@ export default function ScoreCalculatorPage() {
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link href="/book" className="btn-primary">Book a Strategy Call</Link>
                 <button
-                  onClick={() => { setShowResult(false); setAnswers({}); }}
+                  onClick={() => { setShowResult(false); setAnswers({}); setEmailSubmitted(false); setEmail(''); }}
                   className="btn-secondary"
                 >
                   Retake Calculator
