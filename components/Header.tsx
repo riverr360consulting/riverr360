@@ -25,24 +25,31 @@ export default function Header() {
 
   // Flat list only — no B2B/B2C shown here. If an industry has a real
   // B2B/B2C split, that choice lives on its own hub page as internal links.
+  //
+  // `live: true` means the page actually exists and is ready to be linked
+  // publicly. Only these show in the nav — this prevents Google (and users)
+  // from hitting 404s via crawlable links to pages that aren't built yet.
+  // Flip an industry to `live: true` once its page is deployed.
   const industries = [
-    { href: '/industries/saas', label: 'SaaS' },
-    { href: '/industries/fintech', label: 'Fintech' },
-    { href: '/industries/realtors', label: 'Realtors' },
-    { href: '/industries/legal', label: 'Legal' },
-    { href: '/industries/ecommerce', label: 'Ecommerce' },
-    { href: '/industries/insurance', label: 'Insurance' },
-    { href: '/industries/healthcare', label: 'Healthcare' },
-    { href: '/industries/travel-tourism', label: 'Travel & Tourism' },
-    { href: '/industries/education', label: 'Education' },
-    { href: '/industries/hospitality', label: 'Hospitality' },
-    { href: '/industries/home-services', label: 'Home Services' },
-    { href: '/industries/automotive', label: 'Automotive' },
-    { href: '/industries/manufacturers', label: 'Manufacturers' },
-    { href: '/industries/professionals', label: 'Professionals' },
-    { href: '/industries/marketing', label: 'Marketing' },
-    { href: '/industries/sales', label: 'Sales' },
+    { href: '/industries/saas', label: 'SaaS', live: true },
+    { href: '/industries/fintech', label: 'Fintech', live: false },
+    { href: '/industries/realtors', label: 'Realtors', live: false },
+    { href: '/industries/legal', label: 'Legal', live: false },
+    { href: '/industries/ecommerce', label: 'Ecommerce', live: false },
+    { href: '/industries/insurance', label: 'Insurance', live: false },
+    { href: '/industries/healthcare', label: 'Healthcare', live: false },
+    { href: '/industries/travel-tourism', label: 'Travel & Tourism', live: false },
+    { href: '/industries/education', label: 'Education', live: false },
+    { href: '/industries/hospitality', label: 'Hospitality', live: false },
+    { href: '/industries/home-services', label: 'Home Services', live: false },
+    { href: '/industries/automotive', label: 'Automotive', live: false },
+    { href: '/industries/manufacturers', label: 'Manufacturers', live: false },
+    { href: '/industries/professionals', label: 'Professionals', live: false },
+    { href: '/industries/marketing', label: 'Marketing', live: false },
+    { href: '/industries/sales', label: 'Sales', live: false },
   ];
+
+  const liveIndustries = industries.filter((i) => i.live);
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -69,67 +76,74 @@ export default function Header() {
               Framework
             </Link>
 
-            {/* Industries mega menu */}
-            <div
-              className="relative"
-              ref={industriesRef}
-              onMouseEnter={() => {
-                if (industriesCloseTimer.current) clearTimeout(industriesCloseTimer.current);
-                setIndustriesOpen(true);
-              }}
-              onMouseLeave={() => {
-                industriesCloseTimer.current = setTimeout(() => setIndustriesOpen(false), 150);
-              }}
-            >
-              <button className="flex items-center gap-1 text-gray-700 hover:text-primary-600 transition-colors text-sm">
-                Industries
-                <svg className={`w-4 h-4 transition-transform ${industriesOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
+            {/* Industries mega menu — only shows if at least one industry is live */}
+            {liveIndustries.length > 0 && (
+              <div
+                className="relative"
+                ref={industriesRef}
+                onMouseEnter={() => {
+                  if (industriesCloseTimer.current) clearTimeout(industriesCloseTimer.current);
+                  setIndustriesOpen(true);
+                }}
+                onMouseLeave={() => {
+                  industriesCloseTimer.current = setTimeout(() => setIndustriesOpen(false), 150);
+                }}
+              >
+                <button className="flex items-center gap-1 text-gray-700 hover:text-primary-600 transition-colors text-sm">
+                  Industries
+                  <svg className={`w-4 h-4 transition-transform ${industriesOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
 
-              {industriesOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[640px] z-50">
-                  <div className="relative bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-                    {/* Triangle pointer */}
-                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2 overflow-hidden">
-                      <div className="w-3 h-3 bg-white border-l border-t border-gray-100 rotate-45 translate-y-1 mx-auto" />
-                    </div>
+                {industriesOpen && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[640px] z-50">
+                    <div className="relative bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                      {/* Triangle pointer */}
+                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2 overflow-hidden">
+                        <div className="w-3 h-3 bg-white border-l border-t border-gray-100 rotate-45 translate-y-1 mx-auto" />
+                      </div>
 
-                    <div className="px-5 pt-4 pb-2">
-                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Browse by industry</p>
-                    </div>
+                      <div className="px-5 pt-4 pb-2">
+                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Browse by industry</p>
+                      </div>
 
-                    <div className="grid grid-cols-4 gap-x-2 gap-y-0.5 px-3 pb-3">
-                      {industries.map(({ href, label }) => (
-                        <Link
-                          key={href}
-                          href={href}
-                          className="group flex items-center text-sm text-gray-700 rounded-lg px-3 py-2 transition-colors hover:bg-primary-50 hover:text-primary-700"
-                          onClick={() => setIndustriesOpen(false)}
-                        >
-                          <span className="w-1 h-1 rounded-full bg-transparent group-hover:bg-primary-500 mr-2 transition-colors" />
-                          {label}
-                        </Link>
-                      ))}
-                    </div>
+                      <div className="grid grid-cols-4 gap-x-2 gap-y-0.5 px-3 pb-3">
+                        {liveIndustries.map(({ href, label }) => (
+                          <Link
+                            key={href}
+                            href={href}
+                            className="group flex items-center text-sm text-gray-700 rounded-lg px-3 py-2 transition-colors hover:bg-primary-50 hover:text-primary-700"
+                            onClick={() => setIndustriesOpen(false)}
+                          >
+                            <span className="w-1 h-1 rounded-full bg-transparent group-hover:bg-primary-500 mr-2 transition-colors" />
+                            {label}
+                          </Link>
+                        ))}
+                      </div>
 
-                    <div className="border-t border-gray-100 px-5 py-3 bg-gray-50/60">
-                      <Link
-                        href="/industries"
-                        className="flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors"
-                        onClick={() => setIndustriesOpen(false)}
-                      >
-                        View all industries
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                      </Link>
+                      {/* "View all industries" hub link is hidden until more than
+                          one industry is live — a hub page listing mostly unbuilt
+                          pages has the same broken-link problem as the nav itself. */}
+                      {liveIndustries.length > 1 && (
+                        <div className="border-t border-gray-100 px-5 py-3 bg-gray-50/60">
+                          <Link
+                            href="/industries"
+                            className="flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors"
+                            onClick={() => setIndustriesOpen(false)}
+                          >
+                            View all industries
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                          </Link>
+                        </div>
+                      )}
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
 
             {/* Resources mega menu */}
             <div
@@ -219,17 +233,19 @@ export default function Header() {
               </Link>
             ))}
 
-            {/* Industries section in mobile */}
-            <div className="px-2 pt-2 pb-1">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Industries</p>
-              <div className="grid grid-cols-2 gap-x-2">
-                {industries.map(({ href, label }) => (
-                  <Link key={href} href={href} className="py-2 text-sm text-gray-700 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>
-                    {label}
-                  </Link>
-                ))}
+            {/* Industries section in mobile — only live ones */}
+            {liveIndustries.length > 0 && (
+              <div className="px-2 pt-2 pb-1">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Industries</p>
+                <div className="grid grid-cols-2 gap-x-2">
+                  {liveIndustries.map(({ href, label }) => (
+                    <Link key={href} href={href} className="py-2 text-sm text-gray-700 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>
+                      {label}
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Resources section in mobile */}
             <div className="px-2 pt-2 pb-1">
