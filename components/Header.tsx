@@ -38,8 +38,8 @@ export default function Header() {
     { href: '/industries/automotive', label: 'Automotive' },
     { href: '/industries/manufacturers', label: 'Manufacturers' },
     { href: '/industries/professionals', label: 'Professionals' },
-    { href: '/industries/marketing', label: 'Marketing as a Service' },
-    { href: '/industries/sales', label: 'Sales as a Service' },
+    { href: '/industries/marketing', label: 'Marketing' },
+    { href: '/industries/sales', label: 'Sales' },
   ];
 
   return (
