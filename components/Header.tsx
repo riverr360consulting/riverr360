@@ -82,12 +82,12 @@ export default function Header() {
               </button>
 
               {industriesOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[420px] bg-white rounded-xl shadow-lg border border-gray-100 p-4 z-50">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[640px] bg-white rounded-xl shadow-lg border border-gray-100 p-4 z-50">
                   {/* Triangle pointer */}
                   <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2 overflow-hidden">
                     <div className="w-3 h-3 bg-white border-l border-t border-gray-100 rotate-45 translate-y-1 mx-auto" />
                   </div>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                  <div className="grid grid-cols-4 gap-x-4 gap-y-1">
                     {industries.map(({ href, label }) => (
                       <Link
                         key={href}
