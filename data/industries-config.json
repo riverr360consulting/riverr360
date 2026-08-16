@@ -1,0 +1,18 @@
+{
+  "saas": { "live": true, "b2b": false, "b2c": false },
+  "fintech": { "live": false, "b2b": false, "b2c": false },
+  "realtors": { "live": false, "b2b": false, "b2c": false },
+  "legal": { "live": false, "b2b": false, "b2c": false },
+  "ecommerce": { "live": false, "b2b": false, "b2c": false },
+  "insurance": { "live": false, "b2b": false, "b2c": false },
+  "healthcare": { "live": false, "b2b": false, "b2c": false },
+  "travel-tourism": { "live": false, "b2b": false, "b2c": false },
+  "education": { "live": false, "b2b": false, "b2c": false },
+  "hospitality": { "live": false, "b2b": false, "b2c": false },
+  "home-services": { "live": false, "b2b": false, "b2c": false },
+  "automotive": { "live": false, "b2b": false, "b2c": false },
+  "manufacturers": { "live": false, "b2b": false, "b2c": false },
+  "professionals": { "live": false, "b2b": false, "b2c": false },
+  "marketing": { "live": false, "b2b": false, "b2c": false },
+  "sales": { "live": false, "b2b": false, "b2c": false }
+}
