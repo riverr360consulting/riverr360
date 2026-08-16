@@ -7,7 +7,9 @@ import { usePathname } from 'next/navigation';
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
+  const [industriesOpen, setIndustriesOpen] = useState(false);
   const resourcesRef = useRef<HTMLDivElement>(null);
+  const industriesRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
   // Hide header on these pages completely
@@ -17,6 +19,27 @@ export default function Header() {
     { href: '/blog', icon: '📝', label: 'Blog', desc: 'Marketing insights & tips' },
     { href: '/case-studies', icon: '📊', label: 'Case Studies', desc: 'Real results from clients' },
     { href: '/webinars', icon: '🎙️', label: 'Webinars', desc: 'Live & recorded sessions' },
+  ];
+
+  // Flat list only — no B2B/B2C shown here. If an industry has a real
+  // B2B/B2C split, that choice lives on its own hub page as internal links.
+  const industries = [
+    { href: '/industries/saas', label: 'SaaS' },
+    { href: '/industries/fintech', label: 'Fintech' },
+    { href: '/industries/realtors', label: 'Realtors' },
+    { href: '/industries/legal', label: 'Legal' },
+    { href: '/industries/ecommerce', label: 'Ecommerce' },
+    { href: '/industries/insurance', label: 'Insurance' },
+    { href: '/industries/healthcare', label: 'Healthcare' },
+    { href: '/industries/travel-tourism', label: 'Travel & Tourism' },
+    { href: '/industries/education', label: 'Education' },
+    { href: '/industries/hospitality', label: 'Hospitality' },
+    { href: '/industries/home-services', label: 'Home Services' },
+    { href: '/industries/automotive', label: 'Automotive' },
+    { href: '/industries/manufacturers', label: 'Manufacturers' },
+    { href: '/industries/professionals', label: 'Professionals' },
+    { href: '/industries/marketing', label: 'Marketing as a Service' },
+    { href: '/industries/sales', label: 'Sales as a Service' },
   ];
 
   return (
@@ -43,6 +66,42 @@ export default function Header() {
             <Link href="/framework" className="text-gray-700 hover:text-primary-600 transition-colors text-sm">
               Framework
             </Link>
+
+            {/* Industries mega menu */}
+            <div
+              className="relative"
+              ref={industriesRef}
+              onMouseEnter={() => setIndustriesOpen(true)}
+              onMouseLeave={() => setIndustriesOpen(false)}
+            >
+              <button className="flex items-center gap-1 text-gray-700 hover:text-primary-600 transition-colors text-sm">
+                Industries
+                <svg className={`w-4 h-4 transition-transform ${industriesOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {industriesOpen && (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[420px] bg-white rounded-xl shadow-lg border border-gray-100 p-4 z-50">
+                  {/* Triangle pointer */}
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2 overflow-hidden">
+                    <div className="w-3 h-3 bg-white border-l border-t border-gray-100 rotate-45 translate-y-1 mx-auto" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                    {industries.map(({ href, label }) => (
+                      <Link
+                        key={href}
+                        href={href}
+                        className="text-sm text-gray-700 hover:text-primary-600 hover:bg-gray-50 rounded-lg px-3 py-2 transition-colors"
+                        onClick={() => setIndustriesOpen(false)}
+                      >
+                        {label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Resources mega menu */}
             <div
@@ -124,6 +183,18 @@ export default function Header() {
                 {label}
               </Link>
             ))}
+
+            {/* Industries section in mobile */}
+            <div className="px-2 pt-2 pb-1">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Industries</p>
+              <div className="grid grid-cols-2 gap-x-2">
+                {industries.map(({ href, label }) => (
+                  <Link key={href} href={href} className="py-2 text-sm text-gray-700 hover:text-primary-600" onClick={() => setMobileMenuOpen(false)}>
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            </div>
 
             {/* Resources section in mobile */}
             <div className="px-2 pt-2 pb-1">

@@ -15,11 +15,19 @@ function getGmailClient() {
   return google.gmail({ version: 'v1', auth: oAuth2Client });
 }
 
+// Email headers (like Subject) can't contain raw non-ASCII bytes — they must
+// use RFC 2047 "encoded-word" syntax, or special characters like em dashes
+// get garbled (mojibake) by mail clients. This wraps the subject accordingly.
+function encodeSubject(subject: string): string {
+  const base64 = Buffer.from(subject, 'utf-8').toString('base64');
+  return `=?UTF-8?B?${base64}?=`;
+}
+
 function makeEmailRaw(to: string, from: string, subject: string, html: string): string {
   const message = [
     `From: ${from}`,
     `To: ${to}`,
-    `Subject: ${subject}`,
+    `Subject: ${encodeSubject(subject)}`,
     'MIME-Version: 1.0',
     'Content-Type: text/html; charset=utf-8',
     '',
