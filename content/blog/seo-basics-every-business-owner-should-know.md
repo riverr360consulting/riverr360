@@ -6,6 +6,7 @@ excerpt: "Don't pay thousands for SEO services you don't understand. Learn the f
 category: "SEO"
 author: "Team Riverr360"
 publishedDate: "2026-02-09"
+updatedDate: "2026-08-15"
 coverImage: "https://images.unsplash.com/photo-1593437955835-fc8c51725430"
 coverImageAlt: "SEO Basics Every Business Owner Should Know"
 featured: false
