@@ -9,7 +9,9 @@ export default function Header() {
   const [resourcesOpen, setResourcesOpen] = useState(false);
   const [industriesOpen, setIndustriesOpen] = useState(false);
   const resourcesRef = useRef<HTMLDivElement>(null);
+  const resourcesCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const industriesRef = useRef<HTMLDivElement>(null);
+  const industriesCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
 
   // Hide header on these pages completely
@@ -71,8 +73,13 @@ export default function Header() {
             <div
               className="relative"
               ref={industriesRef}
-              onMouseEnter={() => setIndustriesOpen(true)}
-              onMouseLeave={() => setIndustriesOpen(false)}
+              onMouseEnter={() => {
+                if (industriesCloseTimer.current) clearTimeout(industriesCloseTimer.current);
+                setIndustriesOpen(true);
+              }}
+              onMouseLeave={() => {
+                industriesCloseTimer.current = setTimeout(() => setIndustriesOpen(false), 150);
+              }}
             >
               <button className="flex items-center gap-1 text-gray-700 hover:text-primary-600 transition-colors text-sm">
                 Industries
@@ -82,22 +89,43 @@ export default function Header() {
               </button>
 
               {industriesOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[640px] bg-white rounded-xl shadow-lg border border-gray-100 p-4 z-50">
-                  {/* Triangle pointer */}
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2 overflow-hidden">
-                    <div className="w-3 h-3 bg-white border-l border-t border-gray-100 rotate-45 translate-y-1 mx-auto" />
-                  </div>
-                  <div className="grid grid-cols-4 gap-x-4 gap-y-1">
-                    {industries.map(({ href, label }) => (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-[640px] z-50">
+                  <div className="relative bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                    {/* Triangle pointer */}
+                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2 overflow-hidden">
+                      <div className="w-3 h-3 bg-white border-l border-t border-gray-100 rotate-45 translate-y-1 mx-auto" />
+                    </div>
+
+                    <div className="px-5 pt-4 pb-2">
+                      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Browse by industry</p>
+                    </div>
+
+                    <div className="grid grid-cols-4 gap-x-2 gap-y-0.5 px-3 pb-3">
+                      {industries.map(({ href, label }) => (
+                        <Link
+                          key={href}
+                          href={href}
+                          className="group flex items-center text-sm text-gray-700 rounded-lg px-3 py-2 transition-colors hover:bg-primary-50 hover:text-primary-700"
+                          onClick={() => setIndustriesOpen(false)}
+                        >
+                          <span className="w-1 h-1 rounded-full bg-transparent group-hover:bg-primary-500 mr-2 transition-colors" />
+                          {label}
+                        </Link>
+                      ))}
+                    </div>
+
+                    <div className="border-t border-gray-100 px-5 py-3 bg-gray-50/60">
                       <Link
-                        key={href}
-                        href={href}
-                        className="text-sm text-gray-700 hover:text-primary-600 hover:bg-gray-50 rounded-lg px-3 py-2 transition-colors"
+                        href="/industries"
+                        className="flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors"
                         onClick={() => setIndustriesOpen(false)}
                       >
-                        {label}
+                        View all industries
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
                       </Link>
-                    ))}
+                    </div>
                   </div>
                 </div>
               )}
@@ -107,8 +135,13 @@ export default function Header() {
             <div
               className="relative"
               ref={resourcesRef}
-              onMouseEnter={() => setResourcesOpen(true)}
-              onMouseLeave={() => setResourcesOpen(false)}
+              onMouseEnter={() => {
+                if (resourcesCloseTimer.current) clearTimeout(resourcesCloseTimer.current);
+                setResourcesOpen(true);
+              }}
+              onMouseLeave={() => {
+                resourcesCloseTimer.current = setTimeout(() => setResourcesOpen(false), 150);
+              }}
             >
               <button className="flex items-center gap-1 text-gray-700 hover:text-primary-600 transition-colors text-sm">
                 Resources
@@ -118,25 +151,27 @@ export default function Header() {
               </button>
 
               {resourcesOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
-                  {/* Triangle pointer */}
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2 overflow-hidden">
-                    <div className="w-3 h-3 bg-white border-l border-t border-gray-100 rotate-45 translate-y-1 mx-auto" />
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-64 z-50">
+                  <div className="relative bg-white rounded-xl shadow-lg border border-gray-100 py-2">
+                    {/* Triangle pointer */}
+                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2 overflow-hidden">
+                      <div className="w-3 h-3 bg-white border-l border-t border-gray-100 rotate-45 translate-y-1 mx-auto" />
+                    </div>
+                    {resources.map(({ href, icon, label, desc }) => (
+                      <Link
+                        key={href}
+                        href={href}
+                        className="flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
+                        onClick={() => setResourcesOpen(false)}
+                      >
+                        <span className="text-xl mt-0.5">{icon}</span>
+                        <div>
+                          <div className="text-sm font-semibold text-gray-900">{label}</div>
+                          <div className="text-xs text-gray-500">{desc}</div>
+                        </div>
+                      </Link>
+                    ))}
                   </div>
-                  {resources.map(({ href, icon, label, desc }) => (
-                    <Link
-                      key={href}
-                      href={href}
-                      className="flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
-                      onClick={() => setResourcesOpen(false)}
-                    >
-                      <span className="text-xl mt-0.5">{icon}</span>
-                      <div>
-                        <div className="text-sm font-semibold text-gray-900">{label}</div>
-                        <div className="text-xs text-gray-500">{desc}</div>
-                      </div>
-                    </Link>
-                  ))}
                 </div>
               )}
             </div>
