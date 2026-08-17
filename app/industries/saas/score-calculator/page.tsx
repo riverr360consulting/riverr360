@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { submitToWeb3Forms } from '@/lib/web3forms';
 
 // ── R360 SaaS Score formula ──────────────────────────────────────────────
 // One quick question per framework layer. Each answer maps to a 0–100
@@ -116,15 +117,10 @@ export default function ScoreCalculatorPage() {
     setEmailError('');
     setSubmittingEmail(true);
     try {
-      await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          access_key: 'bd8222f1-81ef-4ed7-9182-09c0c52ae333',
-          subject: `New SaaS Score Calculator lead — ${trimmed}`,
-          Email: trimmed,
-          Source: 'SaaS Score Calculator',
-        }),
+      await submitToWeb3Forms({
+        subject: `New SaaS Score Calculator lead — ${trimmed}`,
+        Email: trimmed,
+        Source: 'SaaS Score Calculator',
       });
     } catch {
       /* don't block the user if lead capture fails silently */
@@ -162,63 +158,74 @@ export default function ScoreCalculatorPage() {
 
       <section className="section-padding bg-white">
         <div className="container-custom max-w-2xl mx-auto">
-          {!emailSubmitted ? (
-            <div className="bg-gray-50 rounded-xl p-8 border border-gray-100 max-w-md mx-auto text-center">
-              <div className="text-3xl mb-3">📩</div>
-              <h2 className="text-lg font-bold text-gray-900 mb-2">Enter your email to start</h2>
-              <p className="text-sm text-gray-600 mb-6">
-                We'll use this to send you the full breakdown if you'd like a deeper analysis later.
-              </p>
-              <form onSubmit={handleEmailSubmit} className="space-y-3">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@company.com"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 text-sm"
-                  required
-                />
-                {emailError && <p className="text-sm text-red-600 text-left">{emailError}</p>}
-                <button type="submit" disabled={submittingEmail} className="btn-primary w-full py-3">
-                  {submittingEmail ? 'Starting...' : 'Start Calculator →'}
-                </button>
-              </form>
-            </div>
-          ) : !showResult ? (
-            <div className="space-y-8">
-              {QUESTIONS.map((q, idx) => (
-                <div key={q.layer} className="bg-gray-50 rounded-xl p-6 border border-gray-100">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs font-semibold text-primary-600 bg-primary-100 px-2 py-1 rounded-full">
-                      {idx + 1}/5 · {q.title}
-                    </span>
-                  </div>
-                  <p className="font-semibold text-gray-900 mb-4">{q.question}</p>
-                  <div className="grid grid-cols-2 gap-3">
-                    {q.options.map((opt) => (
-                      <button
-                        key={opt.label}
-                        onClick={() => selectAnswer(q.layer, opt.score)}
-                        className={`text-sm px-4 py-3 rounded-lg border text-left transition-colors ${
-                          answers[q.layer] === opt.score
-                            ? 'bg-primary-600 text-white border-primary-600'
-                            : 'bg-white text-gray-700 border-gray-200 hover:border-primary-300'
-                        }`}
-                      >
-                        {opt.label}
+          {!showResult ? (
+            <div className="space-y-6">
+              {/* Email field sits at the top of the same view — not a separate
+                  gate screen. Questions below stay visible the whole time,
+                  just locked until this is submitted. */}
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
+                <p className="text-sm font-semibold text-gray-900 mb-1">
+                  {emailSubmitted ? '✅ Calculator unlocked' : 'Enter your email to unlock the calculator'}
+                </p>
+                {!emailSubmitted && (
+                  <>
+                    <p className="text-xs text-gray-500 mb-4">
+                      We'll use this to send your full breakdown if you'd like a deeper analysis later.
+                    </p>
+                    <form onSubmit={handleEmailSubmit} className="flex flex-col sm:flex-row gap-3">
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="you@company.com"
+                        className="flex-1 px-4 py-3 rounded-lg border border-gray-200 text-sm"
+                        required
+                      />
+                      <button type="submit" disabled={submittingEmail} className="btn-primary px-6 whitespace-nowrap">
+                        {submittingEmail ? 'Unlocking...' : 'Unlock Calculator →'}
                       </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                    </form>
+                    {emailError && <p className="text-sm text-red-600 mt-2">{emailError}</p>}
+                  </>
+                )}
+              </div>
 
-              <button
-                onClick={() => setShowResult(true)}
-                disabled={!allAnswered}
-                className="btn-primary w-full py-4 disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                {allAnswered ? 'See My Score →' : `Answer all ${QUESTIONS.length} questions to continue`}
-              </button>
+              {/* Questions — always rendered, disabled until email is submitted */}
+              <div className={`space-y-6 transition-opacity ${!emailSubmitted ? 'opacity-40 pointer-events-none select-none' : ''}`}>
+                {QUESTIONS.map((q, idx) => (
+                  <div key={q.layer} className="bg-gray-50 rounded-xl p-6 border border-gray-100">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs font-semibold text-primary-600 bg-primary-100 px-2 py-1 rounded-full">
+                        {idx + 1}/5 · {q.title}
+                      </span>
+                    </div>
+                    <p className="font-semibold text-gray-900 mb-4">{q.question}</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      {q.options.map((opt) => (
+                        <button
+                          key={opt.label}
+                          onClick={() => selectAnswer(q.layer, opt.score)}
+                          className={`text-sm px-4 py-3 rounded-lg border text-left transition-colors ${
+                            answers[q.layer] === opt.score
+                              ? 'bg-primary-600 text-white border-primary-600'
+                              : 'bg-white text-gray-700 border-gray-200 hover:border-primary-300'
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+
+                <button
+                  onClick={() => setShowResult(true)}
+                  disabled={!allAnswered}
+                  className="btn-primary w-full py-4 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {allAnswered ? 'See My Score →' : `Answer all ${QUESTIONS.length} questions to continue`}
+                </button>
+              </div>
             </div>
           ) : (
             <div className="text-center">
