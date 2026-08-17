@@ -116,17 +116,31 @@ export default function ScoreCalculatorPage() {
     }
     setEmailError('');
     setSubmittingEmail(true);
+    // Just unlocks the calculator — no notification is sent at this point.
+    // The single notification goes out once they've actually completed the
+    // calculator (see handleSeeScore below), sent only to your configured
+    // admin email, never to the visitor.
+    setEmailSubmitted(true);
+    setSubmittingEmail(false);
+  }
+
+  async function handleSeeScore() {
+    setShowResult(true);
     try {
+      const answerLines = QUESTIONS.map(
+        (q) => `${q.title}: ${q.options.find((o) => o.score === answers[q.layer])?.label} (score: ${answers[q.layer]})`
+      ).join('\n');
+
       await submitToWeb3Forms({
-        subject: `New SaaS Score Calculator lead — ${trimmed}`,
-        Email: trimmed,
+        subject: `SaaS Score Calculator completed — ${email.trim()} (Score: ${finalScore})`,
+        'Visitor Email': email.trim(),
+        'Final Score': `${finalScore}/100`,
+        'Answer Breakdown': answerLines,
         Source: 'SaaS Score Calculator',
       });
     } catch {
-      /* don't block the user if lead capture fails silently */
+      /* don't block the user's result if this fails silently */
     }
-    setEmailSubmitted(true);
-    setSubmittingEmail(false);
   }
 
   function selectAnswer(layer: Layer, score: number) {
@@ -219,7 +233,7 @@ export default function ScoreCalculatorPage() {
                 ))}
 
                 <button
-                  onClick={() => setShowResult(true)}
+                  onClick={handleSeeScore}
                   disabled={!allAnswered}
                   className="btn-primary w-full py-4 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
